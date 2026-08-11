@@ -1,0 +1,18 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sistema_ne_app
+    ports:
+      - "8081:80"
+    volumes:
+      - .:/var/www/html
+    env_file:
+      - .env
+    networks:
+      - sistema_ne__net
+
+networks:
+  sistema_ne__net:
+    driver: bridge
