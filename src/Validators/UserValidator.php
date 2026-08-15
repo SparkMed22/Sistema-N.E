@@ -36,11 +36,19 @@ class UserValidator
 
     public function validarPassword(array $data): bool
     {
-        $passwordValidator = v::key('password_new', v::stringType()->notEmpty()->length(8, null))
+        $passwordValidator = v::key('password_new', v::stringType()->notEmpty()->length(6, null))
             ->key('confirm_password', v::stringType()->notEmpty())
             ->key('cedula', v::stringType()->notEmpty()->alnum())
             ->keyValue('confirm_password', 'equals', 'password_new');
 
         return $passwordValidator->validate($data);
+    }
+
+    public function validarActualizacion(array $data): bool
+    {
+        $actualizarValidator = v::key('id', v::intVal()->positive())
+            ->key('rol', v::in(['admin', 'internacion', 'nutricionista']))
+            ->key('estado', v::boolVal());
+        return $actualizarValidator->validate($data);
     }
 }

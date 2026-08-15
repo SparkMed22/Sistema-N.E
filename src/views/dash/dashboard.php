@@ -34,7 +34,7 @@ $accesosGlobales = [
         'icono'   => 'group',
         'titulo'  => 'Usuarios',
         'desc'    => 'Gestión de usuarios, roles y permisos del sistema.',
-        'url'     => '/start/dashboard/user',
+        'url'     => '/start/dashboard/users',
         'permiso' => 'gestionar_usuarios'
     ],
 

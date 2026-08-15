@@ -42,7 +42,7 @@ class User
     {
         $user = $this->buscarPorCedula($cedula);
         if ($user && password_verify($password, $user->password_hash)) {
-            return ($user->estado == 1)?$user:null;
+            return ($user->estado == 1) ? $user : null;
         }
         return null;
     }
@@ -66,7 +66,22 @@ class User
                 return false;
             }
         } catch (PDOException $e) {
-            ////error_log("Error al actualizar contraseña: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    // Funciona ✅
+    public function updateUserModel(int $id, string $rol, bool $estado): bool
+    {
+        $sql = "UPDATE usuarios SET rol = :rol, estado = :estado WHERE id = :id";
+        try {
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindValue(':rol', $rol, \PDO::PARAM_STR);
+            $stmt->bindValue(':estado', $estado, \PDO::PARAM_BOOL);
+            $stmt->bindValue(':id', $id, \PDO::PARAM_INT);
+            return $stmt->execute();
+        } catch (\PDOException $e) {
+            error_log("Error al actualizar usuario (Model): " . $e->getMessage());
             return false;
         }
     }
@@ -87,7 +102,6 @@ class User
                 return false;
             }
         } catch (PDOException $e) {
-            //// error_log("Error al actualizar contraseña: " . $e->getMessage());
             return false;
         }
     }
@@ -122,7 +136,7 @@ class User
     // Funciona ✅
     public function allModel(): array
     {
-        $stmt = $this->db->query("SELECT nombre, apellido, cedula, rol,estado FROM usuarios;");
+        $stmt = $this->db->query("SELECT id ,nombre, apellido, cedula, rol,estado FROM usuarios;");
         return $stmt->fetchAll(PDO::FETCH_OBJ);
     }
 }

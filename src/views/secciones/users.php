@@ -7,193 +7,297 @@ $usuarios_rol = $_SESSION['user_rol'];
 $usuarios = $_SESSION['user_nombre'] ?? 'Personal de Guardia';
 ?>
 
-<body class="bg-background font-jakarta text-textDark min-h-screen flex flex-col">
-
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col">
     <?php require __DIR__ . '/../../utils/header.php'; ?>
+    <main class="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 mt-24">
+        <section class="bg-surface-container-lowest border border-outline-variant rounded-2xl p-4 mb-4">
 
-    <main class="pt-28 pb-12 px-4 max-w-7xl w-full mx-auto flex-grow space-y-6">
+            <div class="flex flex-col md:flex-row gap-3 md:items-center md:justify-between">
 
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <div>
-                <h1 class="text-3xl font-bold text-primary tracking-tight">Gestión de Usuarios</h1>
-                <p class="text-xs text-textSoft mt-1">Administra los accesos, bloquea cuentas y restablece credenciales del personal.</p>
-            </div>
-            <button onclick="openModal('modal-add_usuarios')" class="px-4 py-2 bg-primary hover:bg-opacity-95 text-white text-xs font-bold rounded-xl flex items-center gap-1.5 transition-colors shadow-sm self-start sm:self-center">
-                <span class="material-symbols-outlined text-sm">person_add</span>
-                Nuevo Usuario
-            </button>
-        </div>
-
-        <div class="bg-surface border border-borderColor rounded-2xl shadow-sm overflow-hidden">
-            <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse">
-                    <thead>
-                        <tr class="bg-background border-b border-borderColor text-[11px] font-bold uppercase tracking-wider text-textSoft">
-                            <th class="py-4 px-6">N° Registro</th>
-                            <th class="py-4 px-6">Nombre Completo</th>
-                            <th class="py-4 px-6">N° Cédula</th>
-                            <th class="py-4 px-6">Rol / Permiso</th>
-                            <th class="py-4 px-6">Estado</th>
-                            <th class="py-4 px-6 text-right">Acciones de Gestión</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tabla-usuarios-body" class="divide-y divide-borderColor text-xs">
-                        <tr>
-                            <td colspan="6" class="py-8 text-center text-textSoft">
-                                Cargando usuarios...
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <?php require __DIR__ . '/../../utils/footer.php'; ?>
-    </main>
-
-
-    <div id="modal-add_usuarios" class="modal-backdrop fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 font-jakarta transition-all duration-300">
-
-        <div class="bg-surface w-full max-w-2xl max-h-[90vh] rounded-[24px] shadow-2xl border border-borderColor overflow-hidden flex flex-col bg-white transform scale-100 transition-all">
-
-            <form id="formAddUsuarios" class="flex flex-col h-full m-0">
-
-                <div class="px-8 py-5 border-b border-borderColor bg-slate-50/50 flex justify-between items-center">
-                    <div>
-                        <h3 class="text-lg font-black text-textDark tracking-tight">Registrar Nuevo Usuario</h3>
-                        <p class="text-xs text-textSoft mt-0.5">Completa los datos del personal para el acceso al sistema.</p>
-                    </div>
-                    <button type="button" onclick="closeModal('modal-add_usuarios')" class="w-8 h-8 flex items-center justify-center rounded-full text-textSoft hover:text-textDark hover:bg-slate-100 transition-colors duration-200">
-                        <span class="material-symbols-outlined text-[20px]">close</span>
-                    </button>
+                <div class="relative w-full md:max-w-md">
+                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[21px]">
+                        search
+                    </span>
+                    <input id="input_buscar_usuario" type="search" placeholder="Buscar usuario..." class="w-full pl-10 pr-4 py-2.5 bg-surface-container-low border border-outline-variant rounded-xl text-sm text-on-surface placeholder:text-on-surface-variant outline-none focus:border-primary focus:ring-2 focus:ring-primary/10" />
                 </div>
 
-                <div class="flex-1 overflow-y-auto p-8 space-y-5 bg-white scrollbar-thin">
+                <button
+                    popovertarget="modal-nuevo-usuario"
+                    type="button" class="inline-flex items-center justify-center gap-2 bg-primary text-on-primary px-5 py-3 rounded-xl font-semibold text-sm hover:bg-primary-container transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/30">
+                    <span class="material-symbols-outlined text-[20px]">
+                        person_add
+                    </span>
+                    Nuevo usuario
+                </button>
+            </div>
+        </section>
 
-                    <div id="modalErrorContainer" class="hidden p-4 rounded-xl bg-red-50 border border-red-100 text-red-600 text-xs font-semibold flex items-center gap-2">
-                        <span class="material-symbols-outlined text-[18px]">error</span>
-                        <span class="error-message"></span>
-                    </div>
+        <section class="bg-surface-container-lowest border border-outline-variant rounded-2xl overflow-hidden">
 
-                    <div class="group flex flex-col">
-                        <label for="add_nombre" class="text-xs font-bold text-textSoft mb-1.5 transition-colors group-focus-within:text-primary">
-                            Nombre Completo <span class="text-red-500">*</span>
-                        </label>
-                        <div class="flex items-center border border-slate-200 rounded-xl bg-slate-50/50 px-4 focus-within:border-primary focus-within:bg-white focus-within:ring-4 focus-within:ring-primary/10 transition-all duration-200">
-                            <span class="material-symbols-outlined text-slate-400 group-focus-within:text-primary mr-3 text-[20px] transition-colors">person</span>
-                            <input
-                                type="text"
-                                id="add_nombre"
-                                name="nombre"
-                                placeholder="Ej. Juan Pérez"
-                                class="w-full py-3.5 bg-transparent outline-none text-textDark text-sm font-medium placeholder:text-slate-400"
-                                required />
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                        <div class="group flex flex-col">
-                            <label for="add_cedula" class="text-xs font-bold text-textSoft mb-1.5 transition-colors group-focus-within:text-primary">
-                                Cédula de Identidad <span class="text-red-500">*</span>
-                            </label>
-                            <div class="flex items-center border border-slate-200 rounded-xl bg-slate-50/50 px-4 focus-within:border-primary focus-within:bg-white focus-within:ring-4 focus-within:ring-primary/10 transition-all duration-200">
-                                <span class="material-symbols-outlined text-slate-400 group-focus-within:text-primary mr-3 text-[20px] transition-colors">badge</span>
-                                <input
-                                    type="text"
-                                    id="add_cedula"
-                                    name="cedula"
-                                    placeholder="Ej. 1234567"
-                                    class="w-full py-3.5 bg-transparent outline-none text-textDark text-sm font-medium placeholder:text-slate-400"
-                                    required />
-                            </div>
-                        </div>
-
-                        <div class="group flex flex-col">
-                            <div class="flex justify-between items-center mb-1.5">
-                                <label for="add_numero_registro" class="text-xs font-bold text-textSoft transition-colors group-focus-within:text-primary">
-                                    N° de Registro Profesional
-                                </label>
-                                <span class="text-[10px] text-slate-500 bg-slate-100 px-2 py-0.5 rounded-md font-bold tracking-wide uppercase">Opcional</span>
-                            </div>
-                            <div class="flex items-center border border-slate-200 rounded-xl bg-slate-50/50 px-4 focus-within:border-primary focus-within:bg-white focus-within:ring-4 focus-within:ring-primary/10 transition-all duration-200">
-                                <span class="material-symbols-outlined text-slate-400 group-focus-within:text-primary mr-3 text-[20px] transition-colors">clinical_notes</span>
-                                <input
-                                    type="text"
-                                    id="add_numero_registro"
-                                    name="numero_registro"
-                                    placeholder="Ej. REG-884"
-                                    class="w-full py-3.5 bg-transparent outline-none text-textDark text-sm font-medium placeholder:text-slate-400" />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="group flex flex-col relative" id="custom-select-container">
-                        <label for="add_rol" class="text-xs font-bold text-textSoft mb-1.5 transition-colors group-focus-within:text-primary">
-                            Rol Asignado <span class="text-red-500">*</span>
-                        </label>
-
-                        <input type="hidden" id="add_rol" name="rol" required />
-
-                        <button
-                            type="button"
-                            id="custom-select-trigger"
-                            class="w-full flex items-center justify-between border border-slate-200 rounded-xl bg-slate-50/50 px-4 py-3.5 focus:border-primary focus:bg-white focus:ring-4 focus:ring-primary/10 text-left transition-all duration-200">
-
-                            <div class="flex items-center text-slate-400 group-focus-within:text-primary transition-colors">
-                                <span class="material-symbols-outlined mr-3 text-[20px]">manage_accounts</span>
-                                <span id="custom-select-text" class="text-slate-400 text-sm font-medium">Selecciona el rol de acceso</span>
-                            </div>
-
-                            <span id="custom-select-arrow" class="material-symbols-outlined text-slate-400 text-[20px] transition-transform duration-200">expand_more</span>
-                        </button>
-
-                        <div
-                            id="custom-select-options"
-                            class="hidden absolute z-50 left-0 right-0 top-[calc(100%+4px)] bg-white border border-slate-100 rounded-xl shadow-xl py-1.5 transform scale-95 opacity-0 transition-all duration-150 origin-top">
-
-                            <button type="button" data-value="Administracion" class="custom-option w-full px-4 py-3 text-sm text-textDark hover:bg-slate-50 font-medium flex items-center justify-between transition-colors text-left">
-                                <span>Administración</span>
-                                <span class="material-symbols-outlined text-primary text-base hidden check-icon">check</span>
-                            </button>
-
-                            <button type="button" data-value="Licenciado" class="custom-option w-full px-4 py-3 text-sm text-textDark hover:bg-slate-50 font-medium flex items-center justify-between transition-colors text-left">
-                                <span>Licenciado</span>
-                                <span class="material-symbols-outlined text-primary text-base hidden check-icon">check</span>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="bg-slate-50 border border-slate-200/60 rounded-xl p-4 flex items-start gap-3">
-                        <span class="material-symbols-outlined text-slate-500 text-[20px] mt-0.5">info</span>
-                        <p class="text-xs text-slate-600 leading-relaxed font-medium">
-                            La contraseña predeterminada para el primer acceso del usuario será <span class="font-bold text-slate-900">únicamente su número de cédula</span>. El sistema le solicitará cambiarla obligatoriamente al ingresar.
+            <!-- Table header -->
+            <div class="px-6 py-5 border-b border-outline-variant">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h2 class="font-bold text-base text-on-surface">
+                            Personal registrado
+                        </h2>
+                        <p class="text-sm text-on-surface-variant mt-1">
+                            Lista de usuarios del sistema.
                         </p>
                     </div>
-
                 </div>
+            </div>
 
-                <div class="px-8 py-4 border-t border-borderColor bg-slate-50/50 flex justify-end gap-3">
-                    <button
-                        type="button"
-                        onclick="closeModal('modal-add_usuarios')"
-                        class="px-5 py-2.5 text-xs rounded-xl border border-slate-200 bg-white hover:bg-slate-50 hover:border-slate-300 text-slate-600 font-bold transition-all duration-150 active:scale-[0.98]">
-                        Cancelar
-                    </button>
-                    <button
-                        type="submit"
-                        id="btnSubmitAddUsuario"
-                        class="px-6 py-2.5 text-xs rounded-xl bg-primary hover:bg-primary/95 text-white font-bold flex items-center gap-2 shadow-sm transition-all duration-150 active:scale-[0.98]">
-                        <span class="material-symbols-outlined text-sm">save</span>
-                        <span>Agregar Usuario</span>
-                    </button>
-                </div>
-            </form>
+
+            <div class="overflow-x-auto">
+                <table class="w-full min-w-[850px] text-left">
+                    <thead>
+                        <tr id='table_tread' class="bg-surface-container-low"></tr>
+                    </thead>
+
+                    <!-- Cargar los usuarios de manera dinamica-->
+                    <tbody id="users_table_body" class="divide-y divide-outline-variant">
+
+                        <tr>
+                            <td colspan="4" class="px-6 py-12 text-center text-sm text-on-surface-variant">
+                                <div class="flex flex-col items-center gap-3">
+                                    <span class="material-symbols-outlined animate-spin">
+                                        progress_activity
+                                    </span>
+                                    Cargando usuarios...
+                                </div>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+
+            </div>
+
+        </section>
+    </main>
+    <?php require __DIR__ . '/../../utils/footer.php'; ?>
+    <script src="/assets/js/script.js" defer></script>
+    <script src="/assets/js/users.js" defer></script>
+</body>
+
+<!-- Popover Nuevo Usuario-->
+<div id="modal-nuevo-usuario" popover="manual"
+    class="w-[calc(100%-2rem)] max-w-2xl overflow-hidden rounded-2xl bg-surface-container-lowest text-on-surface border border-outline-variant/60 backdrop:bg-on-surface/50 backdrop:backdrop-blur-sm">
+
+    <div class="flex items-center justify-between px-6 py-5 border-b border-outline-variant/60">
+
+        <div class="flex items-center gap-3">
+            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-container text-on-primary-container">
+                <span class="material-symbols-outlined text-[22px]">person_add</span>
+            </div>
+            <div>
+                <h3 class="font-headline-sm text-headline-sm font-semibold text-on-surface">Nuevo usuario</h3>
+                <p class="mt-0.5 text-sm text-on-surface-variant">Registra un nuevo usuario en el sistema </p>
+            </div>
+
         </div>
+
+        <button type="button" popovertarget="modal-nuevo-usuario" popovertargetaction="hide" aria-label="Cerrar modal"
+            class="flex h-9 w-9 items-center justify-center rounded-full text-on-surface-variant transition-colors hover:bg-surface-container-high hover:text-on-surface cursor-pointer">
+            <span class="material-symbols-outlined text-[20px]"> close</span>
+        </button>
     </div>
 
-    <script src="/assets/js/script.js" defer></script>
-    <script src="/assets/js/usuarios.js" defer></script>
+    <form id="form-add-user" class="px-6 py-6">
 
-</body>
+        <div class="grid grid-cols-1 gap-x-5 gap-y-5 sm:grid-cols-4">
+
+            <div class="flex flex-col gap-2 sm:col-span-2">
+                <label for="nombre" class="text-sm font-medium text-on-surface"> Nombre</label>
+                <div class="relative">
+                    <span
+                        class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[20px] text-on-surface-variant">
+                        person
+                    </span>
+                    <input id="nombre" name="nombre" type="text" required autocomplete="given-name" placeholder="Ej. Juan"
+                        class="w-full rounded-xl border border-outline-variant bg-surface-container-low py-2.5 pl-11 pr-4 text-sm text-on-surface placeholder:text-on-surface-variant/70 outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/15" />
+                </div>
+            </div>
+
+            <div class="flex flex-col gap-2 sm:col-span-2">
+                <label for="apellido" class="text-sm font-medium text-on-surface"> Apellido </label>
+                <div class="relative">
+                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[20px] text-on-surface-variant">
+                        badge
+                    </span>
+                    <input id="apellido" name="apellido" type="text" required autocomplete="family-name" placeholder="Ej. Pérez"
+                        class="w-full rounded-xl border border-outline-variant bg-surface-container-low py-2.5 pl-11 pr-4 text-sm text-on-surface placeholder:text-on-surface-variant/70 outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/15" />
+                </div>
+            </div>
+
+            <div class="flex flex-col gap-2 sm:col-span-2">
+                <label for="cedula" class="text-sm font-medium text-on-surface"> Cédula de identidad</label>
+                <div class="relative">
+                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[20px] text-on-surface-variant">
+                        id_card
+                    </span>
+                    <input id="cedula" name="cedula" type="text" required inputmode="numeric" autocomplete="off" placeholder="Ej. 1234567"
+                        class="w-full rounded-xl border border-outline-variant bg-surface-container-low py-2.5 pl-11 pr-4 text-sm text-on-surface placeholder:text-on-surface-variant/70 outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/15" />
+                </div>
+            </div>
+
+            <div class="flex flex-col gap-2 sm:col-span-2">
+                <label for="rol" class="text-sm font-medium text-on-surface"> Rol del usuario</label>
+                <div class="relative">
+                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[20px] text-on-surface-variant">
+                        admin_panel_settings
+                    </span>
+
+                    <select id="rol" name="rol" required
+                        class="w-full appearance-none rounded-xl border border-outline-variant bg-surface-container-low py-2.5 pl-11 pr-10 text-sm text-on-surface outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/15 cursor-pointer">
+                        <option value="">Seleccionar rol...</option>
+                        <option value="admin">Administrador</option>
+                        <option value="internacion"> Internación</option>
+                        <option value="nutricionista">Nutricionista</option>
+                    </select>
+                    <span
+                        class="material-symbols-outlined pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[20px] text-on-surface-variant">
+                        expand_more
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-7 flex flex-col-reverse gap-3 border-t border-outline-variant/60 pt-5 sm:flex-row sm:justify-end">
+            <button type="button" popovertarget="modal-nuevo-usuario" popovertargetaction="hide"
+                class="h-10 rounded-xl border border-outline-variant px-5 text-sm font-medium text-on-surface-variant transition-colors hover:bg-surface-container-low hover:text-on-surface cursor-pointer">
+                Cancelar
+            </button>
+            <button type="submit"
+                class="flex h-10 items-center justify-center gap-2 rounded-xl bg-primary px-5 text-sm font-medium text-on-primary transition-all hover:bg-primary-container active:scale-[0.98] cursor-pointer">
+                <span class="material-symbols-outlined text-[19px]">
+                    person_add
+                </span>
+                Crear usuario
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- Popover Editar Usuario-->
+<div id="modal-editar-usuario" popover="manual"
+    class="w-[calc(100%-2rem)] max-w-2xl overflow-hidden rounded-2xl bg-surface-container-lowest text-on-surface border border-outline-variant/60 backdrop:bg-on-surface/50 backdrop:backdrop-blur-sm">
+
+    <div class="flex items-center justify-between border-b border-outline-variant/60 px-6 py-5">
+
+        <div class="flex items-center gap-3">
+            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-secondary-container text-on-secondary-container">
+                <span class="material-symbols-outlined text-[22px]">manage_accounts</span>
+            </div>
+            <div>
+                <h3 class="text-headline-sm font-headline-sm font-semibold text-on-surface">Editar usuario</h3>
+                <p class="mt-0.5 text-sm text-on-surface-variant">Modifica los datos del usuario seleccionado</p>
+            </div>
+        </div>
+
+        <button type="button" popovertarget="modal-editar-usuario" popovertargetaction="hide" aria-label="Cerrar modal"
+            class="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full text-on-surface-variant transition-colors hover:bg-surface-container-high hover:text-on-surface">
+            <span class="material-symbols-outlined text-[20px]"> close</span>
+        </button>
+    </div>
+
+    <form id="form-edit-user" class="px-6 py-6">
+
+        <input type="hidden" id="edit-id" name="id" />
+
+        <div class="grid grid-cols-1 gap-x-5 gap-y-5 sm:grid-cols-4">
+
+            <!-- Nombre -->
+            <div class="flex flex-col gap-2 sm:col-span-2">
+                <label for="edit-nombre" class="text-sm font-medium text-on-surface"> Nombre <span class="text-xs font-normal text-on-surface-variant">(No editable)</span></label>
+                <div class="relative">
+                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[20px] text-on-surface-variant">
+                        person
+                    </span>
+                    <input id="edit-nombre" name="nombre" type="text" readonly
+                        class="w-full cursor-not-allowed rounded-xl border border-outline-variant bg-surface-container-low py-2.5 pl-11 pr-4 text-sm text-on-surface outline-none transition-all placeholder:text-on-surface-variant/70 focus:border-primary focus:ring-2 focus:ring-primary/15" />
+                </div>
+            </div>
+
+            <!-- Apellido -->
+            <div class="flex flex-col gap-2 sm:col-span-2">
+                <label for="edit-apellido" class="text-sm font-medium text-on-surface"> Apellido<span class="text-xs font-normal text-on-surface-variant">(No editable)</span></label>
+                <div class="relative">
+                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[20px] text-on-surface-variant">
+                        badge
+                    </span>
+                    <input id="edit-apellido" name="apellido" type="text" readonly
+                        class="w-full cursor-not-allowed rounded-xl border border-outline-variant bg-surface-container-low py-2.5 pl-11 pr-4 text-sm text-on-surface outline-none transition-all placeholder:text-on-surface-variant/70 focus:border-primary focus:ring-2 focus:ring-primary/15" />
+                </div>
+            </div>
+
+            <!-- Cédula (Solo Mostrar) -->
+            <div class="flex flex-col gap-2 sm:col-span-2">
+                <label for="edit-cedula" class="text-sm font-medium text-on-surface"> Cédula de identidad <span class="text-xs font-normal text-on-surface-variant">(No editable)</span></label>
+                <div class="relative">
+                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[20px] text-on-surface-variant/60">
+                        id_card
+                    </span>
+                    <!-- readonly y estilos de deshabilitado aplicados -->
+                    <input id="edit-cedula" name="cedula" type="text" readonly
+                        class="w-full cursor-not-allowed rounded-xl border border-outline-variant/50 bg-surface-container py-2.5 pl-11 pr-4 text-sm text-on-surface-variant outline-none" />
+                </div>
+            </div>
+
+            <!-- Rol -->
+            <div class="flex flex-col gap-2 sm:col-span-2">
+                <label for="edit-rol" class="text-sm font-medium text-on-surface"> Rol del usuario</label>
+                <div class="relative">
+                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[20px] text-on-surface-variant">
+                        admin_panel_settings
+                    </span>
+                    <select id="edit-rol" name="rol" required
+                        class="w-full cursor-pointer appearance-none rounded-xl border border-outline-variant bg-surface-container-low py-2.5 pl-11 pr-10 text-sm text-on-surface outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/15">
+                        <option value="admin">Administrador</option>
+                        <option value="internacion">Internación</option>
+                        <option value="nutricionista">Nutricionista</option>
+                    </select>
+                    <span class="material-symbols-outlined pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[20px] text-on-surface-variant">
+                        expand_more
+                    </span>
+                </div>
+            </div>
+
+            <!-- Estado (Booleano) -->
+            <div class="flex flex-col gap-2 sm:col-span-2">
+                <label for="edit-estado" class="text-sm font-medium text-on-surface"> Estado de la cuenta</label>
+                <div class="relative">
+                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[20px] text-on-surface-variant">
+                        toggle_on
+                    </span>
+                    <select id="edit-estado" name="estado" required
+                        class="w-full cursor-pointer appearance-none rounded-xl border border-outline-variant bg-surface-container-low py-2.5 pl-11 pr-10 text-sm text-on-surface outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/15">
+                        <option value="true">Activo</option>
+                        <option value="false">Inactivo</option>
+                    </select>
+                    <span class="material-symbols-outlined pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[20px] text-on-surface-variant">
+                        expand_more
+                    </span>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="mt-7 flex flex-col-reverse gap-3 border-t border-outline-variant/60 pt-5 sm:flex-row sm:justify-end">
+            <button type="button" popovertarget="modal-editar-usuario" popovertargetaction="hide"
+                class="h-10 cursor-pointer rounded-xl border border-outline-variant px-5 text-sm font-medium text-on-surface-variant transition-colors hover:bg-surface-container-low hover:text-on-surface">
+                Cancelar
+            </button>
+            <button type="submit"
+                class="flex h-10 cursor-pointer items-center justify-center gap-2 rounded-xl bg-primary px-5 text-sm font-medium text-on-primary transition-all hover:bg-primary-container active:scale-[0.98]">
+                <span class="material-symbols-outlined text-[19px]">
+                    save
+                </span>
+                Guardar cambios
+            </button>
+        </div>
+    </form>
+</div>
 
 </html>

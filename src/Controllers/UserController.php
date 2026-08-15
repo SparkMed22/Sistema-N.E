@@ -72,27 +72,73 @@ class UserController extends BaseController
 
 
     //Funciona ✅
-    public function updaetePasswordController(): void
+    public function updatePasswordController(): void
     {
         try {
             $data = $this->getPostJson();
             $valido = $this->userValidator->validarPassword($data);
 
             if (!$valido) {
+                $this->error('Información no válida para el cambio de contraseña.', 400);
+                return;
+            }
+
+            $resultado = $this->userModel->updatePasswordModel($data['cedula'], $data['password_new']);
+
+            if (!$resultado) {
+                $this->error('No se pudo restablecer la contraseña. Usuario no encontrado o error en BD.', 400);
+                return;
+            }
+
+            $this->success(null, 'Contraseña restablecida correctamente.');
+        } catch (Exception $e) {
+            error_log('Error en updatePasswordController: ' . $e->getMessage());
+            $this->error('Error interno del servidor: ' . $e->getMessage(), 500);
+        }
+    }
+
+    public function restartPasswordController(): void
+    {
+        try {
+            $data = $this->getPostJson();
+            $valido = $this->userValidator->validarPassword($data);
+
+            if (!$valido) {
+                $this->error('Información no válida para el cambio de contraseña.', 400);
+                return;
+            }
+            $resultado = $this->userModel->restartPasswordModel($data['cedula']);
+            if (!$resultado) {
+                $this->error('No se pudo restablecer la contraseña. Usuario no encontrado o error en BD.', 400);
+                return;
+            }
+            $this->success(null, 'Contraseña restablecida correctamente.');
+        } catch (Exception $e) {
+            error_log('Error en updatePasswordController: ' . $e->getMessage());
+            $this->error('Error interno del servidor: ' . $e->getMessage(), 500);
+        }
+    }
+
+    //Funciona ✅
+    public function updateUserController(): void
+    {
+        try {
+            $data = $this->getPostJson();
+            $valido = $this->userValidator->validarActualizacion($data);
+
+            if (!$valido) {
                 $this->error('Informacion no valida.', 400);
                 return;
             }
 
-            $usuarioNewPassword = $this->userModel->updatePasswordModel($data['cedula'], $data['password_new']);
+            $usuarioEdit = $this->userModel->updateUserModel($data['id'], $data['rol'], $data['estado']);
 
-            if (!$usuarioNewPassword) {
-                $this->error('Credenciales inválidas.', 401);
+            if (!$usuarioEdit) {
+                $this->error('Error al Actualizar Usuario.', 401);
                 return;
             }
-
-            //error_log('Datos recuperados: ' . json_encode($usuarioNewPassword));
-
-            $this->success($usuarioNewPassword, 'Login exitoso.');
+            ////error_log('Datos recuperados: ' . json_encode($usuarioEdit));
+            $this->success($usuarioEdit, 'Login exitoso.');
         } catch (Exception $e) {
             $this->error('Error interno del servidor: ' . $e->getMessage(), 500);
         }
@@ -115,6 +161,8 @@ class UserController extends BaseController
                 $data['cedula'],
                 $data['rol']
             );
+
+            ////error_log('Datos recuperados para crear un usuario nuevo: ' . json_encode($data));
 
             $this->success([
                 'id' => $usuarioLogin,

@@ -12,12 +12,25 @@ $dotenv->load();
 
 use App\Models\User;
 $userModel = new User();
-////$userModel->crearUsuarioModel('Francisco David', 'Medina Lourenzo', '5483874', 'admin');
-////$userModel->crearUsuarioModel('Jose', 'Martinez', '123456', 'internacion');
-////$userModel->crearUsuarioModel('Enrrique', 'Mereles', '1234567', 'nutricionista');
-//// $usuarios = $userModel->obteberUsuarios();
-////$login = $userModel->loginModel('554454','554454');
-////$userModel->restartPasswordModel('12349');
+
+////$userModel->crearUsuarioModel('Francisco David ','Medina Lourenzo','5483874','admin');
+////$userModel->crearUsuarioModel('Evelin ','Caballero','6174947','admin');
+////$userModel->crearUsuarioModel('Ana ','Beatriz Sosa','4113268','admin');
+////$userModel->crearUsuarioModel('Milagros Aracely ','Aguilera Rios','6015286','admin');
+////$userModel->crearUsuarioModel('Javier Moreira','6317350','admin');
+////$userModel->crearUsuarioModel('Lilian',' Ramirez Veron','4242619','nutricionista');
+////$userModel->crearUsuarioModel('Nathalia ','Vazquez','2999174','internacion');
+////$userModel->crearUsuarioModel('Maria del Carmen','Palacios','1631967','internacion');
+////$userModel->crearUsuarioModel('Vanessa Elizabeth ',' Surnyak Hatschbach','3873742','internacion');
+////$userModel->crearUsuarioModel('Samantha Anglica ',' Villordo Van Nevel','3188244','internacion');
+////$userModel->crearUsuarioModel('Camila Alicia Ester ',' Lezcano Molinas','3813193','internacion');
+////$userModel->crearUsuarioModel('Rosala Irene','Velzquez Acua','4840690','internacion');
+////$userModel->crearUsuarioModel('Patricia Nathalia','Kung Huther','2642937','nutricionista');
+////$userModel->crearUsuarioModel('Deolinda Concepcin',' Bordn Rodriguez','3001678','internacion');
+////$userModel->crearUsuarioModel('Celia Elizabeth ','Snchez Martinez','3518681','internacion');
+////$userModel->crearUsuarioModel('Adriana Gisselle','Maldonado Amatte','4273013','internacion');
+////$userModel->crearUsuarioModel('Gricelda Noemi ','Britez Arevalos','3502800','internacion');
+////$userModel->crearUsuarioModel('Carina Elizabeth ','Vargas Atencio','3197255','internacion');
 
 
 
@@ -35,17 +48,16 @@ $router->post('/user-login','UserController@loginController');
 // ! Rutas de API (Autenticadas con ->protect())
 
 // ? Rutas Gets 
-$router->get('users','UserController@allController')->protect();
+$router->get('/api/users','UserController@allController')->protect();
+
 
 
 // ? Rutas Post
-$router->post('/users/update-password','UserController@updaetePasswordController')->protect();
-$router->post('/users/update-password','UserController@updaetePasswordController')->protect();
+$router->post('/users/update-password','UserController@updatePasswordController')->protect();
 $router->post('logout','LoginController@logout')->protect();
-
-
-$router->post('/users', 'UserController@createUsuarioController')->protect();    
-
+$router->post('/api/users', 'UserController@createUsuarioController')->protect();   
+$router->post('/api/users/update-data', 'UserController@updateUserController')->protect();   
+$router->post('/api/users/update-password','UserController@restartPasswordController')->protect();
 
 //! Rutas para el Front (Autenticadas con ->protect())
 $router->get('/start/dashboard', 'RouterController@dashboard')->protect();
