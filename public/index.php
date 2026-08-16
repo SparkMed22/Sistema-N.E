@@ -32,7 +32,18 @@ $userModel = new User();
 ////$userModel->crearUsuarioModel('Gricelda Noemi ','Britez Arevalos','3502800','internacion');
 ////$userModel->crearUsuarioModel('Carina Elizabeth ','Vargas Atencio','3197255','internacion');
 
+use App\Models\Patients;
+use App\Models\Consultations;
+$pacientesModel = new Patients();
+$consultasModel = new Consultations();
 
+$consultasModel->altaConsultaModel(1,21);
+//$pacientesModel->crearPacienteModel("Carlos","Benítez","4567890","1992-05-14","M");
+//var_dump( $pacientesModel->buscarPorCedula("45678900"));
+
+/////$consultasModel->reasignarConsulta(7,15);
+
+//var_dump($consultasModel->allConsultasActivasUsuarioModel(4,'internacion'));
 
 $router = new Router();
 
@@ -49,7 +60,10 @@ $router->post('/user-login','UserController@loginController');
 
 // ? Rutas Gets 
 $router->get('/api/users','UserController@allController')->protect();
-
+$router->get('/api/users/activos','UserController@allDataUseController')->protect();
+$router->get('/api/patients','PatientsController@allPatientsController')->protect();
+$router->get('/api/consultation','ConsultationsController@allConsultationsController')->protect();
+$router->get('/api/{rol}/consultation/{id}/activas','ConsultationsController@allConsultasActivasUsuarioController')->protect();
 
 
 // ? Rutas Post
@@ -58,12 +72,18 @@ $router->post('logout','LoginController@logout')->protect();
 $router->post('/api/users', 'UserController@createUsuarioController')->protect();   
 $router->post('/api/users/update-data', 'UserController@updateUserController')->protect();   
 $router->post('/api/users/update-password','UserController@restartPasswordController')->protect();
+$router->post('/api/consultation','ConsultationsController@createConsultaController')->protect();
+$router->post('/api/consultation/reasignar','ConsultationsController@reasignarConsultaController')->protect();
+$router->post('/api/consultation/alta','ConsultationsController@altaConsultaController')->protect();
+
+
 
 //! Rutas para el Front (Autenticadas con ->protect())
 $router->get('/start/dashboard', 'RouterController@dashboard')->protect();
 $router->get('/start/dashboard/patients', 'RouterController@patients')->protect();
 $router->get('/start/dashboard/users', 'RouterController@users')->protect();
 $router->get('/start/dashboard/stock', 'RouterController@stock')->protect();
+$router->get('/start/dashboard/orders', 'RouterController@orders')->protect();
 
 
 

@@ -139,4 +139,10 @@ class User
         $stmt = $this->db->query("SELECT id ,nombre, apellido, cedula, rol,estado FROM usuarios;");
         return $stmt->fetchAll(PDO::FETCH_OBJ);
     }
+
+    // Funciona ✅
+    public function allDataUserModel():array{
+        $stmt = $this->db->query("select id,nombre,apellido,rol from usuarios WHERE estado=1;");
+        return $stmt->fetchAll(PDO::FETCH_OBJ);
+    }
 }

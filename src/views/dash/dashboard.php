@@ -16,7 +16,8 @@ $roles = [
     'admin' => [
         'gestionar_usuarios',
         'gestionar_pacientes',
-        'gestionar_stock'
+        'gestionar_stock',
+        'gestionar_ordenes'
     ],
 
     'internacion' => [
@@ -25,7 +26,8 @@ $roles = [
 
     'nutricionista' => [
         'gestionar_pacientes',
-        'gestionar_stock'
+        'gestionar_stock',
+        'gestionar_ordenes'
     ]
 ];
 
@@ -52,7 +54,14 @@ $accesosGlobales = [
         'desc'    => 'Inventario, control de medicamentos y suministros.',
         'url'     => '/start/dashboard/stock',
         'permiso' => 'gestionar_stock'
-    ]
+    ],
+    'gestionar_ordenes' => [
+        'icono'   => 'prescriptions',
+        'titulo'  => 'Órdenes de Fórmulas',
+        'desc'    => 'Gestión de prescripciones y órdenes de fórmulas enterales.',
+        'url'     => '/start/dashboard/orders',
+        'permiso' => 'gestionar_ordenes' 
+    ],
 ];
 
 $permisos = $roles[$rol] ?? [];
@@ -78,7 +87,7 @@ require __DIR__ . '/../../utils/head.php';
                         </div>
                     </div>
                     <div class="flex items-center gap-3">
-                        
+
                         <button onclick="logout()" class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-primary text-white text-sm font-bold hover:bg-secondary transition">
                             <span class="material-symbols-outlined text-[20px]"> logout </span>
                             <span class="hidden sm:inline"> Cerrar sesión </span>
@@ -149,4 +158,5 @@ require __DIR__ . '/../../utils/head.php';
     <script src="/assets/js/script.js" defer></script>
     <script src="/assets/js/dashboard.js" defer></script>
 </body>
+
 </html>

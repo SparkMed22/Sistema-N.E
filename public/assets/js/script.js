@@ -102,3 +102,5 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('Recarga automática desactivada.');
     }
 });
+
+

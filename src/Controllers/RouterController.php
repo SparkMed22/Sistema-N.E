@@ -38,4 +38,8 @@ class  RouterController
     public function stock():void{
         require __DIR__ . '/../views/secciones/stock.php';
     }
+
+    public function orders():void{
+        require __DIR__ . '/../views/secciones/orders.php';
+    }
 }

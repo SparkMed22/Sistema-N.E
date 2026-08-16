@@ -183,4 +183,15 @@ class UserController extends BaseController
             $this->error('Error al recuperar usuarios: ' . $e->getMessage(), 500);
         }
     }
+
+    // Funciona ✅
+    public function allDataUseController(): void
+    {
+        try {
+            $usuarios = $this->userModel->allDataUserModel();
+            $this->success($usuarios, 'Lista de usuarios recuperada correctamente');
+        } catch (Exception $e) {
+            $this->error('Error al recuperar usuarios: ' . $e->getMessage(), 500);
+        }
+    }
 }
