@@ -1,4 +1,8 @@
-const usuarioData = localStorage.getItem('usuario');
+const usuarioDataRawStorageHeader = localStorage.getItem('usuario');
+const serviciosRaw = localStorage.getItem('servicios');
+
+const usuarioData = usuarioDataRawStorageHeader ? JSON.parse(usuarioDataRawStorageHeader) : null;
+const serviciosHeader = serviciosRaw ? JSON.parse(serviciosRaw) : null;
 
 const nombre_header = document.getElementById('nombre_usuario');
 const rol_header = document.getElementById('rol_usuario');
@@ -11,32 +15,47 @@ const ROLES = {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-
     if (!nombre_header) {
-        console.error("Elemento nombre_usuario no encontrado");
+        console.error("Elemento nombre_usuario no encontrado en el DOM");
         return;
     }
 
-    if (usuarioData && nombre_header) {
+    if (usuarioData && nombre_header && serviciosHeader) {
         try {
-            const usuario = JSON.parse(usuarioData);
-            const nombreCompleto = `${usuario.nombre} ${usuario.apellido}`;
+            const nombreCompleto = `${usuarioData.nombre} ${usuarioData.apellido}`;
             nombre_header.textContent = nombreCompleto;
+            let servicioUsuario = '';
 
-            if (rol_header && usuario.rol) {
-                rol_header.textContent = ROLES[usuario.rol] || usuario.rol;
+            if (usuarioData.id_servicio === 1) {
+                servicioUsuario = 'Polivalente';
+            } else {
+                const index = usuarioData.id_servicio - 1;
+                // Verificamos que el índice exista en el array
+                if (index >= 0 && index < serviciosHeader.length) {
+                    servicioUsuario = serviciosHeader[index].nombre;
+                } else {
+                    console.warn("ID de servicio inválido:", usuarioData.id_servicio);
+                    servicioUsuario = 'Desconocido';
+                }
             }
 
-            // Agregar inicial al círculo
-            if (inicial_header && usuario.nombre && usuario.apellido) {
-                const inicial = (usuario.nombre[0] + usuario.apellido[0]).toUpperCase();
+            if (rol_header && usuarioData.rol) {
+                const rolTexto = ROLES[usuarioData.rol] || usuarioData.rol;
+                rol_header.textContent = `${rolTexto} / ${servicioUsuario}`;
+            }
+
+            if (inicial_header && usuarioData.nombre && usuarioData.apellido) {
+                const nombre = usuarioData.nombre || '';
+                const apellido = usuarioData.apellido || '';
+                const inicial = (nombre[0] + apellido[0]).toUpperCase();
                 inicial_header.textContent = inicial;
             }
         } catch (e) {
-            console.error("Error al parsear datos del usuario", e);
-            nombre_header.textContent = "Usuario";
+            // Opcional: Redirigir si el formato de datos está corrupto
+            window.location.href = '/start'; 
         }
     } else {
+        console.warn("No se encontraron datos de sesión. Redirigiendo a /start");
         window.location.href = '/start';
     }
 });

@@ -21,7 +21,8 @@ class UserValidator
         $usuarioValidator = v::key('nombre', v::stringType()->notEmpty()->length(1, 50))
             ->key('apellido', v::stringType()->notEmpty()->length(1, 50))
             ->key('cedula', v::stringType()->notEmpty()->alnum())
-            ->key('rol', v::in(['admin', 'internacion', 'nutricionista']));
+            ->key('rol', v::in(['admin', 'internacion', 'nutricionista']))
+            ->key('id_servicio',v::intVal()->positive());
 
         return $usuarioValidator->validate($data);
     }
@@ -48,7 +49,8 @@ class UserValidator
     {
         $actualizarValidator = v::key('id', v::intVal()->positive())
             ->key('rol', v::in(['admin', 'internacion', 'nutricionista']))
-            ->key('estado', v::boolVal());
+            ->key('estado', v::boolVal())
+            ->key('id_servicio',v::intVal()->positive());
         return $actualizarValidator->validate($data);
     }
 }

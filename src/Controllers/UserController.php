@@ -57,7 +57,8 @@ class UserController extends BaseController
                 'cedula' => $usuarioLogin->cedula,
                 'rol' => $usuarioLogin->rol,
                 'estado' => $usuarioLogin->estado,
-                'primer_ingreso' => $usuarioLogin->primer_ingreso
+                'primer_ingreso' => $usuarioLogin->primer_ingreso,
+                'id_servicio' =>$usuarioLogin->id_servicio
             ];
 
             Auth::login($usuarioLogin->id, $usuarioLogin->rol, $usuarioSeguro);
@@ -124,6 +125,7 @@ class UserController extends BaseController
     {
         try {
             $data = $this->getPostJson();
+                        
             $valido = $this->userValidator->validarActualizacion($data);
 
             if (!$valido) {
@@ -131,14 +133,15 @@ class UserController extends BaseController
                 return;
             }
 
-            $usuarioEdit = $this->userModel->updateUserModel($data['id'], $data['rol'], $data['estado']);
+            $usuarioEdit = $this->userModel->updateUserModel($data['id'], $data['rol'], $data['estado'],$data['id_servicio']);
 
             if (!$usuarioEdit) {
                 $this->error('Error al Actualizar Usuario.', 401);
                 return;
             }
             ////error_log('Datos recuperados: ' . json_encode($usuarioEdit));
-            $this->success($usuarioEdit, 'Login exitoso.');
+            $this->success($usuarioEdit, 'Usuario Actualizado.');
+            //$this->success(null, 'Login exitoso.');
         } catch (Exception $e) {
             $this->error('Error interno del servidor: ' . $e->getMessage(), 500);
         }
@@ -159,10 +162,11 @@ class UserController extends BaseController
                 $data['nombre'],
                 $data['apellido'],
                 $data['cedula'],
-                $data['rol']
+                $data['rol'],
+                $data['id_servicio']
             );
 
-            ////error_log('Datos recuperados para crear un usuario nuevo: ' . json_encode($data));
+            error_log('Datos recuperados para crear un usuario nuevo: ' . json_encode($data));
 
             $this->success([
                 'id' => $usuarioLogin,

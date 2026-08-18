@@ -60,5 +60,4 @@
         </div>
     </div>
 </header>
-
-<script src="/assets/js/header.js"></script>
+<script src="/assets/js/header.js" defer></script>

@@ -39,6 +39,8 @@ class ConsultationsController extends BaseController
         try {
             $data = $this->getPostJson();
 
+            error_log('Datos enviados para consulta: ' . json_encode($data));
+
             if (!$this->validator->validarIngresoConsulta($data)) {
                 error_log('Datos inválidos para consulta: ' . json_encode($data));
                 $this->error('Los datos enviados no cumplen con el formato requerido.');
@@ -50,8 +52,7 @@ class ConsultationsController extends BaseController
             $pacienteTemporal = false;
 
             if ($pacienteId === null) {
-
-                $pacienteId = $this->patientModel->crearPacienteModel(nombre: 'Desconocido', apellido: 'Desconocido', cedula: $data['cedula'],    fechaNacimiento: '2026-01-01', sexo: 'INDEFINIDO');
+                $pacienteId = $this->patientModel->crearPacienteModel(nombre: 'Desconocido', apellido: 'Desconocido', cedula: $data['cedula'],    fechaNacimiento: date('Y') .'-01-01', sexo: 'INDEFINIDO');
                 $pacienteTemporal = true;
                 error_log('Paciente temporal creado. ID: ' . $pacienteId . ' | CI: ' . $data['cedula']);
             }
@@ -65,7 +66,7 @@ class ConsultationsController extends BaseController
                 pacienteId: $pacienteId,
                 servicioId: (int) $data['servicio_id'],
                 usuarioIngresoId: (int) $data['usuario_ingreso_id'],
-                usuarioTratanteId: isset($data['usuario_tratante_id']) ? (int) $data['usuario_tratante_id'] : null,
+                diagnostico_medico: $data['diagnostico_medico'],
                 observacionesIngreso: $data['observaciones_ingreso'] ?? null,
                 bloque: $data['bloque'] ?? null,
                 sala: isset($data['sala']) ? (int) $data['sala'] : null,
@@ -90,24 +91,29 @@ class ConsultationsController extends BaseController
     }
 
 
-    public function allConsultasActivasUsuarioController(string $rol, int $id): void
+
+    // Funciona ✅
+    public function allConsultasActivasServicioController(string $rol, int $id_servicio): void
     {
         try {
-
-            $data = ['id' => $id, 'rol' => $rol];
+            $data = ['rol' => $rol, 'id_servicio' => $id_servicio];
 
             if (!$this->validator->validarPedidioConsultas($data)) {
                 error_log('Datos inválidos para solicitar consultas');
                 $this->error('Los datos enviados no cumplen con el formato requerido.');
                 return;
             }
-            $conusultas = $this->consultationModel->allConsultasActivasUsuarioModel($id, $rol);
+
+            error_log('Datos válidos para solicitar consultas');
+
+            $conusultas = $this->consultationModel->allConsultasActivasServicioModel($id_servicio);
             $this->success($conusultas, 'Consultas obtenidas correctamente.');
         } catch (\Exception $e) {
             error_log('Error en allConsultasActivasUsuarioController: ' .  $e->getMessage());
             $this->error('Error interno del servidor al obtener las consultas.', 500);
         }
     }
+
 
     // Funciona ✅
     public function allConsultationsController(): void
@@ -133,10 +139,8 @@ class ConsultationsController extends BaseController
                 return;
             }
 
-            $respuesta = $this->consultationModel->reasignarConsultaModel(
-                $data['id_profesional'],
-                $data['id_consulta']
-            );
+            $respuesta = $this->consultationModel->reasignarConsultaModel($data['id_servicio'], $data['id_consulta']);
+
 
             $this->success($respuesta, 'Consulta e ingreso registrado correctamente.');
         } catch (\RuntimeException $e) {
@@ -148,20 +152,20 @@ class ConsultationsController extends BaseController
         }
     }
 
-
-      public function altaConsultaController(): void
+    // Funciona ✅
+    public function altaConsultaController(): void
     {
         try {
             $data = $this->getPostJson();
 
-            if (!$this->validator->validarUsuarioID_ConsultaID($data)) {
+            if (!$this->validator->validarAlta($data)) {
                 error_log('Datos inválidos para la alta del paciente: ' . json_encode($data));
                 $this->error('Los datos enviados no cumplen con el formato requerido.');
                 return;
             }
 
             $respuesta = $this->consultationModel->altaConsultaModel(
-                $data['id_profesional'],
+                $data['id_usuario'],
                 $data['id_consulta']
             );
 
@@ -171,6 +175,26 @@ class ConsultationsController extends BaseController
             $this->error($e->getMessage(), 400);
         } catch (\Exception $e) {
             error_log('Error en altaConsultaController: ' . $e->getMessage());
+            $this->error('Error interno del servidor en Alta medica.', 500);
+        }
+    }
+
+    public function editarPacienteConsultaController(): void
+    {
+        try {
+            $data = $this->getPostJson();
+            if (!$this->validator->validarEdicionPaciente($data)) {
+                error_log('Datos inválidos para la edicion del paciente: ' . json_encode($data));
+                $this->error('Los datos enviados no cumplen con el formato requerido.');
+                return;
+            }
+            $respuesta = $this->consultationModel->editarConsultaGeneral(
+                $data['editar_id'],$data['editar_nombre'],$data['editar_apellido'],$data['editar_sexo'],$data['editar_fecha_nacimiento'],
+                $data['edit_consulta'],$data['editar_bloque'],$data['editar_sala'],$data['editar_cama']
+            );
+            $this->success($respuesta, 'Edicion Exitosa.');
+        } catch (\Exception $e) {
+            error_log('Error en editarPacienteConsultaController: ' . $e->getMessage());
             $this->error('Error interno del servidor en Alta medica.', 500);
         }
     }

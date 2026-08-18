@@ -108,60 +108,66 @@ $usuarios = $_SESSION['user_nombre'] ?? 'Personal de Guardia';
 
         <div class="grid grid-cols-1 gap-x-5 gap-y-5 sm:grid-cols-4">
 
+            <!-- Nombre -->
             <div class="flex flex-col gap-2 sm:col-span-2">
                 <label for="nombre" class="text-sm font-medium text-on-surface"> Nombre</label>
                 <div class="relative">
-                    <span
-                        class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[20px] text-on-surface-variant">
-                        person
-                    </span>
+                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[20px] text-on-surface-variant">person</span>
                     <input id="nombre" name="nombre" type="text" required autocomplete="given-name" placeholder="Ej. Juan"
                         class="w-full rounded-xl border border-outline-variant bg-surface-container-low py-2.5 pl-11 pr-4 text-sm text-on-surface placeholder:text-on-surface-variant/70 outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/15" />
                 </div>
             </div>
 
+            <!-- Apellido -->
             <div class="flex flex-col gap-2 sm:col-span-2">
                 <label for="apellido" class="text-sm font-medium text-on-surface"> Apellido </label>
                 <div class="relative">
-                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[20px] text-on-surface-variant">
-                        badge
-                    </span>
+                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[20px] text-on-surface-variant">badge</span>
                     <input id="apellido" name="apellido" type="text" required autocomplete="family-name" placeholder="Ej. Pérez"
                         class="w-full rounded-xl border border-outline-variant bg-surface-container-low py-2.5 pl-11 pr-4 text-sm text-on-surface placeholder:text-on-surface-variant/70 outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/15" />
                 </div>
             </div>
 
+            <!-- Cédula -->
             <div class="flex flex-col gap-2 sm:col-span-2">
                 <label for="cedula" class="text-sm font-medium text-on-surface"> Cédula de identidad</label>
                 <div class="relative">
-                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[20px] text-on-surface-variant">
-                        id_card
-                    </span>
+                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[20px] text-on-surface-variant">id_card</span>
                     <input id="cedula" name="cedula" type="text" required inputmode="numeric" autocomplete="off" placeholder="Ej. 1234567"
                         class="w-full rounded-xl border border-outline-variant bg-surface-container-low py-2.5 pl-11 pr-4 text-sm text-on-surface placeholder:text-on-surface-variant/70 outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/15" />
                 </div>
             </div>
 
+            <!-- Rol -->
             <div class="flex flex-col gap-2 sm:col-span-2">
                 <label for="rol" class="text-sm font-medium text-on-surface"> Rol del usuario</label>
                 <div class="relative">
-                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[20px] text-on-surface-variant">
-                        admin_panel_settings
-                    </span>
-
+                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[20px] text-on-surface-variant">admin_panel_settings</span>
                     <select id="rol" name="rol" required
                         class="w-full appearance-none rounded-xl border border-outline-variant bg-surface-container-low py-2.5 pl-11 pr-10 text-sm text-on-surface outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/15 cursor-pointer">
                         <option value="">Seleccionar rol...</option>
                         <option value="admin">Administrador</option>
-                        <option value="internacion"> Internación</option>
+                        <option value="internacion">Internación</option>
                         <option value="nutricionista">Nutricionista</option>
                     </select>
-                    <span
-                        class="material-symbols-outlined pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[20px] text-on-surface-variant">
-                        expand_more
-                    </span>
+                    <span class="material-symbols-outlined pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[20px] text-on-surface-variant">expand_more</span>
                 </div>
             </div>
+
+            <div class="flex flex-col gap-2 sm:col-span-2">
+                <label for="id_servicio" class="text-sm font-medium text-on-surface"> Servicio</label>
+                <div class="relative">
+                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[20px] text-on-surface-variant">medical_services</span>
+
+                    <select id="id_servicio" name="id_servicio" required
+                        class="w-full appearance-none rounded-xl border border-outline-variant bg-surface-container-low py-2.5 pl-11 pr-10 text-sm text-on-surface outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/15 cursor-pointer">
+                        <option value="">Seleccionar servicio...</option>
+                    </select>
+
+                    <span class="material-symbols-outlined pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[20px] text-on-surface-variant">expand_more</span>
+                </div>
+            </div>
+
         </div>
 
         <div class="mt-7 flex flex-col-reverse gap-3 border-t border-outline-variant/60 pt-5 sm:flex-row sm:justify-end">
@@ -171,9 +177,7 @@ $usuarios = $_SESSION['user_nombre'] ?? 'Personal de Guardia';
             </button>
             <button type="submit"
                 class="flex h-10 items-center justify-center gap-2 rounded-xl bg-primary px-5 text-sm font-medium text-on-primary transition-all hover:bg-primary-container active:scale-[0.98] cursor-pointer">
-                <span class="material-symbols-outlined text-[19px]">
-                    person_add
-                </span>
+                <span class="material-symbols-outlined text-[19px]">person_add</span>
                 Crear usuario
             </button>
         </div>
@@ -208,40 +212,33 @@ $usuarios = $_SESSION['user_nombre'] ?? 'Personal de Guardia';
 
         <div class="grid grid-cols-1 gap-x-5 gap-y-5 sm:grid-cols-4">
 
-            <!-- Nombre -->
+            <!-- Nombre (No editable) -->
             <div class="flex flex-col gap-2 sm:col-span-2">
                 <label for="edit-nombre" class="text-sm font-medium text-on-surface"> Nombre <span class="text-xs font-normal text-on-surface-variant">(No editable)</span></label>
                 <div class="relative">
-                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[20px] text-on-surface-variant">
-                        person
-                    </span>
+                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[20px] text-on-surface-variant">person</span>
                     <input id="edit-nombre" name="nombre" type="text" readonly
-                        class="w-full cursor-not-allowed rounded-xl border border-outline-variant bg-surface-container-low py-2.5 pl-11 pr-4 text-sm text-on-surface outline-none transition-all placeholder:text-on-surface-variant/70 focus:border-primary focus:ring-2 focus:ring-primary/15" />
+                        class="w-full cursor-not-allowed rounded-xl border border-outline-variant bg-surface-container-low py-2.5 pl-11 pr-4 text-sm text-on-surface outline-none transition-all placeholder:text-on-surface-variant/70 focus:border-primary focus:ring-2 focus:ring-primary/15 opacity-70" />
                 </div>
             </div>
 
-            <!-- Apellido -->
+            <!-- Apellido (No editable) -->
             <div class="flex flex-col gap-2 sm:col-span-2">
-                <label for="edit-apellido" class="text-sm font-medium text-on-surface"> Apellido<span class="text-xs font-normal text-on-surface-variant">(No editable)</span></label>
+                <label for="edit-apellido" class="text-sm font-medium text-on-surface"> Apellido <span class="text-xs font-normal text-on-surface-variant">(No editable)</span></label>
                 <div class="relative">
-                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[20px] text-on-surface-variant">
-                        badge
-                    </span>
+                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[20px] text-on-surface-variant">badge</span>
                     <input id="edit-apellido" name="apellido" type="text" readonly
-                        class="w-full cursor-not-allowed rounded-xl border border-outline-variant bg-surface-container-low py-2.5 pl-11 pr-4 text-sm text-on-surface outline-none transition-all placeholder:text-on-surface-variant/70 focus:border-primary focus:ring-2 focus:ring-primary/15" />
+                        class="w-full cursor-not-allowed rounded-xl border border-outline-variant bg-surface-container-low py-2.5 pl-11 pr-4 text-sm text-on-surface outline-none transition-all placeholder:text-on-surface-variant/70 focus:border-primary focus:ring-2 focus:ring-primary/15 opacity-70" />
                 </div>
             </div>
 
-            <!-- Cédula (Solo Mostrar) -->
+            <!-- Cédula (No editable) -->
             <div class="flex flex-col gap-2 sm:col-span-2">
                 <label for="edit-cedula" class="text-sm font-medium text-on-surface"> Cédula de identidad <span class="text-xs font-normal text-on-surface-variant">(No editable)</span></label>
                 <div class="relative">
-                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[20px] text-on-surface-variant/60">
-                        id_card
-                    </span>
-                    <!-- readonly y estilos de deshabilitado aplicados -->
+                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[20px] text-on-surface-variant/60">id_card</span>
                     <input id="edit-cedula" name="cedula" type="text" readonly
-                        class="w-full cursor-not-allowed rounded-xl border border-outline-variant/50 bg-surface-container py-2.5 pl-11 pr-4 text-sm text-on-surface-variant outline-none" />
+                        class="w-full cursor-not-allowed rounded-xl border border-outline-variant/50 bg-surface-container py-2.5 pl-11 pr-4 text-sm text-on-surface-variant outline-none opacity-70" />
                 </div>
             </div>
 
@@ -249,36 +246,42 @@ $usuarios = $_SESSION['user_nombre'] ?? 'Personal de Guardia';
             <div class="flex flex-col gap-2 sm:col-span-2">
                 <label for="edit-rol" class="text-sm font-medium text-on-surface"> Rol del usuario</label>
                 <div class="relative">
-                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[20px] text-on-surface-variant">
-                        admin_panel_settings
-                    </span>
+                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[20px] text-on-surface-variant">admin_panel_settings</span>
                     <select id="edit-rol" name="rol" required
                         class="w-full cursor-pointer appearance-none rounded-xl border border-outline-variant bg-surface-container-low py-2.5 pl-11 pr-10 text-sm text-on-surface outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/15">
                         <option value="admin">Administrador</option>
                         <option value="internacion">Internación</option>
                         <option value="nutricionista">Nutricionista</option>
                     </select>
-                    <span class="material-symbols-outlined pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[20px] text-on-surface-variant">
-                        expand_more
-                    </span>
+                    <span class="material-symbols-outlined pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[20px] text-on-surface-variant">expand_more</span>
                 </div>
             </div>
 
-            <!-- Estado (Booleano) -->
+            <!-- SERVICIO (Nuevo campo) -->
+            <div class="flex flex-col gap-2 sm:col-span-2">
+                <label for="edit-id_servicio" class="text-sm font-medium text-on-surface"> Servicio</label>
+                <div class="relative">
+                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[20px] text-on-surface-variant">medical_services</span>
+                    <select id="edit-id_servicio" name="id_servicio" required
+                        class="w-full cursor-pointer appearance-none rounded-xl border border-outline-variant bg-surface-container-low py-2.5 pl-11 pr-10 text-sm text-on-surface outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/15">
+                        <option value="">Seleccionar servicio...</option>
+                        
+                    </select>
+                    <span class="material-symbols-outlined pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[20px] text-on-surface-variant">expand_more</span>
+                </div>
+            </div>
+
+            <!-- Estado -->
             <div class="flex flex-col gap-2 sm:col-span-2">
                 <label for="edit-estado" class="text-sm font-medium text-on-surface"> Estado de la cuenta</label>
                 <div class="relative">
-                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[20px] text-on-surface-variant">
-                        toggle_on
-                    </span>
+                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[20px] text-on-surface-variant">toggle_on</span>
                     <select id="edit-estado" name="estado" required
                         class="w-full cursor-pointer appearance-none rounded-xl border border-outline-variant bg-surface-container-low py-2.5 pl-11 pr-10 text-sm text-on-surface outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/15">
                         <option value="true">Activo</option>
                         <option value="false">Inactivo</option>
                     </select>
-                    <span class="material-symbols-outlined pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[20px] text-on-surface-variant">
-                        expand_more
-                    </span>
+                    <span class="material-symbols-outlined pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[20px] text-on-surface-variant">expand_more</span>
                 </div>
             </div>
 
@@ -291,9 +294,7 @@ $usuarios = $_SESSION['user_nombre'] ?? 'Personal de Guardia';
             </button>
             <button type="submit"
                 class="flex h-10 cursor-pointer items-center justify-center gap-2 rounded-xl bg-primary px-5 text-sm font-medium text-on-primary transition-all hover:bg-primary-container active:scale-[0.98]">
-                <span class="material-symbols-outlined text-[19px]">
-                    save
-                </span>
+                <span class="material-symbols-outlined text-[19px]">save</span>
                 Guardar cambios
             </button>
         </div>

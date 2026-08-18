@@ -2,9 +2,10 @@ const tableBody = document.getElementById('users_table_body');
 const tableHead = document.getElementById('table_tread');
 const inputBuscar = document.getElementById('input_buscar_usuario');
 
-const columnas = ['Usuario', 'Cedula', 'Rol', 'Estado', 'Acciones'];
+const columnas = ['Usuario', 'Cedula', 'Rol', 'Servicio', 'Estado', 'Acciones'];
 
 let usuarios = [];
+let servicios = [];
 
 columnas.forEach((columna) => {
     const th = document.createElement('th');
@@ -16,38 +17,13 @@ columnas.forEach((columna) => {
 
 async function loadUsers() {
     try {
-        const response = await fetch('/api/users', {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json'
-            }
-        });
-
-        if (!response.ok) {
-            throw new Error('Error al obtener los usuarios.');
-        }
-
-        const data = await response.json();
-
-        if (!data.success) {
-            throw new Error(
-                data.message ?? 'No se pudieron cargar los usuarios.'
-            );
-        }
-
-        usuarios = data.data ?? []
+        usuarios = await getFetch('/api/users', 'Error al obtener los usuarios.') ?? [];
         renderizarUsuarios(usuarios);
-
     } catch (error) {
         console.error('loadUsers:', error);
-
-        showError(
-            'Error del servidor',
-            error.message ?? 'No se pudieron cargar los usuarios.'
-        );
+        showError('Error del servidor', error.message ?? 'No se pudieron cargar los usuarios.');
     }
 }
-
 
 
 function renderizarUsuarios(usuariosData) {
@@ -100,6 +76,7 @@ function crearFilaUsuario(usuario) {
     const nombre = escapeHtml(usuario.nombre);
     const apellido = escapeHtml(usuario.apellido);
     const cedula = escapeHtml(usuario.cedula);
+    const nombre_servicio = escapeHtml(usuario.nombre_servicio);
 
     const rol = escapeHtml(
         ROLES?.[usuario.rol] ?? usuario.rol ?? 'Sin rol'
@@ -139,6 +116,12 @@ function crearFilaUsuario(usuario) {
                 >
                     ${rol}
                 </span>
+            </td>
+
+            <td class="px-6 py-5">
+                <p class="text-sm text-on-surface-variant">
+                    ${nombre_servicio}
+                </p>
             </td>
 
             <!-- Estado -->
@@ -187,95 +170,48 @@ function crearFilaUsuario(usuario) {
 }
 
 
-
 function buscarUsuarios(event) {
-
     const texto = event.target.value.trim().toLowerCase();
-
     if (!texto) {
         renderizarUsuarios(usuarios);
         return;
     }
-
     const resultados = usuarios.filter((usuario) => {
-
         const nombreCompleto = [
             usuario.nombre,
             usuario.apellido
-        ]
-            .filter(Boolean)
-            .join(' ')
-            .toLowerCase();
-
-        const cedula = String(usuario.cedula ?? '')
-            .toLowerCase();
-
-        return (
-            nombreCompleto.includes(texto) ||
-            cedula.includes(texto)
-        );
+        ].filter(Boolean).join(' ').toLowerCase();
+        const cedula = String(usuario.cedula ?? '').toLowerCase();
+        return (nombreCompleto.includes(texto) || cedula.includes(texto));
     });
-
     renderizarUsuarios(resultados);
 }
 
 
 
 async function addUser(event) {
-
     event.preventDefault();
-
     const form = event.target;
     const formData = new FormData(form);
-
     const capitalizar = (texto) => {
-        if (!texto) {
-            return '';
-        }
+        if (!texto) return '';
         texto = String(texto).trim();
         return texto.charAt(0).toUpperCase() + texto.slice(1).toLowerCase();
     };
 
     const cedula = String(formData.get('cedula') ?? '').trim();
-
     const nombre = capitalizar(formData.get('nombre'));
-
     const apellido = capitalizar(formData.get('apellido'));
-
     const rol = String(formData.get('rol') ?? '').trim();
+    const id_servicio = parseInt(formData.get('id_servicio'));
 
-
-    if (!cedula || !nombre || !apellido || !rol) {
+    if (!cedula || !nombre || !apellido || !rol || isNaN(id_servicio)) {
         showError('Datos incompletos', 'Todos los campos son obligatorios.');
         return;
     }
-
-
+    const paylod = { cedula, nombre, apellido, rol, id_servicio }
     try {
-
-        const response = await fetch('/api/users', {
-            method: 'POST',
-
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-
-            body: JSON.stringify({
-                cedula,
-                nombre,
-                apellido,
-                rol
-            })
-        });
-
-
-        const data = await response.json();
-
-        if (!response.ok || !data.success) {
-            throw new Error(data.message ?? 'El nuevo usuario no pudo ser creado.');
-        }
-
+        const data = await postFetch('/api/users', paylod, 'El nuevo usuario no pudo ser creado.');
         closeModal('modal-nuevo-usuario');
         form.reset();
         await loadUsers();
@@ -301,42 +237,31 @@ function editarUserModel(button) {
     document.getElementById('edit-cedula').value = usuario.cedula;
     document.getElementById('edit-rol').value = usuario.rol;
     document.getElementById('edit-estado').value = usuario.estado ? 'true' : 'false';
+    document.getElementById('edit-id_servicio').value = usuario.id_servicio;
     openModal('modal-editar-usuario');
 }
 
 
+
 async function editUser(event) {
     event.preventDefault();
-
     const form = event.target;
-
     const id = document.getElementById('edit-id').value;
     const rol = document.getElementById('edit-rol').value;
     const estado = document.getElementById('edit-estado').value;
+    const id_servicio = document.getElementById('edit-id_servicio').value;
 
     try {
-        const response = await fetch('/api/users/update-data', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify({
-                id: parseInt(id, 10),
-                rol: rol,
-                estado: estado === 'true'
-            })
-        });
-
-        const data = await response.json();
-
-        if (!response.ok || !data.success) {
-            throw new Error(data.message ?? 'El usuario no pudo ser actualizado.');
+        const paylod = {
+            id: parseInt(id, 10),
+            rol: rol,
+            estado: estado === 'true',
+            id_servicio: parseInt(id_servicio)
         }
-
+        const data = await postFetch('/api/users/update-data', paylod, 'El usuario no pudo ser actualizado.');
         closeModal('modal-editar-usuario');
         form.reset();
-        await loadUsers();
+        loadUsers();
         showSuccess('Usuario Actualizado', data.message ?? 'El usuario fue actualizado correctamente.');
 
     } catch (error) {
@@ -353,33 +278,15 @@ async function reiniciarPassword(button) {
         console.error('Usuario no encontrado:', userId);
         return;
     }
-
-    console.log(usuario);
-
     try {
-        const response = await fetch('/api/users/update-password', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify({
-                cedula:usuario.cedula,
-                password_new:usuario.cedula,
-                confirm_password:usuario.cedula
-            })
-        });
-
-        const data = await response.json();
-
-        console.log(data);
-
-        if (!response.ok || !data.success) {
-            throw new Error(data.message ?? 'Eror al reiciar la contraseña.');
-        }
-
+        const payload = {
+            cedula: usuario.cedula,
+            password_new: usuario.cedula,
+            confirm_password: usuario.cedula
+        };
+        const data = await postFetch('/api/users/update-password', payload, 'Error al reiniciar la contraseña.');
         await loadUsers();
-        showSuccess('Usuario Actualizado', data.message ?? 'El usuario fue actualizado correctamente.');
+        showSuccess('Usuario actualizado', data.message ?? 'La contraseña fue reiniciada correctamente.');
 
     } catch (error) {
         showError('Error al actualizar usuario', error.message ?? 'Ocurrió un error inesperado.');
@@ -387,8 +294,15 @@ async function reiniciarPassword(button) {
 }
 
 
+
+
 document.addEventListener('DOMContentLoaded', () => {
     loadUsers();
+    servicios = getLocalStorangeData('servicios');
+    loadOptions(servicios, 'id_servicio');
+    loadOptions(servicios, 'edit-id_servicio');
+
+
     const addUserForm = document.getElementById('form-add-user');
     if (addUserForm) {
         addUserForm.addEventListener('submit', addUser);

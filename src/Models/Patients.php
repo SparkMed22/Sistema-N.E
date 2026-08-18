@@ -25,13 +25,13 @@ class Patients
     // Funciona ✅
     public function existePaciente(string $cedula): ?int
     {
-        $stmt = $this->db->prepare(    "SELECT id FROM pacientes WHERE cedula = :cedula LIMIT 1");
+        $stmt = $this->db->prepare("SELECT id FROM pacientes WHERE cedula = :cedula LIMIT 1");
         $stmt->execute(['cedula' => $cedula]);
         $id = $stmt->fetchColumn();
         return $id !== false ? (int)$id : null;
     }
 
-    
+
     // Funciona ✅
     public function crearPacienteModel(string $nombre, string $apellido, string $cedula, string $fechaNacimiento, string $sexo): int
     {
@@ -64,6 +64,18 @@ class Patients
         return $stmt->fetchAll(PDO::FETCH_OBJ);
     }
 
-    // TODO: ACTUALIZAR Paciente
-    // UPDATE pacientes  SET nombre = 'Maria Fatima', apellido = 'Medina l', sexo = 'F'  WHERE id = 32;
+    // Funciona ✅
+    public function editarPacienteModel(int $editar_id, string $editar_nombre, string $editar_apellido, string $editar_sexo, string $editar_fecha_nacimiento)
+    {
+        $sql = "UPDATE pacientes SET nombre = :nombre, apellido = :apellido, sexo = :sexo,fecha_nacimiento = :fecha_nacimiento WHERE id = :id";
+        $stmt = $this->db->prepare($sql);
+        $resultado = $stmt->execute([
+            ':nombre' => $editar_nombre,
+            ':apellido' => $editar_apellido,
+            ':sexo' => $editar_sexo,
+            ':fecha_nacimiento' => $editar_fecha_nacimiento,
+            ':id' => $editar_id
+        ]);
+        return $resultado && $stmt->rowCount() > 0;
+    }
 }

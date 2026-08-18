@@ -87,6 +87,71 @@ const showConfirm = (title, text) => {
 };
 
 
+// ? GET GENERICO 
+async function getFetch(url, message_error) {
+    try {
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json'
+            }
+        });
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.message || errorMessage);
+        }
+        return (await response.json()).data;
+    } catch (error) {
+        showError('Error del servidor', error.message ?? 'ERROR HABLE CON SOPORTE.');
+        return null;
+    }
+}
+
+
+// ? POST GENERICO
+async function postFetch(url, payload, messageError) {
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        });
+        const data = await response.json();
+        if (!response.ok || !data.success) throw new Error(data.message ?? messageError);
+        return data;
+    } catch (error) {
+        console.error('Error en el servidor:', error);
+        throw error;
+    }
+}
+// ? Recuperar el localStorange y retornar un json
+function getLocalStorangeData(key, message_error) {
+    const data = localStorage.getItem(key);
+    if (!data) throw new Error(message_error);
+    return JSON.parse(data);
+}
+
+
+// ? Cargar select dinamicamente
+function loadOptions(arreglo, id) {
+    const select = document.getElementById(id);
+    //select.innerHTML += '<option value="">Seleccionar servicio...</option>';
+    if (servicios.length === 0) {
+        select.innerHTML += '<option value="" disabled>No hay servicios disponibles</option>';
+        return;
+    }
+    servicios.forEach(servicio => {
+        const option = document.createElement('option');
+        option.value = servicio.id;
+        option.textContent = servicio.nombre;
+        select.appendChild(option);
+    });
+}
+
+
 // ! SOLO PARA DESARROLLO 
 // localStorage.setItem('autoReloadEnabled', 'false');
 // localStorage.setItem('autoReloadEnabled', 'true'); 

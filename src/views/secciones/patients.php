@@ -1,17 +1,14 @@
 <?php
-$title = "HGI - Usuarios";
+$title = "HGI - Pacientes";
 require __DIR__ . '/../../utils/head.php';
-
-$usuarios_id = $_SESSION['user_id'];
-$usuarios_rol = $_SESSION['user_rol'];
-$usuarios = $_SESSION['user_nombre'] ?? 'Personal de Guardia';
 ?>
 
 <body class="bg-background text-on-background font-body-md min-h-screen flex flex-col">
 
     <?php require __DIR__ . '/../../utils/header.php'; ?>
 
-    <main class="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 mt-24">
+    <main class="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-20 md:mt-24 pt-6 pb-12">
+        
 
         <section class="mb-7">
             <div class="flex flex-col gap-4 rounded-2xl border border-outline-variant/60 bg-surface-container-lowest p-4 sm:flex-row sm:items-center">
@@ -36,13 +33,13 @@ $usuarios = $_SESSION['user_nombre'] ?? 'Personal de Guardia';
             </div>
         </section>
 
-
         <!-- GRID DE PACIENTES -->
         <section>
             <div id="pacientes_grid" class="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3"></div>
         </section>
 
     </main>
+
     <?php require __DIR__ . '/../../utils/footer.php'; ?>
     <script src="/assets/js/script.js" defer></script>
     <script src="/assets/js/patients.js" defer></script>
@@ -129,25 +126,25 @@ $usuarios = $_SESSION['user_nombre'] ?? 'Personal de Guardia';
                     </div>
                 </div>
 
-                <!-- // TODO: CARGAR DINAMICAMENTE -->
                 <div class="flex flex-col gap-2 sm:col-span-3">
                     <label for="ingreso-servicio" class="text-sm font-medium text-on-surface">Servicio</label>
                     <div class="relative">
                         <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[20px] text-on-surface-variant">medical_services</span>
                         <select id="ingreso-servicio" name="servicio" required
                             class="h-11 w-full cursor-pointer appearance-none rounded-xl border border-outline-variant bg-surface-container-low py-2.5 pl-11 pr-10 text-sm text-on-surface outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/15">
-                            <option value="">Seleccionar servicio...</option>
-                            <option value="1">Clínica Médica</option>
-                            <option value="2">Cirugía y Traumatología</option>
-                            <option value="3">Ginecología</option>
-                            <option value="4">Pediatría</option>
-                            <option value="5">UTI Adultos</option>
-                            <option value="6">Urgencia Clínica Médica</option>
-                            <option value="7">Urgencia Cirugía y Traumatología</option>
-                            <option value="8">Urgencia Ginecología</option>
-                            <option value="9">Urgencia Pediatría</option>
                         </select>
                         <span class="material-symbols-outlined pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[20px] text-on-surface-variant">expand_more</span>
+                    </div>
+                </div>
+
+                <!-- Nuevo Campo: Diagnóstico Médico (Obligatorio) -->
+                <div class="flex flex-col gap-2 sm:col-span-3">
+                    <label for="ingreso-diagnostico" class="text-sm font-medium text-on-surface">Diagnóstico Médico</label>
+                    <div class="relative">
+                        <span class="material-symbols-outlined absolute left-3 top-3 text-[20px] text-on-surface-variant">health_and_safety</span>
+                        <textarea id="ingreso-diagnostico" name="diagnostico_medico" rows="3" required
+                            placeholder="Ingrese el diagnóstico médico detallado..."
+                            class="w-full resize-none rounded-xl border border-outline-variant bg-surface-container-low py-3 pl-11 pr-4 text-sm text-on-surface outline-none transition-all placeholder:text-on-surface-variant/70 focus:border-primary focus:ring-2 focus:ring-primary/15"></textarea>
                     </div>
                 </div>
 
@@ -182,43 +179,28 @@ $usuarios = $_SESSION['user_nombre'] ?? 'Personal de Guardia';
         </form>
     </div>
 
+
     <!-- POPOVER: Reasignar -->
     <div id="popover-reasignar" popover="manual" class="m-auto border-0 bg-transparent p-0 backdrop:bg-slate-900/50 backdrop:backdrop-blur-sm">
-        <div class="w-80 max-w-sm rounded-xl border border-outline-variant bg-surface p-5 shadow-2xl text-on-surface">
+        <div class="w-80 max-w-sm rounded-xl border border-outline-variant bg-surface p-5 text-on-surface">
 
             <div class="mb-4">
-                <h3 class="text-base font-semibold text-on-surface"> Reasignar profesional</h3>
-                <p class="mt-1 text-xs text-on-surface-variant"> Selecciona el profesional que continuará con esta consulta.</p>
+                <h3 class="text-base font-semibold text-on-surface"> Reasignar servicio</h3>
+                <p class="mt-1 text-xs text-on-surface-variant"> Selecciona el servicio que continuará con esta consulta.</p>
             </div>
 
-            <div class="mb-4 rounded-lg bg-surface-container-low p-3">
-                <p class="text-xs text-on-surface-variant">Profesional actual</p>
-                <p class="mt-1 text-sm font-medium text-on-surface" id="current-prof-name"></p>
-            </div>
-
-            <!-- Seleccionar profesional -->
-            <label for="profesional-select" class="mb-1 block text-xs font-medium text-on-surface-variant">
-                Nuevo profesional
+            <label for="servicio-select" class="mb-1 block text-xs font-medium text-on-surface-variant">
+                Nuevo Servicio
             </label>
 
 
             <form id="form-reasignar-paciente">
 
-                <input
-                    type="hidden"
-                    id="id-consulta-reasignar"
-                    name="consulta_id"
-                    value="">
+                <input type="hidden" id="id-consulta-reasignar" name="consulta_id" value="">
 
-                <select
-                    id="profesional-select"
-                    name="profesional_id"
+                <select id="servicio-select" name="servicio_id"
                     class="w-full rounded-lg border border-outline bg-surface-container-lowest px-3 py-2 text-sm text-on-surface outline-none transition focus:border-primary focus:ring-2 focus:ring-primary-container">
-
-                    <option value="">
-                        Seleccionar profesional
-                    </option>
-
+                    <option value=""> Seleccionar Servicio </option>
                 </select>
 
                 <div class="mt-5 flex justify-end gap-2">
@@ -243,9 +225,10 @@ $usuarios = $_SESSION['user_nombre'] ?? 'Personal de Guardia';
         </div>
     </div>
 
+
     <!-- POPOVER: Editar Paciente -->
     <div id="popover-editar-paciente" popover="manual"
-        class=" max-w-2xl overflow-hidden rounded-2xl border border-outline-variant/60 bg-surface-container-lowest text-on-surface shadow-xl backdrop:bg-on-surface/50 backdrop:backdrop-blur-sm">
+        class=" max-w-2xl overflow-hidden rounded-2xl border border-outline-variant/60 bg-surface-container-lowest text-on-surface  backdrop:bg-on-surface/50 backdrop:backdrop-blur-sm">
 
         <div class="flex items-center justify-between border-b border-outline-variant/60 px-6 py-5">
             <div class="flex items-center gap-3">
@@ -268,72 +251,236 @@ $usuarios = $_SESSION['user_nombre'] ?? 'Personal de Guardia';
                 <span class="material-symbols-outlined text-[20px]"> close</span>
             </button>
         </div>
-
         <form id="form-editar-paciente" class="px-6 py-6">
+
             <input type="hidden" id="edit-paciente-id" name="id">
+            <input type="hidden" id="edit-paciente-consulta" name="id_consulta">
 
-            <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+            <section class="space-y-4">
 
-                <div class="flex flex-col gap-2">
-                    <label for="edit-paciente-nombre" class="text-sm font-medium text-on-surface">
-                        Nombre
-                    </label>
-                    <div class="relative">
-                        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[20px] text-on-surface-variant"> person</span>
-                        <input id="edit-paciente-nombre" name="nombre"
-                            type="text" maxlength="50" autocomplete="off" required
-                            class="h-11 w-full rounded-xl border border-outline-variant bg-surface-container-low py-2.5 pl-11 pr-4 text-sm text-on-surface outline-none transition-all placeholder:text-on-surface-variant/70 focus:border-primary focus:ring-2 focus:ring-primary/15">
-                    </div>
+                <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-[20px] text-primary">
+                        person
+                    </span>
+
+                    <h4 class="text-sm font-semibold text-on-surface">
+                        Datos personales
+                    </h4>
                 </div>
 
-                <div class="flex flex-col gap-2">
-                    <label for="edit-paciente-apellido" class="text-sm font-medium text-on-surface">
-                        Apellido
-                    </label>
+                <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
 
-                    <div class="relative">
-                        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[20px] text-on-surface-variant">
-                            badge
-                        </span>
+                    <!-- Nombre -->
+                    <div class="flex flex-col gap-2">
+                        <label
+                            for="edit-paciente-nombre"
+                            class="text-sm font-medium text-on-surface">
+                            Nombre
+                        </label>
 
-                        <input id="edit-paciente-apellido" name="apellido" type="text"
-                            maxlength="50"
-                            autocomplete="off"
-                            required
-                            class="h-11 w-full rounded-xl border border-outline-variant bg-surface-container-low py-2.5 pl-11 pr-4 text-sm text-on-surface outline-none transition-all placeholder:text-on-surface-variant/70 focus:border-primary focus:ring-2 focus:ring-primary/15">
+                        <div class="relative">
+                            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[20px] text-on-surface-variant">
+                                person
+                            </span>
+
+                            <input
+                                id="edit-paciente-nombre"
+                                name="nombre"
+                                type="text"
+                                maxlength="50"
+                                autocomplete="off"
+                                required
+                                class="h-11 w-full rounded-xl border border-outline-variant bg-surface-container-low py-2.5 pl-11 pr-4 text-sm text-on-surface outline-none transition-all placeholder:text-on-surface-variant/70 focus:border-primary focus:ring-2 focus:ring-primary/15">
+                        </div>
                     </div>
+
+                    <!-- Apellido -->
+                    <div class="flex flex-col gap-2">
+                        <label
+                            for="edit-paciente-apellido"
+                            class="text-sm font-medium text-on-surface">
+                            Apellido
+                        </label>
+
+                        <div class="relative">
+                            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[20px] text-on-surface-variant">
+                                badge
+                            </span>
+
+                            <input
+                                id="edit-paciente-apellido"
+                                name="apellido"
+                                type="text"
+                                maxlength="50"
+                                autocomplete="off"
+                                required
+                                class="h-11 w-full rounded-xl border border-outline-variant bg-surface-container-low py-2.5 pl-11 pr-4 text-sm text-on-surface outline-none transition-all placeholder:text-on-surface-variant/70 focus:border-primary focus:ring-2 focus:ring-primary/15">
+                        </div>
+                    </div>
+
+                    <!-- Sexo -->
+                    <div class="flex flex-col gap-2">
+                        <label
+                            for="edit-paciente-sexo"
+                            class="text-sm font-medium text-on-surface">
+                            Sexo
+                        </label>
+
+                        <div class="relative">
+                            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[20px] text-on-surface-variant">
+                                wc
+                            </span>
+
+                            <select
+                                id="edit-paciente-sexo"
+                                name="sexo"
+                                required
+                                class="h-11 w-full cursor-pointer appearance-none rounded-xl border border-outline-variant bg-surface-container-low py-2.5 pl-11 pr-10 text-sm text-on-surface outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/15">
+
+                                <option value="M">Masculino</option>
+                                <option value="F">Femenino</option>
+                                <option value="INDEFINIDO">No definido</option>
+
+                            </select>
+
+                            <span class="material-symbols-outlined pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[20px] text-on-surface-variant">
+                                expand_more
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Fecha -->
+                    <div class="flex flex-col gap-2">
+                        <label
+                            for="edit-paciente-fecha"
+                            class="text-sm font-medium text-on-surface">
+                            Fecha de nacimiento
+                        </label>
+
+                        <div class="relative">
+                            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[20px] text-on-surface-variant">
+                                event
+                            </span>
+
+                            <input
+                                id="edit-paciente-fecha"
+                                name="fecha_nacimiento"
+                                type="date"
+                                required
+                                class="h-11 w-full rounded-xl border border-outline-variant bg-surface-container-low py-2.5 pl-11 pr-4 text-sm text-on-surface outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/15">
+                        </div>
+                    </div>
+
                 </div>
 
-                <div class="flex flex-col gap-2 sm:col-span-2">
+            </section>
+            <section class="mt-7 space-y-4">
 
-                    <label
-                        for="edit-paciente-sexo"
-                        class="text-sm font-medium text-on-surface">
-                        Sexo
-                    </label>
+                <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-[20px] text-primary">
+                        location_on
+                    </span>
 
-                    <div class="relative">
-                        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[20px] text-on-surface-variant">wc</span>
-
-                        <select id="edit-paciente-sexo" name="sexo" required
-                            class="h-11 w-full cursor-pointer appearance-none rounded-xl border border-outline-variant bg-surface-container-low py-2.5 pl-11 pr-10 text-sm text-on-surface outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/15">
-                            <option value="M"> Masculino</option>
-                            <option value="F"> Femenino</option>
-                            <option value="INDEFINIDO"> No definido</option>
-                        </select>
-                        <span class="material-symbols-outlined pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[20px] text-on-surface-variant">
-                            expand_more
-                        </span>
-                    </div>
+                    <h4 class="text-sm font-semibold text-on-surface">
+                        Ubicación del paciente
+                    </h4>
                 </div>
-            </div>
+
+                <div class="rounded-2xl border border-outline-variant/60 bg-surface-container-low/50 p-4">
+
+                    <div class="grid grid-cols-1 gap-5 sm:grid-cols-3">
+
+                        <!-- Bloque -->
+                        <div class="flex flex-col gap-2">
+                            <label
+                                for="edit-bloque"
+                                class="text-sm font-medium text-on-surface">
+                                Bloque
+                            </label>
+
+                            <div class="relative">
+                                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[20px] text-on-surface-variant">
+                                    domain
+                                </span>
+
+                                <select
+                                    id="edit-bloque"
+                                    name="bloque"
+                                    required
+                                    class="h-11 w-full cursor-pointer appearance-none rounded-xl border border-outline-variant bg-surface-container-low py-2.5 pl-11 pr-10 text-sm text-on-surface outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/15">
+
+                                    <option value="">
+                                        Seleccionar...
+                                    </option>
+
+                                    <option value="Bloque A">Bloque A</option>
+                                    <option value="Bloque B">Bloque B</option>
+                                    <option value="Bloque C">Bloque C</option>
+                                    <option value="Bloque D">Bloque D</option>
+
+                                </select>
+
+                                <span class="material-symbols-outlined pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[20px] text-on-surface-variant">
+                                    expand_more
+                                </span>
+                            </div>
+                        </div>
 
 
-            <!-- Footer -->
-            <div
-                class="mt-7 flex flex-col-reverse gap-3 border-t border-outline-variant/60 pt-5 sm:flex-row sm:justify-end">
+                        <!-- Sala -->
+                        <div class="flex flex-col gap-2">
+                            <label
+                                for="edit-sala"
+                                class="text-sm font-medium text-on-surface">
+                                Sala
+                            </label>
 
-                <!-- Cancelar -->
+                            <div class="relative">
+                                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[20px] text-on-surface-variant">
+                                    meeting_room
+                                </span>
+
+                                <input
+                                    id="edit-sala"
+                                    name="sala"
+                                    type="text"
+                                    placeholder="Ej. 12"
+                                    required
+                                    class="h-11 w-full rounded-xl border border-outline-variant bg-surface-container-low py-2.5 pl-11 pr-4 text-sm text-on-surface outline-none transition-all placeholder:text-on-surface-variant/70 focus:border-primary focus:ring-2 focus:ring-primary/15">
+                            </div>
+                        </div>
+
+
+                        <!-- Cama -->
+                        <div class="flex flex-col gap-2">
+                            <label
+                                for="edit-cama"
+                                class="text-sm font-medium text-on-surface">
+                                Cama
+                            </label>
+
+                            <div class="relative">
+                                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[20px] text-on-surface-variant">
+                                    bed
+                                </span>
+
+                                <input
+                                    id="edit-cama"
+                                    name="cama"
+                                    type="text"
+                                    placeholder="Ej. 3"
+                                    required
+                                    class="h-11 w-full rounded-xl border border-outline-variant bg-surface-container-low py-2.5 pl-11 pr-4 text-sm text-on-surface outline-none transition-all placeholder:text-on-surface-variant/70 focus:border-primary focus:ring-2 focus:ring-primary/15">
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+            <div class="mt-7 flex flex-col-reverse gap-3 border-t border-outline-variant/60 pt-5 sm:flex-row sm:justify-end">
+
                 <button
                     type="button"
                     popovertarget="popover-editar-paciente"
@@ -342,8 +489,6 @@ $usuarios = $_SESSION['user_nombre'] ?? 'Personal de Guardia';
                     Cancelar
                 </button>
 
-
-                <!-- Guardar -->
                 <button
                     type="submit"
                     class="flex h-10 cursor-pointer items-center justify-center gap-2 rounded-xl bg-primary px-5 text-sm font-semibold text-on-primary transition-all hover:bg-primary-container active:scale-[0.98]">
@@ -357,11 +502,77 @@ $usuarios = $_SESSION['user_nombre'] ?? 'Personal de Guardia';
                 </button>
 
             </div>
-
         </form>
 
     </div>
 
+    <!-- POPOVER: Recetas -->
+    <div id="popover-receta" popover="manual"
+        class="bg-surface-container-lowest text-on-surface rounded-2xl border border-outline-variant w-full max-w-2xl p-6 backdrop:bg-on-background/40 my-auto mx-auto">
+
+        <div class="flex justify-between items-center pb-4 mb-4 border-b border-surface-variant">
+            <div>
+                <h2 class="text-xl font-bold text-primary">Cargar Receta Nutricional</h2>
+                <p class="text-xs text-on-surface-variant mt-0.5">Ingresa los detalles clínicos e indicaciones del paciente</p>
+            </div>
+            <button
+                onclick="document.getElementById('popover-receta').hidePopover()"
+                class="text-on-surface-variant hover:text-error transition p-1.5 rounded-lg hover:bg-surface-container-low">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+
+        <form class="space-y-4" id="form-receta-paciente">
+            <input type="hidden" id="consulta-id" name="id">
+
+            <div>
+                <label for="indicacion-nutricional" class="block text-xs font-semibold text-on-surface-variant uppercase mb-1">
+                    Indicación Nutricional *
+                </label>
+                <textarea id="indicacion-nutricional" name="indicacion_nutricional" required rows="2"
+                    placeholder="Detalle de prescripción dietética..."
+                    class="w-full bg-surface-container-low border border-outline-variant rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-outline focus:ring-1 focus:ring-outline transition"></textarea>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                <div>
+                    <label for="medida-porcion" class="block text-xs font-semibold text-on-surface-variant uppercase mb-1">
+                        Medida Porción
+                    </label>
+                    <input type="text" id="medida-porcion" name="medida_porcion" placeholder="Ej: 200g"
+                        class="w-full bg-surface-container-low border border-outline-variant rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-outline focus:ring-1 focus:ring-outline transition">
+                </div>
+                <div>
+                    <label for="aporte-liquido" class="block text-xs font-semibold text-on-surface-variant uppercase mb-1">
+                        Aporte Líquido
+                    </label>
+                    <input type="text" id="aporte-liquido" name="aporte_liquido" placeholder="Ej: 1500 ml/día"
+                        class="w-full bg-surface-container-low border border-outline-variant rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-outline focus:ring-1 focus:ring-outline transition">
+                </div>
+                <div>
+                    <label for="volumen-total" class="block text-xs font-semibold text-on-surface-variant uppercase mb-1">
+                        Volumen Total
+                    </label>
+                    <input type="text" id="volumen-total" name="volumen_total" placeholder="Ej: 2000 ml"
+                        class="w-full bg-surface-container-low border border-outline-variant rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-outline focus:ring-1 focus:ring-outline transition">
+                </div>
+            </div>
+
+            <div class="flex justify-end gap-3 pt-4 border-t border-surface-variant mt-6">
+                <button type="button" id="btn-cancelar-receta"
+                    onclick="document.getElementById('popover-receta').hidePopover()"
+                    class="px-4 py-2 text-sm font-medium text-on-surface-variant hover:bg-surface-container-high rounded-lg transition">
+                    Cancelar
+                </button>
+                <button type="submit" id="btn-guardar-receta"
+                    class="px-5 py-2 text-sm font-medium bg-primary hover:bg-tertiary text-on-primary rounded-lg">
+                    Guardar Receta
+                </button>
+            </div>
+        </form>
+    </div>
 
 </body>
 

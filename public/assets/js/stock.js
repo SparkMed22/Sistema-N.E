@@ -1,0 +1,171 @@
+const table_titulos_stock = document.getElementById('table-titulos');
+const titulos_stock = ['Artículo', 'Stock', 'Estado', 'Último movimiento', 'Acciones'];
+let prodcutosFormulasEnterales = [];
+
+
+
+table_titulos_stock.innerHTML = titulos_stock.map((titulo, index) => {
+    const esAcciones = index === titulos_stock.length - 1;
+    const alineacion = esAcciones ? 'text-right' : 'text-left';
+
+    return `<th class="px-6 py-4 font-semibold ${alineacion}">${titulo}</th>`;
+}).join('');
+
+// ? Renderisar tablas
+function renderInventario(productos) {
+    const tbody = document.getElementById("table-productos");
+
+    tbody.innerHTML = productos.map(producto => {
+
+        let estado;
+        let estadoClass;
+        let puntoClass;
+
+        if (producto.cantidad > producto.stock_minimo + 5) {
+            estado = "Disponible";
+            estadoClass = "bg-emerald-50 text-emerald-700";
+            puntoClass = "bg-emerald-500";
+
+        } else if (producto.cantidad >= producto.stock_minimo) {
+            estado = "Stock bajo";
+            estadoClass = "bg-amber-50 text-amber-700";
+            puntoClass = "bg-amber-500";
+
+        } else {
+            estado = "Crítico";
+            estadoClass = "bg-rose-50 text-rose-700";
+            puntoClass = "bg-rose-500";
+        }
+
+        return `
+            <tr class="hover:bg-surface-container-low transition">
+
+                <!-- Nombre -->
+                <td class="px-6 py-5">
+                    <div class="flex items-center gap-4">
+                        <div>
+                            <p class="font-bold">
+                                ${producto.nombre}
+                            </p>
+                        </div>
+                    </div>
+                </td>
+
+                <!-- Cantidad -->
+                <td class="px-6 py-5">
+                    <p class="font-bold text-primary">
+                        ${producto.cantidad}
+                    </p>
+
+                    <p class="text-xs text-on-surface-variant">
+                        unidades
+                    </p>
+                </td>
+
+                <!-- Estado -->
+                <td class="px-6 py-5">
+                    <span class="inline-flex items-center gap-2 px-3 py-1.5
+                                 rounded-full ${estadoClass} text-xs font-bold">
+
+                        <span class="w-2 h-2 rounded-full ${puntoClass}"></span>
+
+                        ${estado}
+                    </span>
+                </td>
+
+                <!-- Stock mínimo -->
+                <td class="px-6 py-5 text-sm text-on-surface-variant">
+                    ${producto.stock_minimo} unidades
+                </td>
+
+                <!-- Acciones -->
+                <td class="px-6 py-5 text-right">
+                    <button
+                        type="button"
+                        data-id="${producto.id}"
+                        class="w-10 h-10 rounded-xl
+                               hover:bg-surface-container
+                               text-on-surface-variant
+                               hover:text-primary
+                               transition">
+
+                        <span class="material-symbols-outlined">
+                            more_vert
+                        </span>
+
+                    </button>
+                </td>
+
+            </tr>
+        `;
+    }).join("");
+}
+
+// ? Cargar los productos
+async function loadProductos() {
+    try {
+        prodcutosFormulasEnterales = await getFetch('/api/stock/productos', 'Error al obtener los prductos.') ?? [];
+        renderInventario(prodcutosFormulasEnterales);
+    } catch (error) {
+        console.error('loadProductos:', error);
+        showError('Error del servidor', error ?? 'No se pudieron cargar los productos.');
+    }
+}
+
+
+// ? Cargar nuevos productos 
+async function addNewItem(event) {
+    event.preventDefault();
+    const form = event.target;
+    const payload = {
+        nombre: document.getElementById('new-item-nombre').value,
+        cantidad_inicial: parseInt(document.getElementById('new-item-cantidad-inicial').value),
+        cantidad_minima: parseInt(document.getElementById('new-item-cantidad-minima').value)
+    }
+    try {
+        const data = await postFetch('/api/stock/productos', payload, 'No se pudo crear el nuevo producto');
+        closeModal('modal-new-item');
+        showSuccess('Producto Agregado', data.message ?? 'La formula fue añadida a la base de datos correctamente.');
+        loadProductos();
+    } catch (error) {
+        closeModal('modal-new-item');
+        showError('Error al Agregar el producto', error.message ?? 'Ocurrió un error inesperado.');
+    } finally {
+        form.reset();
+    }
+}
+
+
+function buscarProducto(event) {
+    const texto = event.target.value.trim().toLowerCase();
+    if (!texto) {
+        renderInventario(prodcutosFormulasEnterales);
+        return;
+    }
+    const resultados = prodcutosFormulasEnterales.filter((producto) => {
+        const nombreCompleto = [
+            producto.nombre
+        ].filter(Boolean).join(' ').toLowerCase();
+        return (nombreCompleto.includes(texto));
+    });
+    renderInventario(resultados);
+}
+
+
+
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    loadProductos();
+
+
+    const inputBuscar = document.getElementById('input_buscar_prodcuto');
+    if (inputBuscar) {
+        inputBuscar.addEventListener('input', buscarProducto);
+    }
+
+    const newItemForm = document.getElementById('form-new-item');
+    if (newItemForm) {
+        newItemForm.addEventListener('submit', addNewItem);
+    }
+});

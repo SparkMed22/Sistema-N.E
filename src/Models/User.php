@@ -10,8 +10,6 @@ use PDOException;
 /**
  * Clase modelo encargargado de ejecutar SQL 
  * 
- * Maneja las peticiones HTTP para creación, listado y autenticación.
- * 
  * @author Francisco David Medina Lourenzo <sparkmed0224@gmail.com>
  * @version 1.0.0
  * @package App\Moodels
@@ -71,14 +69,15 @@ class User
     }
 
     // Funciona ✅
-    public function updateUserModel(int $id, string $rol, bool $estado): bool
+    public function updateUserModel(int $id, string $rol, bool $estado, int $id_servicio ): bool
     {
-        $sql = "UPDATE usuarios SET rol = :rol, estado = :estado WHERE id = :id";
+        $sql = "UPDATE usuarios SET rol = :rol, estado = :estado, id_servicio=:id_servicio WHERE id=:id";
         try {
             $stmt = $this->db->prepare($sql);
             $stmt->bindValue(':rol', $rol, \PDO::PARAM_STR);
             $stmt->bindValue(':estado', $estado, \PDO::PARAM_BOOL);
             $stmt->bindValue(':id', $id, \PDO::PARAM_INT);
+            $stmt->bindValue(':id_servicio', $id_servicio, \PDO::PARAM_INT);
             return $stmt->execute();
         } catch (\PDOException $e) {
             error_log("Error al actualizar usuario (Model): " . $e->getMessage());
@@ -108,12 +107,12 @@ class User
 
 
     // Funciona ✅
-    public function crearUsuarioModel(string $nombre, string $apellido, string $cedula, string $rol): int
+    public function crearUsuarioModel(string $nombre, string $apellido, string $cedula, string $rol, int $id_servicio): int
     {
         $passwordInicial = $cedula;
         $hash = password_hash($passwordInicial, PASSWORD_BCRYPT);
 
-        $stmt = $this->db->prepare("INSERT INTO usuarios (nombre,apellido,cedula,password_hash,rol) VALUES (:nombre, :apellido, :cedula, :password_hash, :rol)");
+        $stmt = $this->db->prepare("INSERT INTO usuarios (nombre,apellido,cedula,password_hash,id_servicio,rol) VALUES (:nombre, :apellido, :cedula, :password_hash,:id_servicio ,:rol)");
 
         try {
             $stmt->execute([
@@ -121,7 +120,8 @@ class User
                 'apellido'      => $apellido,
                 'cedula'        => $cedula,
                 'password_hash' => $hash,
-                'rol'           => $rol
+                'rol'           => $rol,
+                'id_servicio'      => $id_servicio
             ]);
             return (int)$this->db->lastInsertId();
         } catch (\PDOException $e) {
@@ -136,13 +136,25 @@ class User
     // Funciona ✅
     public function allModel(): array
     {
-        $stmt = $this->db->query("SELECT id ,nombre, apellido, cedula, rol,estado FROM usuarios;");
+        $stmt = $this->db->query("SELECT 
+                u.id,
+                u.nombre, 
+                u.apellido, 
+                u.cedula, 
+                u.rol, 
+                u.estado,
+                u.id_servicio,
+                s.nombre AS nombre_servicio
+        FROM usuarios u
+        INNER JOIN servicios s 
+        ON s.id = u.id_servicio");
+        
         return $stmt->fetchAll(PDO::FETCH_OBJ);
     }
 
     // Funciona ✅
     public function allDataUserModel():array{
-        $stmt = $this->db->query("select id,nombre,apellido,rol from usuarios WHERE estado=1;");
+        $stmt = $this->db->query("SELECT id,nombre,apellido,rol,id_servicio from usuarios WHERE estado=1;");
         return $stmt->fetchAll(PDO::FETCH_OBJ);
     }
 }

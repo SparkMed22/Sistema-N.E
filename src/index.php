@@ -125,9 +125,8 @@ include_once __DIR__ . '/utils/head.php';
         </div>
     </div>
 
-    <script src="/assets/js/index.js" defer></script>
     <script src="/assets/js/script.js" defer></script>
-
+    <script src="/assets/js/index.js" defer></script>
 </body>
 
 
