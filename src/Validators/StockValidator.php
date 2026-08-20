@@ -17,7 +17,7 @@ class StockValidator
     // Funciona ✅
     public function validarProducto(array $data): bool{
         $validator = v::key('nombre',v::stringType()->notEmpty()->length(1, 100))
-            ->key('cantidad_inicial',v::intVal()->positive())
+            ->key('cantidad_inicial', v::intVal()->min(0))
             ->key('cantidad_minima',v::intVal()->positive()); 
         return $validator->validate($data);
     }

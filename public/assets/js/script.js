@@ -20,7 +20,7 @@ function closeModal(id) {
 // ? Cerrar Sesión
 function logout() {
     localStorage.removeItem('usuario');
-    localStorage.clear();
+
     fetch('/logout', {
         method: 'POST',
         headers: {
@@ -55,9 +55,7 @@ const showError = (title, message, containerId) => {
     });
 };
 
-// Función auxiliar para éxito
 const showSuccess = (title, message, containerId) => {
-    // Garantiza que tenga el formato de selector CSS (#id)
     const targetElement = containerId
         ? (containerId.startsWith('#') ? containerId : `#${containerId}`)
         : 'body';
@@ -72,7 +70,6 @@ const showSuccess = (title, message, containerId) => {
     });
 };
 
-// Función auxiliar para confirmar (opcional, si quieres pedir confirmación antes de borrar/cambiar)
 const showConfirm = (title, text) => {
     return Swal.fire({
         title: title,
@@ -138,7 +135,7 @@ function getLocalStorangeData(key, message_error) {
 // ? Cargar select dinamicamente
 function loadOptions(arreglo, id) {
     const select = document.getElementById(id);
-    //select.innerHTML += '<option value="">Seleccionar servicio...</option>';
+    select.innerHTML += '<option value="">Seleccionar servicio...</option>';
     if (servicios.length === 0) {
         select.innerHTML += '<option value="" disabled>No hay servicios disponibles</option>';
         return;
@@ -149,6 +146,39 @@ function loadOptions(arreglo, id) {
         option.textContent = servicio.nombre;
         select.appendChild(option);
     });
+}
+
+
+// ? Modo DARK
+function getThemePreference(defaultValue = 'light') {
+    try {
+        return localStorage.getItem('preference') || defaultValue;
+    } catch (error) {
+        console.error('Error al leer localStorage:', error);
+        return defaultValue;
+    }
+}
+
+function setThemePreference(newTheme) {
+    try {
+        localStorage.setItem('preference', newTheme);
+
+        if (newTheme === 'dark') {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+
+        return newTheme;
+    } catch (error) {
+        console.error('Error al guardar en localStorage:', error);
+    }
+}
+
+function toggleTheme() {
+    const currentTheme = getThemePreference();
+    const nextTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    return setThemePreference(nextTheme);
 }
 
 

@@ -33,10 +33,10 @@ class Patients
 
 
     // Funciona ✅
-    public function crearPacienteModel(string $nombre, string $apellido, string $cedula, string $fechaNacimiento, string $sexo): int
+    public function crearPacienteModel(string $nombre, string $apellido, string $cedula, string $fechaNacimiento,string $numero_telefono, string $sexo): int
     {
-        $stmt = $this->db->prepare("INSERT INTO pacientes (nombre, apellido, cedula, fecha_nacimiento, sexo) 
-            VALUES (:nombre, :apellido, :cedula, :fecha_nacimiento, :sexo)");
+        $stmt = $this->db->prepare("INSERT INTO pacientes (nombre, apellido, cedula, fecha_nacimiento,telefono, sexo) 
+            VALUES (:nombre, :apellido, :cedula, :fecha_nacimiento,:telefono, :sexo)");
 
         try {
             $stmt->execute([
@@ -44,6 +44,7 @@ class Patients
                 'apellido'         => $apellido,
                 'cedula'           => $cedula,
                 'fecha_nacimiento' => $fechaNacimiento,
+                'telefono'         => $numero_telefono,
                 'sexo'             => $sexo
             ]);
 
@@ -65,15 +66,16 @@ class Patients
     }
 
     // Funciona ✅
-    public function editarPacienteModel(int $editar_id, string $editar_nombre, string $editar_apellido, string $editar_sexo, string $editar_fecha_nacimiento)
+    public function editarPacienteModel(int $editar_id, string $editar_nombre, string $editar_apellido, string $editar_sexo, string $editar_fecha_nacimiento,string $numero_telefono)
     {
-        $sql = "UPDATE pacientes SET nombre = :nombre, apellido = :apellido, sexo = :sexo,fecha_nacimiento = :fecha_nacimiento WHERE id = :id";
+        $sql = "UPDATE pacientes SET nombre = :nombre, apellido = :apellido, sexo = :sexo,fecha_nacimiento = :fecha_nacimiento, telefono=:telefono  WHERE id = :id";
         $stmt = $this->db->prepare($sql);
         $resultado = $stmt->execute([
             ':nombre' => $editar_nombre,
             ':apellido' => $editar_apellido,
             ':sexo' => $editar_sexo,
             ':fecha_nacimiento' => $editar_fecha_nacimiento,
+            ':telefono'         => $numero_telefono,
             ':id' => $editar_id
         ]);
         return $resultado && $stmt->rowCount() > 0;

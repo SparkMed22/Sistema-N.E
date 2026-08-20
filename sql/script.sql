@@ -8,49 +8,58 @@ SELECT
     TIMESTAMPDIFF(YEAR, fecha_nacimiento, CURDATE()) as edad
 FROM pacientes;
 
--- Agregas Pacientes TESTEO
-INSERT INTO pacientes (nombre, apellido, cedula, fecha_nacimiento, sexo) VALUES
-('Juan', 'Pérez', '1001234567', '1985-03-15', 'M'    ),
-('María', 'González', '1002345678', '1992-07-22', 'F'),
-('Carlos', 'Ruiz', '1003456789', '1978-11-05', 'M'   ),
-('Ana', 'Martínez', '1004567890', '2000-01-10', 'F'  ),
-('Luis', 'Fernández', '1005678901', '1995-06-30', 'M'),
-('Sofía', 'López', '1006789012', '1988-09-18', 'F'   ),
-('Roberto', 'Díaz', '1007890123', '1965-12-25', 'M'  ),
-('Elena', 'Torres', '1008901234', '1998-04-02', 'F'  ),
-('Miguel', 'Sánchez', '1009012345', '1970-08-14', 'M'),
-('Carla', 'Vásquez', '1010123456', '2005-02-28', 'F' );
 
 
--- Agregas Servicios
-INSERT INTO servicios (nombre) VALUES 
-('Polivalente'),
-('Clínica Médica'),
-('Cirugía y Traumatología'),
-('Ginecología'),
-('Pediatría'),
-('UTI Adultos'),
-('Urgencia Clínica Médica'),
-('Urgencia Cirugía y Traumatología'),
-('Urgencia Ginecología'),
-('Urgencia Pediatría'),
-('Oncología')
-('Centro de Lactancia');
+INSERT INTO productos (id, nombre, cantidad, stock_minimo) VALUES
+(1, 'NOVARIX CON FIBRAS 1000 GR', 0, 6),
+(2, 'NOVARIX SIN FIBRAS 1000 GR', 0, 5),
+(3, 'NOVARIX DIABETICOS 1000 GR', 0, 5),
+(4, 'CN PLUS', 0, 5),
+(5, 'CN PREMO RENAL', 0, 5),
+(6, 'PENTASURE DLS 400 GR', 10, 5),
+(7, 'PENTASURE DM 400 GR', 0, 5),
+(8, 'PENTASURE INMUNO MAX 244 GR', 15, 5),
+(9, 'RENO DIET LP 400 GR', 90, 37),
+(10, 'ENTEREX KARBS 450 GR', 1, 5),
+(11, 'NUTRILON PEPTI JUNIOR 400 GR', 191, 5),
+(12, 'NUTRILON PREMIUM 1 1000 GR', 4, 5),
+(13, 'GLUTAPAK 15 GR', 702, 5),
+(14, 'FRESUBIN FIBRE 1000 ML', 0, 5),
+(15, 'EXPERTO 131 GR', 17, 5),
+(16, 'ENSURE POLVO 800 GR', 0, 5),
+(17, 'GLUCERNA 237 ML', 316, 5),
+(18, 'ENSURE PLUS 220 ML', 0, 5),
+(19, 'JEVITY 1000 ML', 0, 5),
+(20, 'ENTEREX DBT 237 ML', 366, 5),
+(21, 'ENTEREX PLUS 237 ML', 0, 5),
+(22, 'NOVARIX CON FIBRAS 500 GR', 0, 5),
+(23, 'NOVARIX SIN FIBRAS 500 GR', 10, 28),
+(24, 'NOVARIX DIABETICO 500 GR', 0, 48),
+(25, 'WHEY PROTEIN 50 GR', 0, 5),
+(26, 'CN MODULO CALORICO 500 GR', 1, 5),
+(27, 'NOVARIX RENAL EN DIALISIS 325 GR', 13, 5),
+(28, 'NOVARIX PRE RENAL 325 GR', 0, 5),
+(29, 'NAN OPTI PRO 900 GR', 0, 5),
+(30, 'NOVARIX MOD PROTEICO 50 GR', 349, 5),
+(31, 'ISOSOURCE 400 GR', 4, 5),
+(32, 'ENTEREX PLUS 220 ML', 36, 5),
+(33, 'ENTEREX DBT', 9, 5),
+(34, 'NOVASOURCE 1000 ML', 0, 5),
+(35, 'MALTODEX UP 250 GR', 360, 60)
+ON DUPLICATE KEY UPDATE 
+    cantidad = VALUES(cantidad),
+    stock_minimo = VALUES(stock_minimo);
 
 
--- En caso de necesitar actualizar los nombres de los servicios
-UPDATE servicios SET nombre = 'Polivalente' WHERE id = 1;
-UPDATE servicios SET nombre = 'Clínica Médica' WHERE id = 2;
-UPDATE servicios SET nombre = 'Cirugía y Traumatología' WHERE id = 3;
-UPDATE servicios SET nombre = 'Ginecología' WHERE id = 4;
-UPDATE servicios SET nombre = 'Pediatría' WHERE id = 5;
-UPDATE servicios SET nombre = 'UTI Adultos' WHERE id = 6;
-UPDATE servicios SET nombre = 'Urgencia Clínica Médica' WHERE id = 7;
-UPDATE servicios SET nombre = 'Urgencia Cirugía y Traumatología' WHERE id = 8;
-UPDATE servicios SET nombre = 'Urgencia Ginecología' WHERE id = 9;
-UPDATE servicios SET nombre = 'Urgencia Pediatría' WHERE id = 10;
-UPDATE servicios SET nombre = 'Oncología' WHERE id = 11;
-UPDATE servicios SET nombre = 'Centro de Lactancia' WHERE id = 12;
+
+
+
+
+
+
+
+
+
 
 
 SELECT 

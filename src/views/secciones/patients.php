@@ -8,7 +8,7 @@ require __DIR__ . '/../../utils/head.php';
     <?php require __DIR__ . '/../../utils/header.php'; ?>
 
     <main class="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-20 md:mt-24 pt-6 pb-12">
-        
+
 
         <section class="mb-7">
             <div class="flex flex-col gap-4 rounded-2xl border border-outline-variant/60 bg-surface-container-lowest p-4 sm:flex-row sm:items-center">
@@ -318,6 +318,30 @@ require __DIR__ . '/../../utils/head.php';
                         </div>
                     </div>
 
+                    <!-- Teléfono (Nuevo Campo) -->
+                    <div class="flex flex-col gap-2">
+                        <label
+                            for="edit-paciente-telefono"
+                            class="text-sm font-medium text-on-surface">
+                            Teléfono
+                        </label>
+
+                        <div class="relative">
+                            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[20px] text-on-surface-variant">
+                                call
+                            </span>
+
+                            <input
+                                id="edit-paciente-telefono"
+                                name="telefono"
+                                type="tel"
+                                maxlength="20"
+                                autocomplete="off"
+                                placeholder="Ej. 0981 123456"
+                                class="h-11 w-full rounded-xl border border-outline-variant bg-surface-container-low py-2.5 pl-11 pr-4 text-sm text-on-surface outline-none transition-all placeholder:text-on-surface-variant/70 focus:border-primary focus:ring-2 focus:ring-primary/15">
+                        </div>
+                    </div>
+
                     <!-- Sexo -->
                     <div class="flex flex-col gap-2">
                         <label
@@ -349,8 +373,8 @@ require __DIR__ . '/../../utils/head.php';
                         </div>
                     </div>
 
-                    <!-- Fecha -->
-                    <div class="flex flex-col gap-2">
+                    <!-- Fecha de nacimiento -->
+                    <div class="flex flex-col gap-2 sm:col-span-2">
                         <label
                             for="edit-paciente-fecha"
                             class="text-sm font-medium text-on-surface">
@@ -374,6 +398,7 @@ require __DIR__ . '/../../utils/head.php';
                 </div>
 
             </section>
+
             <section class="mt-7 space-y-4">
 
                 <div class="flex items-center gap-2">
@@ -479,6 +504,7 @@ require __DIR__ . '/../../utils/head.php';
                 </div>
 
             </section>
+
             <div class="mt-7 flex flex-col-reverse gap-3 border-t border-outline-variant/60 pt-5 sm:flex-row sm:justify-end">
 
                 <button

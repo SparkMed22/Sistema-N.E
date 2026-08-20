@@ -1,14 +1,13 @@
 <?php
-$title = "Gestión de Inventario | Hospital General de Itapúa";
-require __DIR__ . '/../../utils/head.php';
+$title = 'Inventario - H.G.I';
+require_once __DIR__ . '/../../utils/head.php';
 ?>
-
 
 <body class="bg-background text-on-surface min-h-screen font-sans">
 
     <?php require __DIR__ . '/../../utils/header.php'; ?>
-    <main class="pt-24 pb-10 max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
 
+    <main class="pt-24 pb-10 max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
         <section class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-8">
             <div>
                 <div class="flex items-center gap-2 mb-2">
@@ -17,7 +16,6 @@ require __DIR__ . '/../../utils/head.php';
                 <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-primary">Inventario </h1>
                 <p class="mt-2 text-sm sm:text-base text-on-surface-variant">Controle el stock y disponibilidad de suministros médicos. </p>
             </div>
-
             <button class="w-full sm:w-auto
                        flex items-center justify-center gap-2 bg-primary hover:bg-primary-container text-white
                        px-5 py-3 rounded-xl font-semibold transition"
@@ -26,53 +24,54 @@ require __DIR__ . '/../../utils/head.php';
             </button>
         </section>
 
-
-        <section class="bg-white border border-outline-variant rounded-2xl p-4 mb-6">
+        <section class="bg-surface-container-lowest border border-outline-variant rounded-2xl p-4 mb-6">
             <div class="flex flex-col lg:flex-row gap-3">
-
-
-                <!-- // TODO: Hacer funcinal el Buscardor -->
                 <div class="relative flex-1">
+                    <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
 
-                    <span class="material-symbols-outlined absolute
-                               left-4 top-1/2 -translate-y-1/2 text-on-surface-variant">
-                        search
-                    </span>
+                    <input
+                        id="input_buscar_producto"
+                        type="text"
+                        placeholder="Buscar por nombre, código o descripción..."
+                        class="w-full pl-11 pr-4 py-3 rounded-xl
+                            bg-surface-container-low
+                            text-on-surface
+                            placeholder:text-on-surface-variant
+                            border
+                            border-transparent
+                            outline-none
+                            transition-all
+                            focus:border-secondary
+                            focus:ring-2
+                            focus:ring-secondary/20">
 
-                    <input id="input_buscar_prodcuto" type="text" placeholder="Buscar por nombre, código o descripción..."
-                        class="w-full pl-11 pr-4 py-3
-                               rounded-xl bg-surface-container-low border border-transparent outline-none">
                 </div>
 
-
-                <!-- // TODO: Hacer funcinal los filtros -->
-                <select class="px-4 py-3 rounded-xl
-                           bg-surface-container-low border border-transparent outline-none">
-                    <option>Todos los estados</option>
-                    <option>Disponible</option>
-                    <option>Stock bajo</option>
-                    <option>Stock crítico</option>
+                <!-- //TODO: Hacer funcional -->
+                <select id="filter-items" 
+                    onchange="handleFilterChange(this.value)"
+                    class="px-4 py-3 rounded-xl bg-surface-container-low text-on-surface
+                    border border-transparent outline-none transition-all focus:border-secondary focus:ring-2 focus:ring-secondary/20">
+                    <option value="0" >Todos los estados</option>
+                    <option value="1" >Disponible</option>
+                    <option value="2" >Stock bajo</option>
+                    <option value="3" >Stock crítico</option>
                 </select>
-
-                <button class="flex items-center justify-center gap-2
-                           px-5 py-3
-                           border border-outline-variant rounded-xl text-sm font-semibold">
-                    <span class="material-symbols-outlined">tune</span>Filtros
-                </button>
             </div>
         </section>
 
-
-        <section class="bg-white border border-outline-variant rounded-2xl overflow-hidden">
+        <section class="bg-surface-container-lowest border border-outline-variant rounded-2xl overflow-hidden transition-colors">
 
             <div class="px-5 sm:px-6 py-5 border-b border-outline-variant flex items-center justify-between">
                 <div>
                     <h2 class="font-bold text-lg text-primary"> Artículos registrados</h2>
-                    <p class="text-sm text-on-surface-variant mt-1">Administre y consulte el estado actual del inventario.</p>
+                    <p class="text-smtext-on-surface-variant mt-1">Administre y consulte el estado actual del inventario.</p>
                 </div>
             </div>
 
+
             <div class="hidden lg:block overflow-x-auto">
+
                 <table class="w-full text-left">
                     <thead>
                         <tr id="table-titulos" class="bg-surface-container-low border-b border-outline-variant text-xs uppercase tracking-wide text-on-surface-variant"></tr>
@@ -84,23 +83,24 @@ require __DIR__ . '/../../utils/head.php';
 
     </main>
 
+
     <?php require __DIR__ . '/../../utils/footer.php'; ?>
+
+    <!-- SCRIPTS -->
     <script src="/assets/js/script.js" defer></script>
     <script src="/assets/js/stock.js" defer></script>
 
-    <!-- Modal utilizando Popover API Nativamente -->
-    <div id="modal-new-item" popover="manual" class="m-auto p-0 bg-transparent backdrop:bg-black/40 backdrop:backdrop-blur-[2px] animate-[fadeIn_.2s_ease-out]">
 
-        <div class="relative w-full max-w-lg bg-white rounded-2xl overflow-hidden">
+    <!-- MODAL -->
+    <div id="modal-new-item" popover="manual" class="m-auto p-0 bg-transparent backdrop:bg-black/40 backdrop:backdrop-blur-[2px]">
 
+        <div class="relative w-full max-w-lg bg-surface-container-lowest border border-outline-variant rounded-2xl overflow-hidden">
             <div class="flex items-start justify-between px-6 py-5 border-b border-outline-variant">
                 <div>
                     <div class="flex items-center gap-3">
-                        <div
-                            class="w-10 h-10 rounded-xl bg-indigo-100 text-primary flex items-center justify-center">
+                        <div class="w-10 h-10 rounded-xl bg-primary-fixed text-primary flex items-center justify-center">
                             <span class="material-symbols-outlined">inventory_2</span>
                         </div>
-
                         <div>
                             <h2 class="text-lg font-bold text-primary">Nuevo artículo</h2>
                             <p class="text-sm text-on-surface-variant mt-1"> Registre un nuevo artículo en el inventario.</p>
@@ -108,89 +108,134 @@ require __DIR__ . '/../../utils/head.php';
                     </div>
                 </div>
 
+
                 <button
                     id="btn-close-modal"
                     type="button"
                     popovertarget="modal-new-item"
                     popovertargetaction="hide"
-                    class="w-9 h-9 rounded-lg flex items-center justify-center text-on-surface-variant hover:bg-surface-container-low hover:text-primary transition">
-                    <span class="material-symbols-outlined">
-                        close
-                    </span>
+                    class="w-9 h-9 rounded-lg flex items-center
+                        justify-center text-on-surface-variant hover:bg-surface-container-low hover:text-primary transition-colors">
+                    <span class="material-symbols-outlined"> close</span>
                 </button>
-            </div>
 
+            </div>
             <form id="form-new-item" class="p-6">
-                <div class="space-y-5">        
+                <div class="space-y-5">
                     <div>
                         <label for="new-item-nombre" class="block text-sm font-semibold text-on-surface mb-2">
                             Nombre del artículo
                         </label>
-
                         <div class="relative">
-                            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant"> 
+                            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">
                                 inventory
                             </span>
                             <input
                                 id="new-item-nombre"
-                                name="new-item-nombre" type="text" placeholder="Ej. Paracetamol 500mg" required
-                                class="w-full pl-11 pr-4 py-3 rounded-xl bg-surface-container-low border border-transparent outline-none transition focus:border-secondary focus:ring-2 focus:ring-indigo-100">
+                                name="new-item-nombre"
+                                type="text"
+                                placeholder="Ej. Paracetamol 500mg"
+                                required
+                                class="w-full pl-11 pr-4 py-3 rounded-xl
+                                    bg-surface-container-low
+                                    text-on-surface
+                                    placeholder:text-on-surface-variant
+                                    border
+                                    border-transparent
+                                    outline-none
+                                    transition-all
+                                    focus:border-secondary
+                                    focus:ring-2
+                                    focus:ring-secondary/20">
                         </div>
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        
                         <div>
-                            <label for="new-item-cantidad-inicial" class="block text-sm font-semibold text-on-surface mb-2">
+                            <label
+                                for="new-item-cantidad-inicial"
+                                class="block text-sm font-semibold text-on-surface mb-2">
                                 Cantidad inicial
                             </label>
+
                             <input
-                                id="new-item-cantidad-inicial" name="new-item-cantidad-inicial" type="number"
-                                min="0" value="0" required
-                                class="w-full px-4 py-3 rounded-xl bg-surface-container-low border border-transparent outline-none transition focus:border-secondary focus:ring-2 focus:ring-indigo-100">
+                                id="new-item-cantidad-inicial"
+                                name="new-item-cantidad-inicial"
+                                type="number"
+                                min="0"
+                                value="0"
+                                required
+                                class="w-full px-4 py-3 rounded-xl bg-surface-container-low
+                                    text-on-surface
+                                    border
+                                    border-transparent
+                                    outline-none
+                                    transition-all
+                                    focus:border-secondary
+                                    focus:ring-2
+                                    focus:ring-secondary/20">
                         </div>
+
                         <div>
-                            <label for="new-item-cantidad-minima" class="block text-sm font-semibold text-on-surface mb-2">
+                            <label for="new-item-cantidad-minima" class=" block text-sm font-semibold text-on-surface mb-2">
                                 Cantidad mínima
                             </label>
-
-                            <input id="new-item-cantidad-minima" name="new-item-cantidad-minima" type="number"
-                                min="0" value="0" required 
-                                class="w-full px-4 py-3 rounded-xl bg-surface-container-low border border-transparent outline-none transition focus:border-secondary focus:ring-2 focus:ring-indigo-100">
+                            <input
+                                id="new-item-cantidad-minima"
+                                name="new-item-cantidad-minima"
+                                type="number"
+                                min="0"
+                                value="0"
+                                required
+                                class="w-full px-4 py-3 rounded-xl bg-surface-container-low text-on-surface border
+                                    border-transparent
+                                    outline-none
+                                    transition-all
+                                    focus:border-secondary
+                                    focus:ring-2
+                                    focus:ring-secondary/20">
                         </div>
                     </div>
-                    <div
-                        class="flex gap-3 p-4 rounded-xl bg-indigo-50 border border-indigo-100">
-                        <span class="material-symbols-outlined text-secondary">info</span>
-                        <p class="text-xs leading-relaxed text-indigo-700">
-                            El sistema utilizará la cantidad mínima para identificar automáticamente cuando el artículo tenga un nivel de stock bajo.
+                    <div class="flex gap-3 p-4 rounded-xl bg-primary-fixed border border-outline-variant">
+
+                        <span class="material-symbols-outlined text-primary">info</span>
+                        <p class= text-xs leading-relaxed text-on-primary-fixed">
+                            El sistema utilizará la cantidad mínima para identificar
+                            automáticamente cuando el artículo tenga un nivel de
+                            stock bajo.
                         </p>
+
                     </div>
+
                 </div>
 
-                <div
-                    class="flex flex-col-reverse sm:flex-row justify-end gap-3 mt-8 pt-5 border-t border-outline-variant">
+
+                <div class="flex flex-col-reverse sm:flex-row justify-end gap-3 mt-8 pt-5 border-t border-outline-variant">
                     <button
                         id="btn-cancel-modal"
                         type="button"
                         popovertarget="modal-new-item"
                         popovertargetaction="hide"
-                        class="w-full sm:w-auto px-5 py-3 rounded-xl border border-outline-variant text-sm font-semibold hover:bg-surface-container-low transition">
+                        class="w-full sm:w-auto px-5 py-3 rounded-xl
+                            border
+                            border-outline-variant
+                            bg-surface-container-lowest
+                            text-on-surface
+                            text-sm">
                         Cancelar
                     </button>
-
                     <button
                         type="submit"
-                        class="w-full sm:w-auto flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-primary text-white text-sm font-semibold hover:bg-primary-container transition">
-                        <span class="material-symbols-outlined text-[20px]">
-                            save
-                        </span>
-                        Guardar artículo
+                        class="w-full sm:w-auto flex items-center justify-center gap-2 px-5 py-3
+                            rounded-xl
+                            bg-primary
+                            text-on-primary
+                            text-sm
+                            font-semibold">
+                        <span class="material-symbols-outlined text-[20px]">save</span>Guardar artículo
                     </button>
                 </div>
             </form>
         </div>
     </div>
 </body>
-
-</html>

@@ -41,6 +41,9 @@ class StockController extends BaseController
                 $this->error('Los datos enviados no cumplen con el formato requerido.');
                 return;
             }
+
+            error_log('Datos válidos para consulta: ' . json_encode($data));
+            
             $producto = $this->stockModel->crearProductoModel($data);
 
             $this->success([ 'id'=>$producto], 'Agregado con Exito');

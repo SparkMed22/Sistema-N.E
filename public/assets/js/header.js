@@ -1,61 +1,64 @@
-const usuarioDataRawStorageHeader = localStorage.getItem('usuario');
+const usuarioRaw = localStorage.getItem('usuario');
 const serviciosRaw = localStorage.getItem('servicios');
 
-const usuarioData = usuarioDataRawStorageHeader ? JSON.parse(usuarioDataRawStorageHeader) : null;
-const serviciosHeader = serviciosRaw ? JSON.parse(serviciosRaw) : null;
-
-const nombre_header = document.getElementById('nombre_usuario');
-const rol_header = document.getElementById('rol_usuario');
-const inicial_header = document.getElementById('inicial_usuario');
+const nombreHeader = document.getElementById('nombre_usuario');
+const rolHeader = document.getElementById('rol_usuario');
+const inicialHeader = document.getElementById('inicial_usuario');
 
 const ROLES = {
-    'admin': 'Administrador',
-    'internacion': 'Internacion',
-    'nutricionista': 'Nutricionista'
+    admin: 'Administrador',
+    internacion: 'Internación',
+    nutricionista: 'Nutricionista'
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-    if (!nombre_header) {
-        console.error("Elemento nombre_usuario no encontrado en el DOM");
-        return;
-    }
-
-    if (usuarioData && nombre_header && serviciosHeader) {
-        try {
-            const nombreCompleto = `${usuarioData.nombre} ${usuarioData.apellido}`;
-            nombre_header.textContent = nombreCompleto;
-            let servicioUsuario = '';
-
-            if (usuarioData.id_servicio === 1) {
-                servicioUsuario = 'Polivalente';
-            } else {
-                const index = usuarioData.id_servicio - 1;
-                // Verificamos que el índice exista en el array
-                if (index >= 0 && index < serviciosHeader.length) {
-                    servicioUsuario = serviciosHeader[index].nombre;
-                } else {
-                    console.warn("ID de servicio inválido:", usuarioData.id_servicio);
-                    servicioUsuario = 'Desconocido';
-                }
-            }
-
-            if (rol_header && usuarioData.rol) {
-                const rolTexto = ROLES[usuarioData.rol] || usuarioData.rol;
-                rol_header.textContent = `${rolTexto} / ${servicioUsuario}`;
-            }
-
-            if (inicial_header && usuarioData.nombre && usuarioData.apellido) {
-                const nombre = usuarioData.nombre || '';
-                const apellido = usuarioData.apellido || '';
-                const inicial = (nombre[0] + apellido[0]).toUpperCase();
-                inicial_header.textContent = inicial;
-            }
-        } catch (e) {
-            // Opcional: Redirigir si el formato de datos está corrupto
-            window.location.href = '/start'; 
+    try {
+        setThemePreference(getThemePreference());
+        if (!nombreHeader) {
+            console.error('Elemento #nombre_usuario no encontrado');
+            return;
         }
-    } else {
-        console.warn("No se encontraron datos de sesión. Redirigiendo a /start");
+
+        if (!usuarioRaw) throw new Error('No se encontraron datos del usuario');        
+
+        const usuarioData = JSON.parse(usuarioRaw);
+        const servicios = serviciosRaw ? JSON.parse(serviciosRaw) : [];
+
+        if (!usuarioData?.nombre || !usuarioData?.apellido) {
+            throw new Error('Datos del usuario inválidos');
+        }
+
+        const nombreCompleto =`${usuarioData.nombre} ${usuarioData.apellido}`;
+
+        nombreHeader.textContent = nombreCompleto;
+
+        let servicioUsuario = 'Sin servicio';
+
+        if (usuarioData.id_servicio && Array.isArray(servicios)) {
+            const servicio = servicios.find(servicio => servicio.id === Number(usuarioData.id_servicio));
+
+            if (servicio) {
+                servicioUsuario = servicio.nombre;
+            } else {
+                console.warn('Servicio no encontrado:', usuarioData.id_servicio);
+                servicioUsuario = 'Desconocido';
+            }
+        }
+
+        if (rolHeader) {
+            const rolTexto = ROLES[usuarioData.rol] || usuarioData.rol || 'Sin rol';
+            rolHeader.textContent = `${rolTexto} / ${servicioUsuario}`;
+        }
+
+        if (inicialHeader) {
+            const iniciales =
+                `${usuarioData.nombre[0]}${usuarioData.apellido[0]}`
+                    .toUpperCase();
+            inicialHeader.textContent = iniciales;
+        }
+    } catch (error) {
+        console.error('Error al cargar los datos del usuario:', error);
+        localStorage.removeItem('usuario');
         window.location.href = '/start';
     }
 });

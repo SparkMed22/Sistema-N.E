@@ -2,3 +2,4 @@
 composer.lock
 *.txt
 .env
+leet.js

@@ -1,7 +1,9 @@
 const table_titulos_stock = document.getElementById('table-titulos');
+const filter_items = document.getElementById('filter-items');
 const titulos_stock = ['Artículo', 'Stock', 'Estado', 'Último movimiento', 'Acciones'];
+const INTERVALO = 5;
 let prodcutosFormulasEnterales = [];
-
+let prodcutosFormulasDispobibles = [];
 
 
 table_titulos_stock.innerHTML = titulos_stock.map((titulo, index) => {
@@ -105,7 +107,8 @@ function renderInventario(productos) {
 async function loadProductos() {
     try {
         prodcutosFormulasEnterales = await getFetch('/api/stock/productos', 'Error al obtener los prductos.') ?? [];
-        renderInventario(prodcutosFormulasEnterales);
+        prodcutosFormulasDispobibles = prodcutosFormulasEnterales.filter(p => p.cantidad > 0);
+        renderInventario(prodcutosFormulasDispobibles);
     } catch (error) {
         console.error('loadProductos:', error);
         showError('Error del servidor', error ?? 'No se pudieron cargar los productos.');
@@ -139,7 +142,7 @@ async function addNewItem(event) {
 function buscarProducto(event) {
     const texto = event.target.value.trim().toLowerCase();
     if (!texto) {
-        renderInventario(prodcutosFormulasEnterales);
+        renderInventario(prodcutosFormulasDispobibles);
         return;
     }
     const resultados = prodcutosFormulasEnterales.filter((producto) => {
@@ -152,14 +155,32 @@ function buscarProducto(event) {
 }
 
 
-
-
+function handleFilterChange(status) {
+    let list=[];
+    switch (status) {
+        case '0':
+            renderInventario(prodcutosFormulasDispobibles);
+            break;
+        case '1':
+            list = prodcutosFormulasDispobibles.filter(p => p.cantidad > (p.stock_minimo+INTERVALO));
+            renderInventario(list);
+            break;
+        case '2':
+            list = prodcutosFormulasDispobibles.filter(p => p.cantidad > p.stock_minimo && p.cantidad <= (p.stock_minimo+INTERVALO));
+            renderInventario(list);
+            break;
+        case '3':
+            list = prodcutosFormulasDispobibles.filter(p => p.cantidad < p.stock_minimo);
+            renderInventario(list);
+            break;
+    }
+}
 
 document.addEventListener('DOMContentLoaded', () => {
     loadProductos();
 
 
-    const inputBuscar = document.getElementById('input_buscar_prodcuto');
+    const inputBuscar = document.getElementById('input_buscar_producto');
     if (inputBuscar) {
         inputBuscar.addEventListener('input', buscarProducto);
     }

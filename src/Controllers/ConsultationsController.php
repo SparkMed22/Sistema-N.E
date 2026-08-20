@@ -52,7 +52,7 @@ class ConsultationsController extends BaseController
             $pacienteTemporal = false;
 
             if ($pacienteId === null) {
-                $pacienteId = $this->patientModel->crearPacienteModel(nombre: 'Desconocido', apellido: 'Desconocido', cedula: $data['cedula'],    fechaNacimiento: date('Y') .'-01-01', sexo: 'INDEFINIDO');
+                $pacienteId = $this->patientModel->crearPacienteModel(nombre: 'Desconocido', apellido: 'Desconocido', cedula: $data['cedula'],fechaNacimiento: date('Y') .'-01-01',numero_telefono:$data['numero_telefono'] ,sexo: 'INDEFINIDO');
                 $pacienteTemporal = true;
                 error_log('Paciente temporal creado. ID: ' . $pacienteId . ' | CI: ' . $data['cedula']);
             }
@@ -187,9 +187,9 @@ class ConsultationsController extends BaseController
                 error_log('Datos inválidos para la edicion del paciente: ' . json_encode($data));
                 $this->error('Los datos enviados no cumplen con el formato requerido.');
                 return;
-            }
+            } 
             $respuesta = $this->consultationModel->editarConsultaGeneral(
-                $data['editar_id'],$data['editar_nombre'],$data['editar_apellido'],$data['editar_sexo'],$data['editar_fecha_nacimiento'],
+                $data['editar_id'],$data['editar_nombre'],$data['editar_apellido'],$data['editar_sexo'],$data['editar_fecha_nacimiento'],$data['editar_telefono'],
                 $data['edit_consulta'],$data['editar_bloque'],$data['editar_sala'],$data['editar_cama']
             );
             $this->success($respuesta, 'Edicion Exitosa.');

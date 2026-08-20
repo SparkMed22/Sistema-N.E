@@ -12,114 +12,183 @@ function renderizarTarjetas(consultas) {
     }
     consultas.forEach((consulta) => {
         const tarjetaHTML = `
-        <div class="max-w-md rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
-                    <div class="mb-4 flex items-start justify-between">
-                        <div>
-                            <span class="text-xs font-medium uppercase tracking-wide text-gray-500">
-                                Consulta #${consulta.consulta_id}
-                            </span>
+        <div class="max-w-md rounded-2xl border border-outline-variant bg-surface-container-lowest p-5 shadow-sm">
 
-                            <h2 class="mt-1 text-lg font-semibold text-gray-900">
-                                ${consulta.paciente_nombre} ${consulta.paciente_apellido}
-                            </h2>
+    <div class="mb-4 flex items-start justify-between">
 
-                            <p class="text-sm text-gray-500">
-                                C.I.: ${consulta.paciente_cedula}
-                            </p>
-                        </div>
-                        <span class="rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-700">
-                            Activa
-                        </span>
-                    </div>
+        <div>
+            <span class="text-xs font-medium uppercase tracking-wide text-on-surface-variant">
+                Consulta #${consulta.consulta_id}
+            </span>
 
-                    <div class="space-y-3 border-t border-gray-100 pt-4">
-                        <div class="flex items-center gap-3">
-                            <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-50">
-                                🏥
-                            </div>
+            <h2 class="mt-1 text-lg font-semibold text-on-surface">
+                ${consulta.paciente_nombre} ${consulta.paciente_apellido}
+            </h2>
 
-                            <div>
-                                <p class="text-xs text-gray-500">Servicio</p>
-                                <p class="text-sm font-medium text-gray-900">
-                                    ${consulta.servicio_nombre}
-                                </p>
-                            </div>
-                        </div>
+            <p class="text-sm text-on-surface-variant">
+                C.I.: ${consulta.paciente_cedula}
+            </p>
+        </div>
 
-                        <div class="flex items-center gap-3">
-                            <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-purple-50">
-                                🛏️
-                            </div>
+        <span class="rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-700">
+            Activa
+        </span>
 
-                            <div>
-                                <p class="text-xs text-gray-500">Ubicación</p>
-                                <p class="text-sm font-medium text-gray-900">
-                                    ${consulta.bloque} · Sala ${consulta.sala} · Cama ${consulta.cama}
-                                </p>
-                            </div>
-                        </div>
+    </div>
 
-                        <div class="flex items-center gap-3">
-                            <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-gray-100">
-                                📅
-                            </div>
-                            <div>
-                                <p class="text-xs text-gray-500">Fecha de ingreso</p>
-                                <p class="text-sm font-medium text-gray-900"> ${consulta.fecha_ingreso}</p>
-                            </div>
-                        </div>
-                    </div>
 
-                    <div class="mt-4 rounded-lg bg-gray-50 p-3">
-                        <p class="text-xs font-medium text-gray-500">Observaciones</p>
-                        <p class="mt-1 text-sm text-gray-700"> ${consulta.observaciones_ingreso} </p>
-                    </div>
+    <div class="space-y-3 border-t border-outline-variant pt-4">
 
-                    <div class="mt-5 grid grid-cols-2 gap-2">
-                      <button type="button"
-                        class="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-on-primary transition hover:bg-primary-container">
-                        Ver consulta
-                      </button>
+        <!-- Servicio -->
+        <div class="flex items-center gap-3">
 
-                      <button
-                        type="button"
-                        onclick="modalReceta(${consulta.consulta_id})"
-                        class="rounded-lg bg-secondary px-4 py-2 text-sm font-medium text-on-secondary transition hover:bg-tertiary">
-                        Nueva Receta
-                      </button>
+            <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-primary-fixed">
+                🏥
+            </div>
 
-                      <button
-                        onclick="verRecetas(${consulta.paciente_id})"
-                        type="button"
-                        class="rounded-lg border border-outline bg-surface px-4 py-2 text-sm font-medium text-primary transition hover:bg-surface-container-high">
-                        Ver receta
-                      </button>
+            <div>
+                <p class="text-xs text-on-surface-variant">
+                    Servicio
+                </p>
 
-                      <button
-                        onclick="altaMedica(${consulta.consulta_id})"
-                        type="button"
-                        class="rounded-lg bg-surface-container-highest px-4 py-2 text-sm font-medium text-primary transition hover:bg-outline-variant">
-                        Alta
-                      </button>
+                <p class="text-sm font-medium text-on-surface">
+                    ${consulta.servicio_nombre}
+                </p>
+            </div>
 
-                      <button
-                        onclick="editarPacienteModal(${consulta.paciente_id})"
-                        type="button"
-                        class="rounded-lg bg-tertiary-container px-4 py-2 text-sm font-medium text-on-tertiary-container transition hover:bg-tertiary">
-                        Editar
-                      </button>
+        </div>
 
-                      <button
-                        onclick="reasignar(${consulta.consulta_id})"
-                        type="button"
-                        class="rounded-lg border border-outline-variant bg-surface-container-low px-4 py-2 text-sm font-medium text-on-surface-variant transition hover:bg-surface-container">
-                        Reasignar
-                      </button>
-                    </div>
-                    
-                    </div>
-                </div>
-            
+
+        <!-- Ubicación -->
+        <div class="flex items-center gap-3">
+
+            <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-secondary-fixed">
+                🛏️
+            </div>
+
+            <div>
+                <p class="text-xs text-on-surface-variant">
+                    Ubicación
+                </p>
+
+                <p class="text-sm font-medium text-on-surface">
+                    ${consulta.bloque} · Sala ${consulta.sala} · Cama ${consulta.cama}
+                </p>
+            </div>
+
+        </div>
+
+        <!-- Fecha -->
+        <div class="flex items-center gap-3">
+
+            <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-surface-container">
+                📅
+            </div>
+
+            <div>
+                <p class="text-xs text-on-surface-variant">
+                    Fecha de ingreso
+                </p>
+
+                <p class="text-sm font-medium text-on-surface">
+                    ${consulta.fecha_ingreso}
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- DX Médico -->
+    <div class="mt-4 rounded-lg bg-primary-fixed p-3">
+
+        <div class="flex items-center gap-2">
+
+            <span class="material-symbols-outlined text-primary">
+                medical_information
+            </span>
+
+            <p class="text-xs font-medium text-on-primary-fixed-variant">
+                DX Médico
+            </p>
+
+        </div>
+
+        <p class="mt-2 text-sm text-on-primary-fixed">
+            ${consulta.diagnostico_medico || 'Sin diagnóstico registrado'}
+        </p>
+
+    </div>
+
+
+    <!-- Observaciones -->
+    <div class="mt-4 rounded-lg bg-surface-container-low p-3">
+
+        <p class="text-xs font-medium text-on-surface-variant">
+            Observaciones
+        </p>
+
+        <p class="mt-1 text-sm text-on-surface">
+            ${consulta.observaciones_ingreso || 'Sin observaciones'}
+        </p>
+
+    </div>
+
+
+    <!-- Acciones -->
+    <div class="mt-5 grid grid-cols-2 gap-2">
+
+        <button
+            type="button"
+            class="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-on-primary transition hover:bg-primary-container"
+        >
+            Ver consulta
+        </button>
+
+        <button
+            type="button"
+            onclick="modalReceta(${consulta.consulta_id})"
+            class="rounded-lg bg-secondary px-4 py-2 text-sm font-medium text-on-secondary transition hover:bg-tertiary"
+        >
+            Nueva Receta
+        </button>
+
+        <button
+            onclick="verRecetas(${consulta.paciente_id})"
+            type="button"
+            class="rounded-lg border border-outline bg-surface px-4 py-2 text-sm font-medium text-primary transition hover:bg-surface-container-high"
+        >
+            Ver receta
+        </button>
+
+        <button
+            onclick="altaMedica(${consulta.consulta_id})"
+            type="button"
+            class="rounded-lg bg-surface-container-highest px-4 py-2 text-sm font-medium text-primary transition hover:bg-outline-variant"
+        >
+            Alta
+        </button>
+
+        <button
+            onclick="editarPacienteModal(${consulta.paciente_id})"
+            type="button"
+            class="rounded-lg bg-tertiary-container px-4 py-2 text-sm font-medium text-on-tertiary-container transition hover:bg-tertiary"
+        >
+            Editar
+        </button>
+
+        <button
+            onclick="reasignar(${consulta.consulta_id})"
+            type="button"
+            class="rounded-lg border border-outline-variant bg-surface-container-low px-4 py-2 text-sm font-medium text-on-surface-variant transition hover:bg-surface-container"
+        >
+            Reasignar
+        </button>
+
+    </div>
+
+</div>
         `;
 
         contenedor.insertAdjacentHTML('beforeend', tarjetaHTML);
@@ -160,7 +229,7 @@ async function ingresarPacientes(event) {
         servicio_id: parseInt(servicio, 10),
         usuario_ingreso_id: usuario.id,
         usuario_egreso_id: null,
-        diagnostico_medico:ingreso_diagnostico,
+        diagnostico_medico: ingreso_diagnostico,
         observaciones_ingreso: observaciones,
         bloque: bloque,
         sala: sala,
@@ -288,8 +357,7 @@ function editarPacienteModal(id_paciente) {
     document.getElementById('edit-sala').value = paciente.sala;
     document.getElementById('edit-cama').value = paciente.cama;
     document.getElementById('edit-paciente-fecha').value = paciente.paciente_fecha_nacimiento || '';
-
-
+    document.getElementById('edit-paciente-telefono').value = paciente.paciente_telefono;
     openModal('popover-editar-paciente');
 }
 
@@ -300,6 +368,7 @@ async function editarPaciente(event) {
         'edit_consulta': document.getElementById('edit-paciente-consulta').value,
         'editar_nombre': document.getElementById('edit-paciente-nombre').value,
         'editar_apellido': document.getElementById('edit-paciente-apellido').value,
+        'editar_telefono': document.getElementById('edit-paciente-telefono').value,
         'editar_sexo': document.getElementById('edit-paciente-sexo').value,
         'editar_bloque': document.getElementById('edit-bloque').value,
         'editar_sala': document.getElementById('edit-sala').value,
@@ -346,8 +415,6 @@ async function generarReceta(event) {
         form.reset();
     }
 }
-
-
 
 function verRecetas(id_consulta) {
     alert("ñj");

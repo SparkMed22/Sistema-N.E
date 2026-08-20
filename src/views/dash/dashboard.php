@@ -60,7 +60,7 @@ $accesosGlobales = [
         'titulo'  => 'Órdenes de Fórmulas',
         'desc'    => 'Gestión de prescripciones y órdenes de fórmulas enterales.',
         'url'     => '/start/dashboard/orders',
-        'permiso' => 'gestionar_ordenes' 
+        'permiso' => 'gestionar_ordenes'
     ],
 ];
 
@@ -105,23 +105,31 @@ require __DIR__ . '/../../utils/head.php';
                     </p>
                 </div>
 
-
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
                     <?php foreach ($accesosGlobales as $acceso): ?>
                         <?php if (!in_array($acceso['permiso'], $permisos, true)) continue; ?>
-                        <a href="<?= htmlspecialchars($acceso['url']) ?>" class="group card-hover bg-white border border-border rounded-2xl p-6">
-                            <div class="icon-box w-12 h-12 rounded-xl bg-primary-soft text-primary flex items-center justify-center mb-5">
-                                <span class="material-symbols-outlined text-2xl"><?= htmlspecialchars($acceso['icono']) ?></span>
+                        <a href="<?= htmlspecialchars($acceso['url']) ?>"
+                            class="group card-hover bg-surface-container-lowest border border-outline-variant rounded-2xl p-6 transition-colors">
+                            <div class="icon-box w-12 h-12 rounded-xl bg-primary-fixed text-primary flex items-center justify-center mb-5">
+                                <span class="material-symbols-outlined text-2xl">
+                                    <?= htmlspecialchars($acceso['icono']) ?>
+                                </span>
                             </div>
                             <div class="flex items-start justify-between gap-3">
-                                <h3 class="font-bold text-base text-text"><?= htmlspecialchars($acceso['titulo']) ?> </h3>
-                                <span class="material-symbols-outlined text-slate-300 group-hover:text-primary transition">
+                                <h3 class="font-bold text-base text-on-surface">
+                                    <?= htmlspecialchars($acceso['titulo']) ?>
+                                </h3>
+                                <span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors">
                                     arrow_forward
                                 </span>
                             </div>
-                            <p class="mt-2 text-sm leading-6 text-text-muted"><?= htmlspecialchars($acceso['desc']) ?></p>
+                            <p class="mt-2 text-sm leading-6 text-on-surface-variant">
+                                <?= htmlspecialchars($acceso['desc']) ?>
+                            </p>
                         </a>
+
                     <?php endforeach; ?>
+
                 </div>
 
             </section>

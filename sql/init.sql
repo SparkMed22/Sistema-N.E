@@ -37,6 +37,7 @@ CREATE TABLE pacientes (
     nombre VARCHAR(50) NOT NULL,
     apellido VARCHAR(50) NOT NULL,
     cedula VARCHAR(20) NOT NULL UNIQUE,
+    telefono VARCHAR(20) NULL,
     fecha_nacimiento DATE NOT NULL,
     sexo ENUM('M', 'F', 'INDEFINIDO') NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

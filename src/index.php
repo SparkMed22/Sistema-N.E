@@ -7,8 +7,7 @@ include_once __DIR__ . '/utils/head.php';
 
 <body class="bg-surface-container min-h-screen flex items-center justify-center p-4 md:p-container-padding">
 
-    <main class="w-full max-w-5xl bg-surface-container-lowest rounded-[2rem] shadow-xl overflow-hidden flex flex-col md:flex-row h-auto min-h-[600px] border border-surface-variant/40">
-
+    <main class=" w-full max-w-5xl bg-surface-container-lowest rounded-[2rem] shadow-xl overflow-hidden flex flex-col md:flex-row h-auto min-h-[600px] border border-outline-variant/40">
         <section class="w-full md:w-1/2 bg-gradient-to-br from-primary via-tertiary to-on-primary-fixed p-8 md:p-12 flex flex-col justify-between items-center text-center relative overflow-hidden text-on-primary">
 
             <div class="absolute -top-16 -left-16 w-48 h-48 bg-secondary-container/20 rounded-full blur-2xl pointer-events-none"></div>

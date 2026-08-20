@@ -53,7 +53,7 @@ async function stratLogin(event) {
         const payload = { cedula, password }
         const data = await postFetch('/api/users/login', payload, 'Credenciales inválidas. Intente nuevamente.');
         localStorage.setItem('usuario', JSON.stringify(data.data));
-        
+
         if (data.data.primer_ingreso === 1) {
             openModal('modal-password');
             return;
@@ -93,7 +93,7 @@ async function updatePasswort(event) {
             confirm_password: confirmPassword
         }
 
-        const data = await postFetch('/users/update-password',payload,'Error al actualizar la contraseña.');
+        const data = await postFetch('/users/update-password', payload, 'Error al actualizar la contraseña.');
         closeModal('modal-password');
         showSuccess('Contraseña actualizada correctamente.');
         usuario.primer_ingreso = 0;
@@ -120,4 +120,5 @@ document.addEventListener('DOMContentLoaded', () => {
     if (loginForm) loginForm.addEventListener('submit', stratLogin);
     if (passwordForm) passwordForm.addEventListener('submit', updatePasswort);
     loadConfig().catch(err => console.error('Error en carga de fondo:', err));
+    setThemePreference(getThemePreference());
 });

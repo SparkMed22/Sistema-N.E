@@ -88,6 +88,7 @@ class Consultations
                 p.nombre AS paciente_nombre,
                 p.apellido AS paciente_apellido,
                 p.cedula AS paciente_cedula,
+                p.telefono AS paciente_telefono,
                 p.fecha_nacimiento AS paciente_fecha_nacimiento,
                 s.nombre AS servicio_nombre
             FROM consultas c
@@ -147,11 +148,11 @@ class Consultations
     }
 
     public function editarConsultaGeneral(
-        int $editar_id,string $editar_nombre,string $editar_apellido,string $editar_sexo,string $fecha_nacimiento,
+        int $editar_id,string $editar_nombre,string $editar_apellido,string $editar_sexo,string $fecha_nacimiento,string $editar_telefono,
         int $edit_consulta,string $editar_bloque,string $editar_sala,string $editar_cama
     ): bool {
         $edit_consulta = $this->editarConsultaModel($edit_consulta,$editar_bloque,$editar_sala,$editar_cama);
-        $edit_paciente = $this->patientModel->editarPacienteModel($editar_id,$editar_nombre,$editar_apellido,$editar_sexo,$fecha_nacimiento);
+        $edit_paciente = $this->patientModel->editarPacienteModel($editar_id,$editar_nombre,$editar_apellido,$editar_sexo,$fecha_nacimiento,$editar_telefono);
         return $edit_consulta && $edit_paciente;
     }
 }

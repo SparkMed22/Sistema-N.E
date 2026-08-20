@@ -46,5 +46,8 @@
 
     </main>
 
+    
+    <script src="/assets/js/error.js" defer></script>
+
 </body>
 </html>

@@ -12,7 +12,6 @@ $dotenv->load();
 
 use App\Models\User;
 $userModel = new User();
-//// ?$userModel->crearUsuarioModel('Deolinda Concepcin',' Bordn Rodriguez','3001678','internacion');
 ////$userModel->crearUsuarioModel('Celia Elizabeth ','Snchez Martinez','3518681','internacion');
 ////$userModel->crearUsuarioModel('Adriana Gisselle','Maldonado Amatte','4273013','internacion');
 ////$userModel->crearUsuarioModel('Gricelda Noemi ','Britez Arevalos','3502800','internacion');
@@ -33,6 +32,7 @@ $userModel = new User();
 //$userModel->crearUsuarioModel('Sandra','Martínez Corvalán ','3171037','internacion',12);
 //$userModel->crearUsuarioModel('Nathalia ','Vazquez','2999174','internacion',3);
 //$userModel->crearUsuarioModel('Camila Alicia Ester','Lezcano Molinas','3813193','internacion',2);
+//$userModel->crearUsuarioModel('Deolinda  Concepción','Bordón Rodriguez ','3001678','internacion',4);
 
 //// ! Diagnóstico que se escriba solo al ingresar al paciente y no cada vez que se tenga que pedir una formula. (Listo) 
 //$userModel->crearUsuarioModel('Samantha','Villordo','3188244','internacion',6); 
@@ -41,7 +41,7 @@ $userModel = new User();
 //$userModel->crearUsuarioModel('Rosala Irene','Velzquez','4840690','internacion',4);
 
 
-// * ME QUEDE EN EL 9 DEL FOMRULARIO
+// * ME QUEDE EN EL  10 DEL FOMRULARIO
 
 
 use App\Models\Patients;
@@ -61,6 +61,9 @@ $recetasModel = new Recetas();
 //var_dump($consultasModel->allConsultasActivasUsuarioModel(4,'internacion'));
 
 //var_dump($recetasModel->ultimasRecetasAprobadas(1));
+
+
+// ! Rutas del S.N.E
 
 $router = new Router();
 
@@ -111,10 +114,4 @@ $router->get('/start/dashboard/users', 'RouterController@users')->protect();
 $router->get('/start/dashboard/stock', 'RouterController@stock')->protect();
 $router->get('/start/dashboard/orders', 'RouterController@orders')->protect();
 
-
-
-
-////$router->post('/pacientes/antecedentesSalud', 'PacienteController@guardarAntecedenteSalud')->protect();
-////$router->get('/pacientes/{id}/historial-antecedentesSalud', 'PacienteController@obtenerUltimoAntecedenteSalud')->protect();
-////$router->get('/test', 'RouterController@test')->protect();
 $router->direct();

@@ -20,6 +20,7 @@ class PatientsValidator
         $validator = v::key('nombre', v::stringType()->notEmpty()->length(1, 100))
             ->key('apellido', v::stringType()->notEmpty()->length(1, 100))
             ->key('cedula', v::stringType()->notEmpty()->alnum()->length(7, 15))
+            ->key('numero_telefono', v::stringType()->notEmpty()->alnum()->length(7, 15))
             ->key('fechaNacimiento', v::stringType()->notEmpty()->date('Y-m-d'))
             ->key('sexo', v::stringType()->notEmpty()->in(['M', 'F', 'INDEFINIDO']));
 
@@ -87,7 +88,8 @@ class PatientsValidator
             ->key('edit_consulta', v::intVal()->positive())
             ->key('editar_nombre', $nombreApellidoRule)
             ->key('editar_apellido', $nombreApellidoRule)
-            ->key('editar_sexo', v::stringType()->notEmpty()->in(['M', 'F'])) // Si necesitas 'INDEFINIDO', agrégalo aquí
+            ->key('editar_telefono', v::stringType()->notEmpty()->alnum()->length(7, 15))
+            ->key('editar_sexo', v::stringType()->notEmpty()->in(['M', 'F']))
             ->key('editar_bloque', v::stringType()->notEmpty()->length(1, 50))
             ->key('editar_sala', v::stringType()->notEmpty()->length(1, 20))
             ->key('editar_cama', v::stringType()->notEmpty()->length(1, 20))

@@ -1,6 +1,6 @@
-
-
-<?php include_once __DIR__ . './../../utils/head.php' ?>
+<?php
+$title = 'ERROR - H.G.I';
+include_once __DIR__ . './../../utils/head.php' ?>
 
 
 <body class="min-h-screen bg-background text-textDark flex items-center justify-center px-6">
@@ -62,6 +62,8 @@
 
     </main>
 
+
+    <script src="/assets/js/error.js" defer></script>
 </body>
 
 </html>

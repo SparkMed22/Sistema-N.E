@@ -161,7 +161,7 @@ $usuarios = $_SESSION['user_nombre'] ?? 'Personal de Guardia';
 
                     <select id="id_servicio" name="id_servicio" required
                         class="w-full appearance-none rounded-xl border border-outline-variant bg-surface-container-low py-2.5 pl-11 pr-10 text-sm text-on-surface outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/15 cursor-pointer">
-                        <option value="">Seleccionar servicio...</option>
+                        
                     </select>
 
                     <span class="material-symbols-outlined pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[20px] text-on-surface-variant">expand_more</span>
@@ -264,7 +264,6 @@ $usuarios = $_SESSION['user_nombre'] ?? 'Personal de Guardia';
                     <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[20px] text-on-surface-variant">medical_services</span>
                     <select id="edit-id_servicio" name="id_servicio" required
                         class="w-full cursor-pointer appearance-none rounded-xl border border-outline-variant bg-surface-container-low py-2.5 pl-11 pr-10 text-sm text-on-surface outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/15">
-                        <option value="">Seleccionar servicio...</option>
                         
                     </select>
                     <span class="material-symbols-outlined pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[20px] text-on-surface-variant">expand_more</span>
