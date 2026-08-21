@@ -114,49 +114,57 @@ function renderizarTarjetas(consultas) {
 
 
     <!-- Acciones -->
-    <div class="mt-5 grid grid-cols-2 gap-2">
+   <div class="mt-5 grid grid-cols-2 gap-2">
 
-        <button
-            onclick="editarConsultaModal(${consulta.consulta_id})"
-            type="button"
-            class="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-on-primary transition hover:bg-primary-container">
-            Ver consulta 
-        </button>
+    <!-- Acción principal -->
+    <button
+        onclick="editarConsultaModal(${consulta.consulta_id})"
+        type="button"
+        class="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-on-primary transition hover:bg-primary-container">
+        Ver consulta
+    </button>
 
-        <button
-            type="button"
-            onclick="modalReceta(${consulta.consulta_id})"
-            class="rounded-lg bg-secondary px-4 py-2 text-sm font-medium text-on-secondary transition hover:bg-tertiary">
-            Nueva Receta
-        </button>
+    <!-- Acción clínica -->
+    <button
+        type="button"
+        onclick="modalReceta(${consulta.consulta_id})"
+        class="rounded-lg bg-secondary px-4 py-2 text-sm font-medium text-on-secondary transition hover:bg-tertiary">
+        Nueva Receta
+    </button>
 
-        <button
-            onclick="historialRecetas(${consulta.paciente_id},${consulta.consulta_id})"
-            type="button"
-            class="rounded-lg border border-outline bg-surface px-4 py-2 text-sm font-medium text-primary transition hover:bg-surface-container-high">
-            Historial
-        </button>
+    <!-- Consulta de información -->
+    <button
+        onclick="historialRecetas(${consulta.paciente_id}, ${consulta.consulta_id})"
+        type="button"
+        class="rounded-lg border border-outline bg-surface px-4 py-2 text-sm font-medium text-primary transition hover:bg-surface-container-high">
+        Historial
+    </button>
 
-        <button
-            onclick="altaMedica(${consulta.consulta_id})"
-            type="button"
-            class="rounded-lg bg-surface-container-highest px-4 py-2 text-sm font-medium text-primary transition hover:bg-outline-variant">
-            Alta
-        </button>
+    <!-- Finalización -->
+    <button
+        onclick="altaMedica(${consulta.consulta_id})"
+        type="button"
+        class="rounded-lg bg-surface-container-highest px-4 py-2 text-sm font-medium text-primary transition hover:bg-outline-variant">
+        Alta
+    </button>
 
-        <button
-            onclick="editarPacienteModal(${consulta.paciente_id})"
-            type="button"
-            class="rounded-lg bg-tertiary-container px-4 py-2 text-sm font-medium text-on-tertiary-container transition hover:bg-tertiary">
-            Editar Paciente
-        </button>
-        <button
-            onclick="reasignar(${consulta.consulta_id})"
-            type="button"
-            class="rounded-lg border border-outline-variant bg-surface-container-low px-4 py-2 text-sm font-medium text-on-surface-variant transition hover:bg-surface-container">
-            Reasignar
-        </button>
-    </div>
+    <!-- Cambio de atención -->
+    <button
+        onclick="reasignar(${consulta.consulta_id})"
+        type="button"
+        class="rounded-lg border border-outline-variant bg-surface-container-low px-4 py-2 text-sm font-medium text-on-surface-variant transition hover:bg-surface-container">
+        Reasignar
+    </button>
+
+    <!-- Administración del paciente -->
+    <button
+        onclick="editarPacienteModal(${consulta.paciente_id})"
+        type="button"
+        class="rounded-lg bg-tertiary-container px-4 py-2 text-sm font-medium text-on-tertiary-container transition hover:bg-tertiary">
+        Editar Paciente
+    </button>
+
+</div>
 </div>
         `;
 
@@ -545,8 +553,7 @@ function formatearFecha(fecha) {
 
     return new Intl.DateTimeFormat('es-PY',
         {
-            dateStyle: 'medium',
-            timeStyle: 'short'
+            dateStyle: 'medium'
         }
     ).format(new Date(fecha.replace(' ', 'T')));
 }
