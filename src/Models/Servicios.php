@@ -25,7 +25,7 @@ class Servicios
     }
 
     public function allServiciosModel():array{
-        $stmt = $this->db->query("SELECT * FROM servicios;");
+        $stmt = $this->db->query("SELECT * FROM servicios WHERE id!=1;");
         return $stmt->fetchAll(PDO::FETCH_OBJ);
     }
 }

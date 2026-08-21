@@ -76,6 +76,7 @@ $router->get('/api/consultation','ConsultationsController@allConsultationsContro
 $router->get('/api/{rol}/consultation/{servicio_id}/activas','ConsultationsController@allConsultasActivasServicioController')->protect();
 $router->get('/api/stock/productos','StockController@allProductosController')->protect();
 $router->get('/api/recetas/{id}','RecetasController@ultimasRecetasAprobadas')->protect();
+$router->get('/api/recetas','RecetasController@allRecetasController')->protect();
 
 
 // ? Rutas Post
@@ -93,6 +94,7 @@ $router->post('/api/stock/productos','StockController@crearProductoController')-
 $router->post('/api/stock/productos/incrementar','StockController@agregarInventarioController')->protect();
 $router->post('/api/stock/productos/decrementar','StockController@retirarInventarioController')->protect();
 $router->post('/api/recetas','RecetasController@crearRecetaController')->protect();
+$router->post('/api/recetas/cancelar','RecetasController@cancelarRecetaController')->protect();
 
 //! Rutas para el Front (Autenticadas con ->protect())
 $router->get('/start/dashboard', 'RouterController@dashboard')->protect();

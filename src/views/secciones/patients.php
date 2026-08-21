@@ -21,6 +21,24 @@ require __DIR__ . '/../../utils/head.php';
                         id="input_buscar_paciente"
                         type="search" placeholder="Buscar por nombre, apellido o cédula..." class="h-11 w-full rounded-xl border border-outline-variant bg-surface-container-low py-2.5 pl-12 pr-4 text-sm text-on-surface outline-none transition-all placeholder:text-on-surface-variant/70 focus:border-primary focus:ring-2 focus:ring-primary/15">
                 </div>
+                
+                <div id="buscarPacientes" class="hidden relative xl:w-64">
+                    <span class="material-symbols-outlined pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[19px] text-on-surface-variant"> 
+                        business
+                    </span>
+                    <select
+                        onchange="serviciosFilterChange(this.value)"
+                        id="opciones-servicio"
+                        class="h-11 w-full appearance-none rounded-xl border border-outline-variant/50 bg-surface-container-lowest pl-10 pr-10 text-sm text-on-surface outline-none transition focus:border-primary focus:bg-surface focus:ring-4 focus:ring-primary-fixed/30">
+                        <option value="0">Todos los servicios</option>
+                        <option value="1">Polivalente</option>
+                    </select>
+                    <span class="material-symbols-outlined pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[18px] text-on-surface-variant">
+                        expand_more
+                    </span>
+                </div>
+
+
                 <div
                     class="flex h-11 items-center justify-center gap-2 rounded-xl  px-4 text-sm font-medium text-on-surface-variant">
                     <button type="button" popovertarget="popover-ingresar-paciente" popovertargetaction="show" class="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-primary px-5 text-sm font-semibold text-on-primary transition-all hover:bg-primary-container active:scale-[0.98]">
@@ -30,6 +48,7 @@ require __DIR__ . '/../../utils/head.php';
                         Nuevo paciente
                     </button>
                 </div>
+                
             </div>
         </section>
 
@@ -253,8 +272,8 @@ require __DIR__ . '/../../utils/head.php';
                     <label for="ingreso-servicio" class="text-sm font-medium text-on-surface">Servicio</label>
                     <div class="relative">
                         <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[20px] text-on-surface-variant">medical_services</span>
-                        <select id="ingreso-servicio" name="servicio" required
-                            class="h-11 w-full cursor-pointer appearance-none rounded-xl border border-outline-variant bg-surface-container-low py-2.5 pl-11 pr-10 text-sm text-on-surface outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/15">
+                        <select id="ingreso-servicio" name="servicio" required class="h-11 w-full cursor-pointer appearance-none rounded-xl border border-outline-variant bg-surface-container-low py-2.5 pl-11 pr-10 text-sm text-on-surface outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/15">
+                            <option value="">Selecione un Servicio</option>
                         </select>
                         <span class="material-symbols-outlined pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[20px] text-on-surface-variant">expand_more</span>
                     </div>

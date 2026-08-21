@@ -240,8 +240,6 @@ async function decrementStock(event) {
         'motivo': motivo
     };
 
-    console.log('Payload listo para enviar:', payload);
-
     try {
         const data = await postFetch('/api/stock/productos/decrementar', payload, 'No se pudo decrementar');
         closeModal('modal-decrement-stock');

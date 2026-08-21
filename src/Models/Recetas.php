@@ -96,4 +96,70 @@ class Recetas
             return [];
         }
     }
+
+    // Funciona ✅
+    public function allRecetasModel(): array
+    {
+        $sql = "SELECT 
+                r.id AS id_receta,
+                r.consulta_id AS id_consulta,
+                r.usuario_id AS id_usuario,
+                r.indicacion_nutricional,
+                r.fecha_creacion,
+                r.medida_porcion,
+                r.aporte_liquido,
+                r.volumen_total,
+
+                c.diagnostico_medico,
+                c.observaciones_ingreso,
+                c.observaciones_egreso,
+                c.bloque,
+                c.sala,
+                c.cama,
+
+                CONCAT(p.nombre, ' ', p.apellido) AS paciente_nombre,
+                CONCAT(u.nombre, ' ', u.apellido) AS usuario_nombre,
+                
+                s.nombre AS 'servicio',
+                s.id AS 'servicio_id'
+
+            FROM recetas r 
+            INNER JOIN consultas c ON c.id = r.consulta_id
+            INNER JOIN usuarios u ON u.id = r.usuario_id
+            LEFT JOIN servicios s ON s.id = u.id_servicio
+            INNER JOIN pacientes p ON p.id = c.paciente_id
+            WHERE r.estado_aprobacion = 'PENDIENTE' 
+              AND c.activo = 1
+            ORDER BY r.fecha_creacion DESC";
+
+        $stmt = $this->db->query($sql);
+        return $stmt->fetchAll(PDO::FETCH_OBJ) ?: [];
+    }
+
+    
+    public function cancelarRecetaModel(int $id_receta, string $motivo, int $usuario_id): bool
+    {
+        $sql = "UPDATE recetas 
+            SET 
+                estado = 'INACTIVA',
+                estado_aprobacion = 'RECHAZADA',
+                motivo_rechazo = :motivo,
+                revisado_por_usuario_id = :usuario_id,
+                fecha_revision = NOW(),
+                fecha_desactivacion = NOW()
+            WHERE id = :id_receta";
+
+        $stmt = $this->db->prepare($sql);
+
+        $stmt->bindValue(':motivo', $motivo, \PDO::PARAM_STR);
+        $stmt->bindValue(':usuario_id', $usuario_id, \PDO::PARAM_INT);
+        $stmt->bindValue(':id_receta', $id_receta, \PDO::PARAM_INT);
+
+        try {
+            return $stmt->execute();
+        } catch (\PDOException $e) {
+            error_log("Error en cancelarRecetaModel: " . $e->getMessage());
+            return false;
+        }
+    }
 }

@@ -33,4 +33,12 @@ class RecetasValidator
         $validator = v::key('paciente_id', v::intVal()->positive());
         return $validator->validate($data);
     }
+
+    public function validarCancelarReceta(array $data): bool
+    {
+        $validator = v::key('receta_id', v::intVal()->positive())
+            ->key('usuario_id', v::intVal()->positive())
+            ->key('motivo_rechazo', v::stringType()->notEmpty()->length(1, 1000));
+        return $validator->validate($data);
+    }
 }

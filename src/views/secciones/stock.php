@@ -47,7 +47,6 @@ require_once __DIR__ . '/../../utils/head.php';
 
                 </div>
 
-                <!-- //TODO: Hacer funcional -->
                 <select id="filter-items"
                     onchange="handleFilterChange(this.value)"
                     class="px-4 py-3 rounded-xl bg-surface-container-low text-on-surface

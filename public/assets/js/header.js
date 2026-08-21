@@ -39,7 +39,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (servicio) {
                 servicioUsuario = servicio.nombre;
-            } else {
+            }
+            else if ( usuarioData.id_servicio===1){
+                servicioUsuario = 'Polivalente';
+            }else {
                 console.warn('Servicio no encontrado:', usuarioData.id_servicio);
                 servicioUsuario = 'Desconocido';
             }

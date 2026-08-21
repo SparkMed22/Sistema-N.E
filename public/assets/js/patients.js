@@ -603,7 +603,18 @@ async function historialRecetas(id_paciente, id_consulta) {
     }
 }
 
-
+// ? Filtrar por servicios
+function serviciosFilterChange(status) {
+    let list = [];
+    switch (status) {
+        case '0':
+            renderizarTarjetas(consultas);
+            break;
+        default:
+            list = consultas.filter(p => p.servicio_id == status);
+            renderizarTarjetas(list);
+    }
+}
 
 
 
@@ -613,7 +624,12 @@ document.addEventListener('DOMContentLoaded', () => {
     servicios = getLocalStorangeData('servicios');
     loadOptions(servicios, 'ingreso-servicio');
     loadOptions(servicios, 'servicio-select');
+    loadOptions(servicios, 'opciones-servicio');
 
+    if(getLocalStorangeData('usuario').id_servicio == 1){
+        document.getElementById('buscarPacientes').classList.toggle('hidden');
+    }
+    
 
     const inputBuscar = document.getElementById('input_buscar_paciente');
 

@@ -135,9 +135,8 @@ function getLocalStorangeData(key, message_error) {
 // ? Cargar select dinamicamente
 function loadOptions(arreglo, id) {
     const select = document.getElementById(id);
-    select.innerHTML += '<option value="">Seleccionar servicio...</option>';
     if (servicios.length === 0) {
-        select.innerHTML += '<option value="" disabled>No hay servicios disponibles</option>';
+        select.innerHTML = '<option value="" disabled>No hay servicios disponibles</option>';
         return;
     }
     servicios.forEach(servicio => {

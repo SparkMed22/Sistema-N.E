@@ -87,7 +87,8 @@ class Consultations
                 p.cedula AS paciente_cedula,
                 p.telefono AS paciente_telefono,
                 p.fecha_nacimiento AS paciente_fecha_nacimiento,
-                s.nombre AS servicio_nombre
+                s.nombre AS servicio_nombre,
+                s.id AS 'servicio_id'
             FROM consultas c
             INNER JOIN pacientes p ON c.paciente_id = p.id
             INNER JOIN servicios s ON c.servicio_id = s.id

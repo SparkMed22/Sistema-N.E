@@ -42,21 +42,18 @@ class RecetasController extends BaseController
 
             $recetaId = $this->recetaModel->crearRecetaModel($data);
 
-            $this->success(['id' => $recetaId],'Receta creada correctamente.');
-
+            $this->success(['id' => $recetaId], 'Receta creada correctamente.');
         } catch (Exception $e) {
             $this->error('Error interno del servidor al crear la receta: ' . $e->getMessage(), 500);
         }
     }
-
-
 
     // Funciona ✅
     public function ultimasRecetasAprobadas(int $paciente_id): void
     {
         try {
 
-            $valido = $this->recetasValidator->validargetRecetasPaciente(['paciente_id'=>$paciente_id]);
+            $valido = $this->recetasValidator->validargetRecetasPaciente(['paciente_id' => $paciente_id]);
             if (!$valido) {
                 $this->error('Los datos enviados no son válidos o no cumplen con los requisitos.');
                 return;
@@ -66,6 +63,36 @@ class RecetasController extends BaseController
             $this->success($recetas, 'Lista de recetas recuperada correctamente.');
         } catch (Exception $e) {
             $this->error('Error al recuperar recetas: ' . $e->getMessage(), 500);
+        }
+    }
+
+    // Funciona ✅
+    public function allRecetasController(): void
+    {
+        try {
+            $usuarios = $this->recetaModel->allRecetasModel();
+            $this->success($usuarios, 'Lista de Recetas recuperada correctamente');
+        } catch (Exception $e) {
+            $this->error('Error al recuperar recetas: ' . $e->getMessage(), 500);
+        }
+    }
+
+
+    public function cancelarRecetaController(): void{
+        try{
+            $data = $this->getPostJson();
+
+            $valido = $this->recetasValidator->validarCancelarReceta($data);
+            if (!$valido) {
+                $this->error('Los datos enviados no son válidos o no cumplen con los requisitos.');
+                return;
+            }
+            error_log('Datos recuperados para crear una nueva receta: ' . json_encode($data));
+            $recetaId = $this->recetaModel->cancelarRecetaModel($data['receta_id'],$data['motivo_rechazo'],$data['usuario_id']);
+            $this->success(['id' => $recetaId], 'Receta cancelada correctamente.');
+            //$this->success(null, 'Receta cancelada correctamente.');
+        }catch(Exception $e){
+             $this->error('Error al cancelar la receta: ' . $e->getMessage(), 500);   
         }
     }
 }

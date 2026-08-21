@@ -101,33 +101,6 @@ CREATE TABLE recetas (
     CONSTRAINT fk_recetas_revisado_por_usuario FOREIGN KEY (revisado_por_usuario_id) REFERENCES usuarios(id)
 );
 
--- Tabla de Recetas del sistema
--- Creada para almacenar los Pedidos de cada receta en el H.G.I relacion 1=1
--- Autor: Francisco David Medina Lourenzo | Fecha: 2026-08-18
-
-CREATE TABLE pedidos (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-
-    receta_id INT NOT NULL UNIQUE,
-
-    creado_por_usuario_id INT NOT NULL,
-
-    estado ENUM('CREADO','PREPARANDO','PREPARADO','CERRADO') NOT NULL DEFAULT 'CREADO',
-
-    fecha_creacion DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    preparado_por_usuario_id INT NULL,
-    fecha_preparacion DATETIME NULL,
-    cerrado_por_usuario_id INT NULL,
-    fecha_cierre DATETIME NULL,
-
-    CONSTRAINT fk_pedidos_receta FOREIGN KEY (receta_id) REFERENCES recetas(id),
-    CONSTRAINT fk_pedidos_creado_por FOREIGN KEY (creado_por_usuario_id) REFERENCES usuarios(id),
-    CONSTRAINT fk_pedidos_preparado_por FOREIGN KEY (preparado_por_usuario_id) REFERENCES usuarios(id),
-    CONSTRAINT fk_pedidos_cerrado_por FOREIGN KEY (cerrado_por_usuario_id) REFERENCES usuarios(id)
-);
-
-
-
 -- Tabla productos 
 -- Creada para almacenar los prodcutos disponibles en el H.G.I
 -- Autor: Francisco David Medina Lourenzo | Fecha: 2026-08-18
@@ -153,4 +126,39 @@ CREATE TABLE stock_movimientos (
     FOREIGN KEY (producto_id) REFERENCES productos (id) ON DELETE CASCADE,
     FOREIGN KEY (pedido_id) REFERENCES pedidos (id) ON DELETE SET NULL,
     FOREIGN KEY (usuario_id) REFERENCES usuarios (id)
+);
+
+
+-- Tabla de Recetas del sistema
+-- Creada para almacenar los Pedidos de cada receta en el H.G.I relacion 1=1
+-- Autor: Francisco David Medina Lourenzo | Fecha: 2026-08-18
+
+CREATE TABLE pedidos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    receta_id INT NOT NULL UNIQUE,
+    gestionado_usuario_id INT NOT NULL,
+    estado ENUM('CREADO', 'PREPARANDO', 'CERRADO') NOT NULL DEFAULT 'CREADO',
+    fecha_creacion DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    fecha_cierre DATETIME NULL,
+    CONSTRAINT fk_pedidos_receta FOREIGN KEY (receta_id) REFERENCES recetas(id),
+    CONSTRAINT fk_gestionado_usuario_id FOREIGN KEY (gestionado_usuario_id) REFERENCES usuarios(id)
+);
+
+
+
+CREATE TABLE pedido_componentes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    pedido_id INT NOT NULL,
+    producto_id INT NOT NULL,
+    cantidad INT NOT NULL,
+    
+    CONSTRAINT uk_pedido_producto UNIQUE (pedido_id, producto_id),
+
+    CONSTRAINT fk_pedido_componentes_pedido
+        FOREIGN KEY (pedido_id) REFERENCES pedidos(id)
+        ON DELETE CASCADE ON UPDATE CASCADE,
+
+    CONSTRAINT fk_pedido_componentes_producto
+        FOREIGN KEY (producto_id) REFERENCES productos(id)
+        ON DELETE RESTRICT ON UPDATE CASCADE
 );
