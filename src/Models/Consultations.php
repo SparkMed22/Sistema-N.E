@@ -19,12 +19,9 @@ use PDOException;
 class Consultations
 {
     private PDO $db;
-    private Patients $patientModel;
-
     public function __construct()
     {
         $this->db = Database::getConnection();
-        $this->patientModel = new Patients();
     }
 
     // Funciona ✅
@@ -139,20 +136,12 @@ class Consultations
         return $resultado && $stmt->rowCount() > 0;
     }
 
+    // Funciona ✅
     public function editarConsultaModel(int $edit_consulta, string $editar_bloque, string $editar_sala, string $editar_cama)
     {
         $sql = "UPDATE consultas SET bloque = :bloque, sala = :sala, cama = :cama WHERE id = :consulta_id";
         $stmt = $this->db->prepare($sql);
         $resultado = $stmt->execute([':consulta_id' => $edit_consulta, ':bloque' => $editar_bloque, ':sala' => $editar_sala, ':cama' => $editar_cama]);
         return $resultado && $stmt->rowCount() > 0;
-    }
-
-    public function editarConsultaGeneral(
-        int $editar_id,string $editar_nombre,string $editar_apellido,string $editar_sexo,string $fecha_nacimiento,string $editar_telefono,
-        int $edit_consulta,string $editar_bloque,string $editar_sala,string $editar_cama
-    ): bool {
-        $edit_consulta = $this->editarConsultaModel($edit_consulta,$editar_bloque,$editar_sala,$editar_cama);
-        $edit_paciente = $this->patientModel->editarPacienteModel($editar_id,$editar_nombre,$editar_apellido,$editar_sexo,$fecha_nacimiento,$editar_telefono);
-        return $edit_consulta && $edit_paciente;
     }
 }

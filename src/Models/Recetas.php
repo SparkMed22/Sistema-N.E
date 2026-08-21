@@ -60,68 +60,40 @@ class Recetas
         }
     }
 
-    
-    // TODO: Corregir
-    public function ultimasRecetasAprobadas(int $paciente_id, int $limite = 5): array
+    // Funciona ✅
+    public function ultimasRecetasAprobadasModel(int $paciente_id): array
     {
-        $sql = "
-            SELECT 
-                -- Información de la Receta
-                r.id AS receta_id,
-                r.indicacion_nutricional,
-                r.medida_porcion,
-                r.aporte_liquido,
-                r.volumen_total,
-                r.estado AS estado_receta,
-                r.estado_aprobacion,
-                r.fecha_revision,
-                r.fecha_creacion AS fecha_receta,
-
-                -- Información del Paciente
-                p.id AS paciente_id,
-                CONCAT(p.nombre, ' ', p.apellido) AS paciente_nombre_completo,
+        $sql = "SELECT 
+                CONCAT(p.nombre, ' ', p.apellido) AS paciente_nombre_completo, 
                 p.cedula AS paciente_cedula,
-
-                -- Información de la Consulta y Ubicación
-                c.id AS consulta_id,
-                s.nombre AS servicio,
-                c.bloque,
-                c.sala,
-                c.cama,
-
-                -- Profesional que creó la receta
-                CONCAT(u_creador.nombre, ' ', u_creador.apellido) AS profesional_prescriptor,
-                u_creador.rol AS profesional_rol,
-
-                -- Profesional que aprobó la receta
-                CONCAT(u_revisador.nombre, ' ', u_revisador.apellido) AS profesional_aprobador
-
-            FROM recetas r
+                r.indicacion_nutricional, 
+                r.medida_porcion, 
+                r.aporte_liquido, 
+                r.volumen_total, 
+                r.fecha_creacion,
+                CONCAT(u.nombre, ' ', u.apellido) AS profesional_nombre,
+                s.nombre AS profesional_servicio
+            FROM recetas r 
             INNER JOIN consultas c ON r.consulta_id = c.id
-            INNER JOIN pacientes p ON c.paciente_id = p.id
-            INNER JOIN servicios s ON c.servicio_id = s.id
-            INNER JOIN usuarios u_creador ON r.usuario_id = u_creador.id
-            LEFT JOIN usuarios u_revisador ON r.revisado_por_usuario_id = u_revisador.id
-
-            WHERE p.id = :paciente_id 
-              AND r.estado_aprobacion = 'APROBADA'
-              AND r.estado = 'ACTIVA'
-
+            INNER JOIN usuarios u ON u.id = r.usuario_id
+            INNER JOIN servicios s ON u.id_servicio = s.id
+            LEFT JOIN pacientes p ON c.paciente_id = p.id
+            WHERE 
+                p.id = :paciente_id 
+                AND r.estado_aprobacion != 'RECHAZADA'
             ORDER BY r.fecha_creacion DESC
-            LIMIT :limite
-        ";
+            LIMIT 5";
 
         $stmt = $this->db->prepare($sql);
-        
-        // Asignación explícita con tipos PDO para evitar problemas con LIMIT
+
         $stmt->bindValue(':paciente_id', $paciente_id, \PDO::PARAM_INT);
-        $stmt->bindValue(':limite', $limite, \PDO::PARAM_INT);
-        
-        $stmt->execute();
 
-        return $stmt->fetchAll(\PDO::FETCH_ASSOC) ?: [];
+        try {
+            $stmt->execute();
+            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        } catch (\PDOException $e) {
+            error_log("Error en ultimasRecetasAprobadas: " . $e->getMessage());
+            return [];
+        }
     }
-
-
- 
 }

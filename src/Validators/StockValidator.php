@@ -3,6 +3,7 @@
 namespace App\Validators;
 
 use Respect\Validation\Validator as v;
+use Respect\Validation\Exceptions\ValidationException;
 
 /**
  * Clase StockController encargargado de validacion para StockController
@@ -15,45 +16,40 @@ use Respect\Validation\Validator as v;
 class StockValidator
 {
     // Funciona ✅
-    public function validarProducto(array $data): bool{
-        $validator = v::key('nombre',v::stringType()->notEmpty()->length(1, 100))
-            ->key('cantidad_inicial', v::intVal()->min(0))
-            ->key('cantidad_minima',v::intVal()->positive()); 
-        return $validator->validate($data);
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-    
-    // Funciona ✅
-    public function validarReceta(array $data): bool
-    {
-        $validator = v::key('consulta_id', v::intVal()->positive())
-            ->key('usuarios_id', v::intVal()->positive())
-            ->key('indicacion_nutricional', v::stringType()->notEmpty()->length(1, 1000))
-            ->key('medida_porcion', v::optional(v::stringType()->length(1, 100)), false)
-            ->key('aporte_liquido', v::optional(v::stringType()->length(1, 100)), false)
-            ->key('volumen_total', v::optional(v::stringType()->length(1, 100)), false);
-
-        return $validator->validate($data);
-    }
-    public function validarPaciente(array $data): bool
+    public function validarProducto(array $data): bool
     {
         $validator = v::key('nombre', v::stringType()->notEmpty()->length(1, 100))
-            ->key('apellido', v::stringType()->notEmpty()->length(1, 100))
-            ->key('cedula', v::stringType()->notEmpty()->alnum()->length(7, 15))
-            ->key('fechaNacimiento', v::stringType()->notEmpty()->date('Y-m-d'))
-            ->key('sexo', v::stringType()->notEmpty()->in(['M', 'F', 'INDEFINIDO']));
-
+            ->key('cantidad_inicial', v::intVal()->min(0))
+            ->key('cantidad_minima', v::intVal()->positive());
         return $validator->validate($data);
+    }
+
+
+    // Funciona ✅
+    public function validarIngresoProducto(array $data): bool
+    {
+        $validator = v::key('productoId', v::intVal()->positive())
+            ->key('usuarioId', v::intVal()->positive())
+            ->key('cantidad', v::intVal()->positive())
+            ->key('motivo', v::stringType()->notEmpty()->length(1, 1000));
+        return $validator->validate($data);
+    }
+
+    // Funciona ✅
+    public function validarRetiroProducto(array $data): void
+    {
+        $validator = v::keySet(
+            v::key('productoId', v::intVal()->positive()),
+            v::key('usuarioId', v::intVal()->positive()),
+            v::key('cantidad', v::intVal()->positive()),
+            v::key('motivo', v::stringType()->notEmpty()->length(1, 1000)),
+            v::key('pedidoId',v::nullable(v::intVal()->positive()),false)
+        );
+        try {
+            $validator->assert($data);
+        } catch (ValidationException $e) {
+            error_log('ERROR VALIDACION: ' . $e);
+            throw $e;
+        }
     }
 }

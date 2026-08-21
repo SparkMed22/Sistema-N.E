@@ -5,7 +5,7 @@ namespace App\Controllers;
 use App\Models\Patients;
 use App\Models\Consultations;
 
-use App\Validators\PatientsValidator;
+use App\Validators\ConsultationsValidator;
 use Exception;
 
 
@@ -24,13 +24,14 @@ class ConsultationsController extends BaseController
 {
     private Patients $patientModel;
     private Consultations $consultationModel;
-    private PatientsValidator $validator;
+    private ConsultationsValidator $validator;
+
 
     public function __construct()
     {
         $this->patientModel = new Patients();
         $this->consultationModel = new Consultations();
-        $this->validator = new PatientsValidator();
+        $this->validator = new ConsultationsValidator();
     }
 
     // Funciona ✅
@@ -90,8 +91,6 @@ class ConsultationsController extends BaseController
         }
     }
 
-
-
     // Funciona ✅
     public function allConsultasActivasServicioController(string $rol, int $id_servicio): void
     {
@@ -103,9 +102,6 @@ class ConsultationsController extends BaseController
                 $this->error('Los datos enviados no cumplen con el formato requerido.');
                 return;
             }
-
-            error_log('Datos válidos para solicitar consultas');
-
             $conusultas = $this->consultationModel->allConsultasActivasServicioModel($id_servicio);
             $this->success($conusultas, 'Consultas obtenidas correctamente.');
         } catch (\Exception $e) {
@@ -183,15 +179,12 @@ class ConsultationsController extends BaseController
     {
         try {
             $data = $this->getPostJson();
-            if (!$this->validator->validarEdicionPaciente($data)) {
+            if (!$this->validator->validarEdicionConsulta($data)) {
                 error_log('Datos inválidos para la edicion del paciente: ' . json_encode($data));
                 $this->error('Los datos enviados no cumplen con el formato requerido.');
                 return;
             } 
-            $respuesta = $this->consultationModel->editarConsultaGeneral(
-                $data['editar_id'],$data['editar_nombre'],$data['editar_apellido'],$data['editar_sexo'],$data['editar_fecha_nacimiento'],$data['editar_telefono'],
-                $data['edit_consulta'],$data['editar_bloque'],$data['editar_sala'],$data['editar_cama']
-            );
+            $respuesta = $this->consultationModel->editarConsultaModel($data['edit_consulta'],$data['editar_bloque'],$data['editar_sala'],$data['editar_cama']);
             $this->success($respuesta, 'Edicion Exitosa.');
         } catch (\Exception $e) {
             error_log('Error en editarPacienteConsultaController: ' . $e->getMessage());

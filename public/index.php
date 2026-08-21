@@ -12,10 +12,17 @@ $dotenv->load();
 
 use App\Models\User;
 $userModel = new User();
+
+use App\Models\Stock;
+$stockModel = new Stock();
+
+//$stockModel->retirarInventario(7,100,'Soy la mera verga',1);
+
+
 ////$userModel->crearUsuarioModel('Celia Elizabeth ','Snchez Martinez','3518681','internacion');
 ////$userModel->crearUsuarioModel('Adriana Gisselle','Maldonado Amatte','4273013','internacion');
 ////$userModel->crearUsuarioModel('Gricelda Noemi ','Britez Arevalos','3502800','internacion');
-////$userModel->crearUsuarioModel('Carina Elizabeth ','Vargas Atencio','3197255','internacion');
+////$userModel->crearUsuarioModel('Carina Elizabeth ','Vargas Atencio','3197255','internacion',0);
 // ! Nuevos datos
 
 //// ? Administracion
@@ -44,32 +51,14 @@ $userModel = new User();
 // * ME QUEDE EN EL  10 DEL FOMRULARIO
 
 
-use App\Models\Patients;
-use App\Models\Consultations;
-use App\Models\Recetas;
-
-$pacientesModel = new Patients();
-$consultasModel = new Consultations();
-$recetasModel = new Recetas();
-
-//$consultasModel->altaConsultaModel(1,21);
-//$pacientesModel->crearPacienteModel("Carlos","Benítez","4567890","1992-05-14","M");
-//var_dump( $pacientesModel->buscarPorCedula("45678900"));
-
-//$consultasModel->reasignarConsulta(7,15);
-
-//var_dump($consultasModel->allConsultasActivasUsuarioModel(4,'internacion'));
-
-//var_dump($recetasModel->ultimasRecetasAprobadas(1));
-
 
 // ! Rutas del S.N.E
 
 $router = new Router();
 
+
 // ! Ruta de prueba
 $router->get('/test','RouterController@test');
-
 
 // ! Rutas sin Autenticacion
 $router->get('/', 'LoginController@index');                
@@ -82,11 +71,11 @@ $router->get('/api/servicios','ServiciosController@allServiciosController');
 // ? Rutas Gets 
 $router->get('/api/users','UserController@allController')->protect();
 $router->get('/api/users/activos','UserController@allDataUseController')->protect();
-$router->get('/api/patients','PatientsController@allPatientsController')->protect();
+$router->get('/api/patients','PacientesController@allPacientesController')->protect();
 $router->get('/api/consultation','ConsultationsController@allConsultationsController')->protect();
 $router->get('/api/{rol}/consultation/{servicio_id}/activas','ConsultationsController@allConsultasActivasServicioController')->protect();
-
 $router->get('/api/stock/productos','StockController@allProductosController')->protect();
+$router->get('/api/recetas/{id}','RecetasController@ultimasRecetasAprobadas')->protect();
 
 
 // ? Rutas Post
@@ -99,13 +88,11 @@ $router->post('/api/consultation','ConsultationsController@createConsultaControl
 $router->post('/api/consultation/reasignar','ConsultationsController@reasignarConsultaController')->protect();
 $router->post('/api/consultation/alta','ConsultationsController@altaConsultaController')->protect();
 $router->post('/api/consultation/editar','ConsultationsController@editarPacienteConsultaController')->protect();
-
-
+$router->post('/api/paciente/editar','PacientesController@editarPacienteController')->protect();
 $router->post('/api/stock/productos','StockController@crearProductoController')->protect();
-
-// TODO: Corregir
+$router->post('/api/stock/productos/incrementar','StockController@agregarInventarioController')->protect();
+$router->post('/api/stock/productos/decrementar','StockController@retirarInventarioController')->protect();
 $router->post('/api/recetas','RecetasController@crearRecetaController')->protect();
-
 
 //! Rutas para el Front (Autenticadas con ->protect())
 $router->get('/start/dashboard', 'RouterController@dashboard')->protect();

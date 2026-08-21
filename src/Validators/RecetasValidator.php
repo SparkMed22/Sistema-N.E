@@ -26,4 +26,11 @@ class RecetasValidator
 
         return $validator->validate($data);
     }
+
+    // Funciona ✅
+    public function validargetRecetasPaciente(array $data): bool
+    {
+        $validator = v::key('paciente_id', v::intVal()->positive());
+        return $validator->validate($data);
+    }
 }

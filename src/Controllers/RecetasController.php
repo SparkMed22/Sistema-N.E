@@ -51,21 +51,19 @@ class RecetasController extends BaseController
 
 
 
-
-
-
-
-
-
-
-
-    
-
-    public function allDataUseController(): void
+    // Funciona ✅
+    public function ultimasRecetasAprobadas(int $paciente_id): void
     {
         try {
-            //$recetas = $this->recetaModel->obtenerTodas();
-            $this->success(null, 'Lista de recetas recuperada correctamente.');
+
+            $valido = $this->recetasValidator->validargetRecetasPaciente(['paciente_id'=>$paciente_id]);
+            if (!$valido) {
+                $this->error('Los datos enviados no son válidos o no cumplen con los requisitos.');
+                return;
+            }
+
+            $recetas = $this->recetaModel->ultimasRecetasAprobadasModel($paciente_id);
+            $this->success($recetas, 'Lista de recetas recuperada correctamente.');
         } catch (Exception $e) {
             $this->error('Error al recuperar recetas: ' . $e->getMessage(), 500);
         }

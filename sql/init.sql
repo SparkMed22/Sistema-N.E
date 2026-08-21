@@ -149,6 +149,7 @@ CREATE TABLE stock_movimientos (
     tipo ENUM('ENTRADA', 'SALIDA') NOT NULL,
     cantidad INT NOT NULL,
     fecha DATETIME DEFAULT CURRENT_TIMESTAMP,
+    motivo VARCHAR(255) NOT NULL,
     FOREIGN KEY (producto_id) REFERENCES productos (id) ON DELETE CASCADE,
     FOREIGN KEY (pedido_id) REFERENCES pedidos (id) ON DELETE SET NULL,
     FOREIGN KEY (usuario_id) REFERENCES usuarios (id)

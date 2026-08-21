@@ -6,7 +6,7 @@ SELECT
     apellido,
     fecha_nacimiento,
     TIMESTAMPDIFF(YEAR, fecha_nacimiento, CURDATE()) as edad
-FROM pacientes;
+FROM pacientes where cedula=5394596;
 
 
 
@@ -49,76 +49,3 @@ INSERT INTO productos (id, nombre, cantidad, stock_minimo) VALUES
 ON DUPLICATE KEY UPDATE 
     cantidad = VALUES(cantidad),
     stock_minimo = VALUES(stock_minimo);
-
-
-
-
-
-
-
-
-
-
-
-
-
-SELECT 
-    r.id AS receta_id,
-    r.diagnostico_medico,
-    r.indicacion_nutricional,
-    r.medida_porcion,
-    r.aporte_liquido,
-    r.volumen_total,
-    r.estado AS estado_receta,
-    r.estado_aprobacion,
-    r.fecha_revision,
-    r.fecha_creacion AS fecha_receta,
-    p.id AS paciente_id,
-    CONCAT(p.nombre, ' ', p.apellido) AS paciente_nombre_completo,
-    p.cedula AS paciente_cedula,
-    c.id AS consulta_id,
-    s.nombre AS servicio,
-    c.bloque,
-    c.sala,
-    c.cama,
-    CONCAT(u_creador.nombre, ' ', u_creador.apellido) AS profesional_prescriptor,
-    u_creador.rol AS profesional_rol,
-    CONCAT(u_revisador.nombre, ' ', u_revisador.apellido) AS profesional_aprobador
-    FROM recetas r
-    INNER JOIN consultas c ON r.consulta_id = c.id
-    INNER JOIN pacientes p ON c.paciente_id = p.id
-    INNER JOIN servicios s ON c.servicio_id = s.id
-    INNER JOIN usuarios u_creador ON r.usuario_id = u_creador.id
-    LEFT JOIN usuarios u_revisador ON r.revisado_por_usuario_id = u_revisador.id
-    WHERE p.id = 1 
-      AND r.estado_aprobacion = 'APROBADA'
-      AND r.estado = 'ACTIVA'
-    ORDER BY r.fecha_creacion DESC
-    LIMIT 5
-
-
-
-
-
-SELECT 
-  p.nombre AS paciente_nombre,
-  p.cedula AS paciente_cedula,
-
-  r.indicacion_nutricional,
-  r.medida_porcion,
-  r.aporte_liquido,
-  r.volumen_total,
-  r.fecha_creacion,
-
-  u.nombre AS profecional_nombre,
-  s.nombre AS profecional_servicio
-
-  FROM recetas r 
-  INNER JOIN consultas c  ON r.consulta_id = c.id
-  INNER JOIN usuarios u ON u.id = r.usuario_id
-  INNER JOIN servicios s ON u.id_servicio = s.id
-  LEFT JOIN pacientes p ON c.paciente_id = p.id
-  WHERE  p.id = 9
-  ORDER BY r.fecha_creacion DESC
-  LIMIT 5;
-  
