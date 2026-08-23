@@ -216,17 +216,6 @@ require __DIR__ . '/../../utils/head.php';
             <div class="flex flex-col-reverse gap-3 border-t border-outline-variant/40 pt-5 sm:flex-row sm:justify-end"><button type="button" popovertarget="popover-procesar-receta" popovertargetaction="hide" class="h-11 rounded-xl border border-outline-variant/60 px-5 text-sm font-semibold text-on-surface-variant transition hover:bg-surface-container-high">Cancelar</button><button type="submit" class="flex h-11 items-center justify-center gap-2 rounded-xl bg-primary px-6 text-sm font-semibold text-on-primary shadow-sm transition hover:opacity-90 active:scale-[0.98]"><span class="material-symbols-outlined text-[19px]">check_circle</span>Procesar Pedido</button></div>
         </form>
     </div>
-
-
-
-
-
-
-
-
-
-
-
 </body>
 
 </html>

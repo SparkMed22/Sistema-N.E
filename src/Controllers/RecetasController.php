@@ -38,7 +38,7 @@ class RecetasController extends BaseController
                 return;
             }
 
-            error_log('Datos recuperados para crear una nueva receta: ' . json_encode($data));
+            error_log('Datos recuperados para crear una nueva receta ---->: ' . json_encode($data));
 
             $recetaId = $this->recetaModel->crearRecetaModel($data);
 
@@ -60,12 +60,17 @@ class RecetasController extends BaseController
             }
 
             $recetas = $this->recetaModel->ultimasRecetasAprobadasModel($paciente_id);
+            
+            error_log('Datos recuperados para crear una nueva receta: ' . json_encode($recetas));
+
             $this->success($recetas, 'Lista de recetas recuperada correctamente.');
         } catch (Exception $e) {
             $this->error('Error al recuperar recetas: ' . $e->getMessage(), 500);
         }
     }
 
+
+    
     // Funciona ✅
     public function allRecetasController(): void
     {
@@ -87,7 +92,6 @@ class RecetasController extends BaseController
                 $this->error('Los datos enviados no son válidos o no cumplen con los requisitos.');
                 return;
             }
-            error_log('Datos recuperados para crear una nueva receta: ' . json_encode($data));
             $recetaId = $this->recetaModel->cancelarRecetaModel($data['receta_id'],$data['motivo_rechazo'],$data['usuario_id']);
             $this->success(['id' => $recetaId], 'Receta cancelada correctamente.');
             //$this->success(null, 'Receta cancelada correctamente.');

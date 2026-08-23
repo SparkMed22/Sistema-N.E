@@ -163,6 +163,7 @@ function handleFilterChange(status) {
 // ? Incrementar Stock
 function modalIncrementStock(id_producto) {
     openModal('modal-increment-stock');
+    console.log(id_producto);
     document.getElementById('inc-item-cantidad-id').value = id_producto;
 }
 

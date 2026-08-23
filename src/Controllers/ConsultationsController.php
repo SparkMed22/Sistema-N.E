@@ -34,13 +34,11 @@ class ConsultationsController extends BaseController
         $this->validator = new ConsultationsValidator();
     }
 
-    // Funciona ✅
+    // Funciona ✅ DGBD29052026_2059
     public function createConsultaController(): void
     {
         try {
             $data = $this->getPostJson();
-
-            error_log('Datos enviados para consulta: ' . json_encode($data));
 
             if (!$this->validator->validarIngresoConsulta($data)) {
                 error_log('Datos inválidos para consulta: ' . json_encode($data));
@@ -53,7 +51,7 @@ class ConsultationsController extends BaseController
             $pacienteTemporal = false;
 
             if ($pacienteId === null) {
-                $pacienteId = $this->patientModel->crearPacienteModel(nombre: 'Desconocido', apellido: 'Desconocido', cedula: $data['cedula'],fechaNacimiento: date('Y') .'-01-01',numero_telefono:$data['numero_telefono'] ,sexo: 'INDEFINIDO');
+                $pacienteId = $this->patientModel->crearPacienteModel(nombre: 'Desconocido', apellido: 'Desconocido', cedula: $data['cedula'],fechaNacimiento: date('Y') .'-01-01',numero_telefono:null ,sexo: 'INDEFINIDO');
                 $pacienteTemporal = true;
                 error_log('Paciente temporal creado. ID: ' . $pacienteId . ' | CI: ' . $data['cedula']);
             }
@@ -74,8 +72,6 @@ class ConsultationsController extends BaseController
                 cama: isset($data['cama']) ? (int) $data['cama'] : null
             );
 
-            error_log('Consulta creada correctamente. ID: ' . $consultaId . ' | Paciente ID: ' . $pacienteId);
-
             $this->success([
                 'message' => 'Consulta e ingreso registrado correctamente.',
                 'consulta_id' => $consultaId,
@@ -90,7 +86,7 @@ class ConsultationsController extends BaseController
             $this->error('Error interno del servidor al registrar la consulta.', 500);
         }
     }
-
+    
     // Funciona ✅
     public function allConsultasActivasServicioController(string $rol, int $id_servicio): void
     {

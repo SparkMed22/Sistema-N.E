@@ -24,17 +24,18 @@ class ConsultationsValidator
             ->regex('/^[A-Za-z0-9_]{7,20}$/');
 
         $validator = v::key('cedula', $cedulaRule)
-            ->key('servicio_id', v::intVal()->positive())
-            ->key('usuario_ingreso_id', v::intVal()->positive())
-            ->key('usuario_egreso_id', v::optional(v::nullable(v::intVal()->positive())))
-            ->key('diagnostico_medico', v::stringType(), false)
-            ->key('observaciones_ingreso', v::optional(v::nullable(v::stringType())), false)
-            ->key('bloque', v::optional(v::nullable(v::stringType()->length(1, 10))), false)
-            ->key('sala', v::optional(v::nullable(v::stringType()->length(1, 10))), false)
-            ->key('cama', v::optional(v::nullable(v::stringType()->length(1, 10))), false);
-
+            ->key('servicio_id',v::intVal()->positive())
+            ->key('usuario_ingreso_id',v::intVal()->positive())
+            ->key('usuario_egreso_id',v::optional(v::nullable(v::intVal()->positive())))
+            ->key('diagnostico_medico', v::stringType()->notEmpty())
+            ->key('observaciones_ingreso',v::optional(v::nullable(v::stringType()->length(1, 1000))))
+            ->key('bloque',v::optional(v::nullable(v::stringType()->length(1, 10))))
+            ->key('sala',v::optional(v::nullable(v::stringType()->length(1, 10))))
+            ->key('cama', v::optional(v::nullable(v::stringType()->length(1, 10))));
         return $validator->validate($data);
     }
+
+
 
     // Funciona ✅
     public function validarPedidioConsultas(array $data): bool

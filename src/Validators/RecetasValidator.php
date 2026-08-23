@@ -18,7 +18,7 @@ class RecetasValidator
     public function validarReceta(array $data): bool
     {
         $validator = v::key('consulta_id', v::intVal()->positive())
-            ->key('usuarios_id', v::intVal()->positive())
+            ->key('creado_por_usuario_id', v::intVal()->positive())
             ->key('indicacion_nutricional', v::stringType()->notEmpty()->length(1, 1000))
             ->key('medida_porcion', v::optional(v::stringType()->length(1, 100)), false)
             ->key('aporte_liquido', v::optional(v::stringType()->length(1, 100)), false)

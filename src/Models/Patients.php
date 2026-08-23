@@ -33,7 +33,7 @@ class Patients
 
 
     // Funciona ✅
-    public function crearPacienteModel(string $nombre, string $apellido, string $cedula, string $fechaNacimiento,string $numero_telefono, string $sexo): int
+    public function crearPacienteModel(string $nombre, string $apellido, string $cedula, string $fechaNacimiento,?string $numero_telefono, string $sexo): int
     {
         $stmt = $this->db->prepare("INSERT INTO pacientes (nombre, apellido, cedula, fecha_nacimiento,telefono, sexo) 
             VALUES (:nombre, :apellido, :cedula, :fecha_nacimiento,:telefono, :sexo)");

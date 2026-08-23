@@ -268,7 +268,7 @@ function agregarFilaProducto(stock = stockD) {
         if (stockDisponible) {
             inputCantidad.max = stockDisponible;
             inputCantidad.placeholder = `Máx: ${stockDisponible}`;
-            
+
             if (Number(inputCantidad.value) > Number(stockDisponible)) {
                 inputCantidad.value = stockDisponible;
             }
@@ -293,22 +293,23 @@ document.getElementById('btn-agregar-producto').addEventListener('click', () => 
 document.getElementById('form-procesar-receta').addEventListener('submit', async function (event) {
     event.preventDefault();
 
+    const submitButton = this.querySelector('button[type="submit"]');
     const idReceta = document.getElementById('procesar-receta-id').value;
     const idConsulta = document.getElementById('procesar-consulta-id').value;
-    
+
     const selectsProducto = document.querySelectorAll('select[name="id_producto[]"]');
     const inputsCantidad = document.querySelectorAll('input[name="cantidad[]"]');
 
     const productos = [];
-    
+
     selectsProducto.forEach((select, index) => {
         const id_producto = Number(select.value);
         const cantidad = Number(inputsCantidad[index].value);
 
         if (id_producto && cantidad > 0) {
-            productos.push({ 
-                id_producto: id_producto, 
-                cantidad: cantidad 
+            productos.push({
+                id_producto: id_producto,
+                cantidad: cantidad
             });
         }
     });
@@ -319,16 +320,29 @@ document.getElementById('form-procesar-receta').addEventListener('submit', async
     }
 
     const payload = {
-        id_receta: Number(idReceta),
-        id_consulta: Number(idConsulta),
+        receta_id: Number(idReceta),
+        gestionado_usuario_id: Number(getLocalStorangeData('usuario').id),
         productos: productos
     };
 
-    // TODO: CONECTAR CON EL BACK
-    console.log('Payload a enviar:', payload);
+    try {
+        if (submitButton) submitButton.disabled = true;
 
+        const data = await postFetch('/api/orden/gestionar', payload, 'No se pudo crear la orden');
+
+        closeModal('popover-procesar-receta');
+        showSuccess('Éxito', data.message ?? 'Receta procesada con éxito.');
+
+        loadRecetas();
+        loadStock();
+        this.reset();
+    } catch (error) {
+        console.error('Error al procesar la orden:', error);
+        showError('Error al procesar la orden:', error)
+    } finally {
+        if (submitButton) submitButton.disabled = false;
+    }
 });
-
 
 
 

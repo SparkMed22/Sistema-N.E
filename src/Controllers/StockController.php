@@ -50,6 +50,7 @@ class StockController extends BaseController
     }
 
 
+
     // Funciona ✅
     public function allProductosController(): void
     {
@@ -73,7 +74,11 @@ class StockController extends BaseController
                 return;
             }
 
+            error_log('Datos válidos aumentar el Stock: ' . json_encode($data));
+                
+
             $producto = $this->stockModel->agregarInventarioModel($data['productoId'], $data['cantidad'], $data['motivo'], $data['usuarioId']);
+            
             $this->success(['id' => $producto], 'Agregado con Exito');
         } catch (\RuntimeException $e) {
             error_log('Error controlado en agregarInventarioController: ' . $e->getMessage());

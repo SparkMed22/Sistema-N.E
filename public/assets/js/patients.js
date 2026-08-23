@@ -11,6 +11,7 @@ function renderizarTarjetas(consultas) {
         return;
     }
     consultas.forEach((consulta) => {
+
         const tarjetaHTML = `
         <div class="max-w-md rounded-2xl border border-outline-variant bg-surface-container-lowest p-5">
 
@@ -213,7 +214,6 @@ async function ingresarPacientes(event) {
         sala: sala,
         cama: cama
     };
-
     try {
         const data = await postFetch('/api/consultation', dataPaciente, 'No se pudo crear la consulta.');
         const dataRespon = data.data;
@@ -391,6 +391,7 @@ async function editarConsulta(event) {
 }
 
 function modalReceta(id_consulta) {
+    console.log(id_consulta);
     document.getElementById('consulta-id').value = id_consulta;
     openModal('popover-receta');
 }
@@ -401,13 +402,14 @@ async function generarReceta(event) {
     const usuario = getLocalStorangeData('usuario');
     const payload = {
         'consulta_id': document.getElementById('consulta-id').value,
-        'usuarios_id': usuario.id,
+        'creado_por_usuario_id': usuario.id,
         'indicacion_nutricional': document.getElementById('indicacion-nutricional').value,
         'medida_porcion': document.getElementById('medida-porcion').value,
         'aporte_liquido': document.getElementById('aporte-liquido').value,
         'volumen_total': document.getElementById('volumen-total').value,
     }
     try {
+        console.log(payload);
         const data = await postFetch('/api/recetas', payload, 'No se pudo crear una nueva receta');
         closeModal('popover-receta');
         showSuccess('Exito', data.message ?? 'Receta Creada con Exito.');
@@ -571,7 +573,7 @@ async function enviarRecetaSeleccionada() {
 
         const payload = {
             'consulta_id': document.getElementById('consulta_recetas_modal').value,
-            'usuarios_id': getLocalStorangeData('usuario').id,
+            'creado_por_usuario_id': getLocalStorangeData('usuario').id,
             'indicacion_nutricional': recetaSeleccionada.indicacion_nutricional,
             'medida_porcion': recetaSeleccionada.medida_porcion,
             'aporte_liquido': recetaSeleccionada.aporte_liquido,
@@ -603,6 +605,7 @@ async function historialRecetas(id_paciente, id_consulta) {
     }
 }
 
+
 // ? Filtrar por servicios
 function serviciosFilterChange(status) {
     let list = [];
@@ -626,10 +629,10 @@ document.addEventListener('DOMContentLoaded', () => {
     loadOptions(servicios, 'servicio-select');
     loadOptions(servicios, 'opciones-servicio');
 
-    if(getLocalStorangeData('usuario').id_servicio == 1){
+    if (getLocalStorangeData('usuario').id_servicio == 1) {
         document.getElementById('buscarPacientes').classList.toggle('hidden');
     }
-    
+
 
     const inputBuscar = document.getElementById('input_buscar_paciente');
 

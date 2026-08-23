@@ -21,9 +21,9 @@ require __DIR__ . '/../../utils/head.php';
                         id="input_buscar_paciente"
                         type="search" placeholder="Buscar por nombre, apellido o cédula..." class="h-11 w-full rounded-xl border border-outline-variant bg-surface-container-low py-2.5 pl-12 pr-4 text-sm text-on-surface outline-none transition-all placeholder:text-on-surface-variant/70 focus:border-primary focus:ring-2 focus:ring-primary/15">
                 </div>
-                
+
                 <div id="buscarPacientes" class="hidden relative xl:w-64">
-                    <span class="material-symbols-outlined pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[19px] text-on-surface-variant"> 
+                    <span class="material-symbols-outlined pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[19px] text-on-surface-variant">
                         business
                     </span>
                     <select
@@ -48,7 +48,7 @@ require __DIR__ . '/../../utils/head.php';
                         Nuevo paciente
                     </button>
                 </div>
-                
+
             </div>
         </section>
 
@@ -64,128 +64,6 @@ require __DIR__ . '/../../utils/head.php';
     <script src="/assets/js/patients.js" defer></script>
     <script src="/assets/js/recetas.js" defer></script>
 
-
-    <!-- POPOVER: Consulta -->
-    <div id="popover-ubicacion-dx" popover="manual"
-        class=" w-full max-w-2xl overflow-hidden rounded-3xl
-        border border-outline-variant bg-surface-container-lowest text-on-surface backdrop:bg-on-surface/40 backdrop:backdrop-blur-md transition-all">
-
-
-        <div class="flex items-center justify-between border-b border-outline-variant/40 bg-surface-container-lowest px-7 py-5">
-            <div class="flex items-center gap-3.5">
-                <!-- Icono -->
-                <div class="flex h-11 w-11 items-center justify-center rounded-2xl border border-outline-variant/60 bg-primary-fixed text-primary">
-                    <span class="material-symbols-outlined text-[24px]">
-                        domain
-                    </span>
-                </div>
-
-                <div>
-                    <h3 class="text-lg font-bold tracking-tight text-on-surface">Ubicación y Diagnóstico</h3>
-                    <p class="text-xs font-medium text-on-surface-variant"> Actualiza la ubicación del paciente y consulta el diagnóstico.</p>
-                </div>
-            </div>
-
-            <button type="button" popovertarget="popover-ubicacion-dx" popovertargetaction="hide" aria-label="Cerrar"
-                class="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full text-on-surface-variant transition-all hover:bg-surface-container-high hover:text-on-surface active:scale-95">
-                <span class="material-symbols-outlined text-[20px]">
-                    close
-                </span>
-            </button>
-        </div>
-
-
-        <form id="form-ubicacion-dx" class="px-7 py-6 space-y-6">
-            <input type="hidden" id="edit-paciente-consulta" name="id_consulta">
-            <section
-                class=" relative overflow-hidden rounded-2xl border border-outline-variant border-l-4 border-l-primary bg-primary-fixed p-5">
-                <div class="flex items-center gap-2 mb-3">
-                    <span class=" material-symbols-outlined text-primary text-[20px]">
-                        medical_information
-                    </span>
-                    <span class=" text-xs font-bold uppercase tracking-wider text-primary">
-                        Diagnóstico Médico Actual
-                    </span>
-                </div>
-                <label for="edit-diagnostico" class="sr-only">
-                    Diagnóstico Médico
-                </label>
-
-                <textarea readonly id="edit-diagnostico" name="diagnostico_medico" rows="3" placeholder="Sin diagnóstico médico registrado"
-                    class=" w-full resize-none border-0 bg-transparent p-0 text-sm font-normal text-on-primary-fixed outline-none cursor-default placeholder:text-on-primary-fixed-variant focus:ring-0"></textarea>
-            </section>
-
-            <section class="space-y-3.5">
-                <div class="flex items-center gap-2">
-                    <span class=" material-symbols-outlined text-[20px] text-primary">location_on</span>
-                    <h4 class=" text-sm font-bold text-on-surface"> Ubicación del paciente</h4>
-                </div>
-
-                <div class="rounded-2xl border border-outline-variant bg-surface-container-low p-5">
-                    <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
-                        <div class="flex flex-col gap-1.5">
-                            <label for="edit-bloque" class="text-xs font-semibold text-on-surface-variant">Bloque</label>
-                            <div class="relative">
-                                <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-[18px] text-on-surface-variant">
-                                    domain
-                                </span>
-                                <select id="edit-bloque" name="bloque" required
-                                    class=" h-11 w-full cursor-pointer appearance-none rounded-xl border border-outline-variant bg-surface-container-lowest py-2 pl-10 pr-9 text-sm font-medium text-on-surface outline-none transition-all hover:border-outline focus:border-primary focus:ring-2 focus:ring-primary/20">
-                                    <option value="">Seleccionar...</option>
-                                    <option value="Bloque A">Bloque A</option>
-                                    <option value="Bloque B">Bloque B </option>
-                                    <option value="Bloque C">Bloque C </option>
-                                    <option value="Bloque D">Bloque D</option>
-                                </select>
-                                <span class="material-symbols-outlined pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[20px] text-on-surface-variant">
-                                    expand_more
-                                </span>
-                            </div>
-                        </div>
-
-                        <div class="flex flex-col gap-1.5">
-                            <label for="edit-sala" class=" text-xs font-semibold text-on-surface-variant"> Sala</label>
-                            <div class="relative">
-                                <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-[18px] text-on-surface-variant">meeting_room</span>
-                                <input id="edit-sala" name="sala" type="text" placeholder="Ej. 12" required
-                                    class=" h-11 w-full rounded-xl border border-outline-variant bg-surface-container-lowest py-2 pl-10 pr-3.5 text-sm font-medium text-on-surface outline-none transition-all placeholder:text-on-surface-variant/50 hover:border-outline focus:border-primary focus:ring-2 focus:ring-primary/20">
-                            </div>
-                        </div>
-                        <div class="flex flex-col gap-1.5">
-                            <label for="edit-cama" class=" text-xs font-semibold text-on-surface-variant"> Cama</label>
-                            <div class="relative">
-                                <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-[18px] text-on-surface-variant">bed</span>
-
-                                <input
-                                    id="edit-cama"
-                                    name="cama"
-                                    type="text"
-                                    placeholder="Ej. 3"
-                                    required
-                                    class=" h-11 w-full rounded-xl border border-outline-variant bg-surface-container-lowest py-2 pl-10 pr-3.5 text-sm font-medium text-on-surface outline-none transition-all placeholder:text-on-surface-variant/50 hover:border-outline focus:border-primary focus:ring-2 focus:ring-primary/20">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            <div class=" pt-2 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
-
-                <!-- Cancelar -->
-                <button
-                    type="button"
-                    popovertarget="popover-ubicacion-dx"
-                    popovertargetaction="hide"
-                    class=" h-11 cursor-pointer rounded-xl border border-outline-variant bg-surface-container-lowest px-5 text-sm font-semibold text-on-surface-variant transition-all hover:bg-surface-container-high hover:text-on-surface active:scale-95">Cancelar</button>
-
-                <button
-                    type="submit"
-                    class=" flex h-11 cursor-pointer items-center justify-center gap-2 rounded-xl bg-primary px-6 text-sm font-semibold text-on-primary transition-all hover:bg-primary-container active:scale-95">
-                    <span class=" material-symbols-outlined text-[18px]">save</span>
-                    Guardar cambios
-                </button>
-            </div>
-        </form>
-    </div>
 
     <!-- POPOVER: INGRESAR PACIENTE -->
     <div id="popover-ingresar-paciente"
@@ -320,6 +198,130 @@ require __DIR__ . '/../../utils/head.php';
 
         </form>
     </div>
+
+    <!-- POPOVER: Consulta -->
+    <div id="popover-ubicacion-dx" popover="manual"
+        class=" w-full max-w-2xl overflow-hidden rounded-3xl
+        border border-outline-variant bg-surface-container-lowest text-on-surface backdrop:bg-on-surface/40 backdrop:backdrop-blur-md transition-all">
+
+
+        <div class="flex items-center justify-between border-b border-outline-variant/40 bg-surface-container-lowest px-7 py-5">
+            <div class="flex items-center gap-3.5">
+                <!-- Icono -->
+                <div class="flex h-11 w-11 items-center justify-center rounded-2xl border border-outline-variant/60 bg-primary-fixed text-primary">
+                    <span class="material-symbols-outlined text-[24px]">
+                        domain
+                    </span>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-bold tracking-tight text-on-surface">Ubicación y Diagnóstico</h3>
+                    <p class="text-xs font-medium text-on-surface-variant"> Actualiza la ubicación del paciente y consulta el diagnóstico.</p>
+                </div>
+            </div>
+
+            <button type="button" popovertarget="popover-ubicacion-dx" popovertargetaction="hide" aria-label="Cerrar"
+                class="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full text-on-surface-variant transition-all hover:bg-surface-container-high hover:text-on-surface active:scale-95">
+                <span class="material-symbols-outlined text-[20px]">
+                    close
+                </span>
+            </button>
+        </div>
+
+
+        <form id="form-ubicacion-dx" class="px-7 py-6 space-y-6">
+            <input type="hidden" id="edit-paciente-consulta" name="id_consulta">
+            <section
+                class=" relative overflow-hidden rounded-2xl border border-outline-variant border-l-4 border-l-primary bg-primary-fixed p-5">
+                <div class="flex items-center gap-2 mb-3">
+                    <span class=" material-symbols-outlined text-primary text-[20px]">
+                        medical_information
+                    </span>
+                    <span class=" text-xs font-bold uppercase tracking-wider text-primary">
+                        Diagnóstico Médico Actual
+                    </span>
+                </div>
+                <label for="edit-diagnostico" class="sr-only">
+                    Diagnóstico Médico
+                </label>
+
+                <textarea readonly id="edit-diagnostico" name="diagnostico_medico" rows="3" placeholder="Sin diagnóstico médico registrado"
+                    class=" w-full resize-none border-0 bg-transparent p-0 text-sm font-normal text-on-primary-fixed outline-none cursor-default placeholder:text-on-primary-fixed-variant focus:ring-0"></textarea>
+            </section>
+
+            <section class="space-y-3.5">
+                <div class="flex items-center gap-2">
+                    <span class=" material-symbols-outlined text-[20px] text-primary">location_on</span>
+                    <h4 class=" text-sm font-bold text-on-surface"> Ubicación del paciente</h4>
+                </div>
+
+                <div class="rounded-2xl border border-outline-variant bg-surface-container-low p-5">
+                    <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                        <div class="flex flex-col gap-1.5">
+                            <label for="edit-bloque" class="text-xs font-semibold text-on-surface-variant">Bloque</label>
+                            <div class="relative">
+                                <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-[18px] text-on-surface-variant">
+                                    domain
+                                </span>
+                                <select id="edit-bloque" name="bloque" required
+                                    class=" h-11 w-full cursor-pointer appearance-none rounded-xl border border-outline-variant bg-surface-container-lowest py-2 pl-10 pr-9 text-sm font-medium text-on-surface outline-none transition-all hover:border-outline focus:border-primary focus:ring-2 focus:ring-primary/20">
+                                    <option value="">Seleccionar...</option>
+                                    <option value="Bloque A">Bloque A</option>
+                                    <option value="Bloque B">Bloque B </option>
+                                    <option value="Bloque C">Bloque C </option>
+                                    <option value="Bloque D">Bloque D</option>
+                                </select>
+                                <span class="material-symbols-outlined pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[20px] text-on-surface-variant">
+                                    expand_more
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col gap-1.5">
+                            <label for="edit-sala" class=" text-xs font-semibold text-on-surface-variant"> Sala</label>
+                            <div class="relative">
+                                <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-[18px] text-on-surface-variant">meeting_room</span>
+                                <input id="edit-sala" name="sala" type="text" placeholder="Ej. 12" required
+                                    class=" h-11 w-full rounded-xl border border-outline-variant bg-surface-container-lowest py-2 pl-10 pr-3.5 text-sm font-medium text-on-surface outline-none transition-all placeholder:text-on-surface-variant/50 hover:border-outline focus:border-primary focus:ring-2 focus:ring-primary/20">
+                            </div>
+                        </div>
+                        <div class="flex flex-col gap-1.5">
+                            <label for="edit-cama" class=" text-xs font-semibold text-on-surface-variant"> Cama</label>
+                            <div class="relative">
+                                <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-[18px] text-on-surface-variant">bed</span>
+
+                                <input
+                                    id="edit-cama"
+                                    name="cama"
+                                    type="text"
+                                    placeholder="Ej. 3"
+                                    required
+                                    class=" h-11 w-full rounded-xl border border-outline-variant bg-surface-container-lowest py-2 pl-10 pr-3.5 text-sm font-medium text-on-surface outline-none transition-all placeholder:text-on-surface-variant/50 hover:border-outline focus:border-primary focus:ring-2 focus:ring-primary/20">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <div class=" pt-2 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+
+                <!-- Cancelar -->
+                <button
+                    type="button"
+                    popovertarget="popover-ubicacion-dx"
+                    popovertargetaction="hide"
+                    class=" h-11 cursor-pointer rounded-xl border border-outline-variant bg-surface-container-lowest px-5 text-sm font-semibold text-on-surface-variant transition-all hover:bg-surface-container-high hover:text-on-surface active:scale-95">Cancelar</button>
+
+                <button
+                    type="submit"
+                    class=" flex h-11 cursor-pointer items-center justify-center gap-2 rounded-xl bg-primary px-6 text-sm font-semibold text-on-primary transition-all hover:bg-primary-container active:scale-95">
+                    <span class=" material-symbols-outlined text-[18px]">save</span>
+                    Guardar cambios
+                </button>
+            </div>
+        </form>
+    </div>
+
+
 
     <!-- POPOVER: Reasignar -->
     <div id="popover-reasignar" popover="manual" class="m-auto border-0 bg-transparent p-0 backdrop:bg-slate-900/50 backdrop:backdrop-blur-sm">
@@ -637,7 +639,7 @@ require __DIR__ . '/../../utils/head.php';
 
         <div class=" flex items-start justify-between gap-4 border-b border-outline-variant px-6 py-5">
 
-            
+
 
             <div class="flex items-center gap-3">
 

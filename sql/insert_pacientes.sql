@@ -624,4 +624,6 @@ INSERT INTO pacientes (nombre, apellido, cedula, telefono, fecha_nacimiento, sex
 ('Alicia', 'Rotela', '920589', NULL, '1966-09-13', 'INDEFINIDO'),
 ('Alejandro', 'Encina.', '2614568', NULL, '1970-07-09', 'INDEFINIDO'),
 ('Alfonso', 'Servín.', '2595155', NULL, '1949-01-26', 'INDEFINIDO'),
-('Eleuteria', 'Ojeda.', '3616937', NULL, '1950-05-26', 'INDEFINIDO');
+('Eleuteria', 'Ojeda.', '3616937', NULL, '1950-05-26', 'INDEFINIDO'),
+('Tito', 'Sholler', '713496', NULL, '1957-12-30', 'INDEFINIDO'),
+('RAMONA ESTELA', 'Gómez', '1774088', NULL, '1957-12-30', 'INDEFINIDO');
