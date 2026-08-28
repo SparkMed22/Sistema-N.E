@@ -11,7 +11,7 @@ INSERT INTO servicios (nombre) VALUES
 ('Urgencia Cirugía y Traumatología'),
 ('Urgencia Ginecología'),
 ('Urgencia Pediatría'),
-('Oncología')
+('Oncología'),
 ('Centro de Lactancia');
 
 

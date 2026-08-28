@@ -1,3 +1,4 @@
+-- Active: 1786211203686@@127.0.0.1@3306@Sistema_N_E
 -- 1. Desactivar temporalmente el chequeo de claves foráneas
 SET FOREIGN_KEY_CHECKS = 0;
 

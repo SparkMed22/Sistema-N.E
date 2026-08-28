@@ -19,7 +19,7 @@ $stockModel = new Stock();
 //$stockModel->retirarInventario(7,100,'Soy la mera verga',1);
 
 
-////$userModel->crearUsuarioModel('Celia Elizabeth ','Snchez Martinez','3518681','internacion');
+////$userModel->crearUsuarioModel('Celia Elizabeth','Snchez Martinez','3518681','internacion');
 ////$userModel->crearUsuarioModel('Adriana Gisselle','Maldonado Amatte','4273013','internacion');
 ////$userModel->crearUsuarioModel('Gricelda Noemi ','Britez Arevalos','3502800','internacion');
 ////$userModel->crearUsuarioModel('Carina Elizabeth ','Vargas Atencio','3197255','internacion',0);
@@ -29,26 +29,24 @@ $stockModel = new Stock();
 //$userModel->crearUsuarioModel('Francisco David ','Medina Lourenzo','5483874','admin',1);
 //$userModel->crearUsuarioModel('Ana Beatriz','Sosa','4113268','admin',1);
 //$userModel->crearUsuarioModel('Evelin Diana','Caballero','6174947','admin',1);
-
 //// ? Nutricionistas e Internacion
 //$userModel->crearUsuarioModel('Patricia Nathalia','Küng Hüther','2642937','nutricionista',1);
 //$userModel->crearUsuarioModel('Lilian Elizabeth',' Ramirez Veron','4242619','nutricionista',1);
 //$userModel->crearUsuarioModel('Luis','Simon','3873856','internacion',11); 
 //$userModel->crearUsuarioModel('Vanessa','Surnyak','3873742','internacion',2); 
 //$userModel->crearUsuarioModel('Maria del Carmen','Palacios','1631967','internacion',6);
-//$userModel->crearUsuarioModel('Sandra','Martínez Corvalán ','3171037','internacion',12);
+//$userModel->crearUsuarioModel('Sandra','Martínez Corvalán','3171037','internacion',12);
 //$userModel->crearUsuarioModel('Nathalia ','Vazquez','2999174','internacion',3);
 //$userModel->crearUsuarioModel('Camila Alicia Ester','Lezcano Molinas','3813193','internacion',2);
-//$userModel->crearUsuarioModel('Deolinda  Concepción','Bordón Rodriguez ','3001678','internacion',4);
-
+//$userModel->crearUsuarioModel('Deolinda  Concepción','Bordón Rodriguez','3001678','internacion',4);
+//$userModel->crearUsuarioModel('Natalia','Ruiz Diaz','2301429','internacion',8);
 //// ! Diagnóstico que se escriba solo al ingresar al paciente y no cada vez que se tenga que pedir una formula. (Listo) 
 //$userModel->crearUsuarioModel('Samantha','Villordo','3188244','internacion',6); 
-
 //// ! Información nutricional de formula y reconstitución para 1 toma
 //$userModel->crearUsuarioModel('Rosala Irene','Velzquez','4840690','internacion',4);
 
 
-// * ME QUEDE EN EL  10 DEL FOMRULARIO
+// * ME QUEDE EN EL  12 DEL FOMRULARIO
 
 
 

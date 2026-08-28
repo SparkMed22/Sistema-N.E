@@ -126,15 +126,48 @@ class Consultations
     }
 
     // Funciona ✅
-    public function altaConsultaModel(int $usuarioId, int $consulta_id): bool
+    public function altaConsultaModel(int $usuarioId, int $consultaId): bool
     {
-        $sql = "UPDATE consultas SET activo = 0, fecha_egreso = NOW(), usuario_egreso_id = :usuario_id WHERE id = :consulta_id";
-        $stmt = $this->db->prepare($sql);
-        $resultado = $stmt->execute([
-            ':usuario_id' => $usuarioId,
-            ':consulta_id' => $consulta_id
-        ]);
-        return $resultado && $stmt->rowCount() > 0;
+        try {
+            $this->db->beginTransaction();
+
+            $sqlConsulta = "UPDATE consultas SET activo = 0, fecha_egreso = NOW(), usuario_egreso_id = :usuario_id
+            WHERE id = :consulta_id AND activo = 1";
+
+            $stmtConsulta = $this->db->prepare($sqlConsulta);
+
+            $stmtConsulta->execute([
+                ':usuario_id' => $usuarioId,
+                ':consulta_id' => $consultaId
+            ]);
+
+            if ($stmtConsulta->rowCount() === 0) {
+                $this->db->rollBack();
+                return false;
+            }
+
+            $sqlRecetas = " UPDATE recetas SET  estado = 'INACTIVA', fecha_desactivacion = NOW()
+                WHERE consulta_id = :consulta_id
+                AND estado_aprobacion = 'PENDIENTE'
+                AND estado = 'ACTIVA'";
+
+            $stmtRecetas = $this->db->prepare($sqlRecetas);
+
+            $stmtRecetas->execute([
+                ':consulta_id' => $consultaId
+            ]);
+
+            $this->db->commit();
+
+            return true;
+        } catch (PDOException $e) {
+
+            if ($this->db->inTransaction()) {
+                $this->db->rollBack();
+            }
+
+            throw $e;
+        }
     }
 
     // Funciona ✅

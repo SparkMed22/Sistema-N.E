@@ -44,6 +44,17 @@ CREATE TABLE pacientes (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
+-- Historial Ubicacion 
+
+CREATE TABLE historialUbicacion(
+  int INT AUTO_INCREMENT NOT NULL,
+  id_servicio INT NOT NULL,
+  bloque VARCHAR(10) NOT NULL,
+  sala VARCHAR(10) NOT NULL,
+  cama VARCHAR(5) NOT NULL,
+  CONSTRAINT fk_servicios FOREIGN KEY (id_servicio) REFERENCES servicios(id)
+);
+
 
 -- Tabla de consultas del sistema
 -- Creada para almacenar las consultas de cada paciente en el H.G.I
@@ -54,16 +65,15 @@ CREATE TABLE consultas (
     paciente_id INT NOT NULL,
     servicio_id INT NOT NULL,
     usuario_ingreso_id INT NOT NULL,          
-    usuario_egreso_id INT NULL,           
+    usuario_egreso_id INT NULL,
+    id_historial_ubicacion INT NOT NULL,
     fecha_ingreso DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     diagnostico_medico TEXT NOT NULL,
     observaciones_ingreso TEXT NULL,
     fecha_egreso DATETIME NULL,
     observaciones_egreso TEXT NULL,
-    bloque VARCHAR(10) NULL,
-    sala VARCHAR(10) NULL,
-    cama VARCHAR(10) NULL,
     activo BOOLEAN DEFAULT TRUE,
+    CONSTRAINT fk_servicios FOREIGN KEY (id_historial_ubicacion) REFERENCES historialUbicacion(id),
     CONSTRAINT fk_consulta_paciente FOREIGN KEY (paciente_id) REFERENCES pacientes(id),
     CONSTRAINT fk_consulta_servicio FOREIGN KEY (servicio_id) REFERENCES servicios(id),
     CONSTRAINT fk_consulta_usuario_ingreso FOREIGN KEY (usuario_ingreso_id) REFERENCES usuarios(id),
@@ -71,7 +81,6 @@ CREATE TABLE consultas (
 );
 -- usuario_tratante_id INT NULL, -- En base a las recetas 
 --CONSTRAINT fk_consulta_usuario_tratante FOREIGN KEY (usuario_tratante_id) REFERENCES usuarios(id),
-
 
 
 -- Tabla de Recetas del sistema

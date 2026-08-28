@@ -38,7 +38,7 @@ function crearTarjetaReceta(receta) {
                         <span class="material-symbols-outlined text-[14px] text-primary">clinical_notes</span>
                         Diagnóstico
                     </div>
-                    <p class="mt-1 text-xs font-semibold text-on-surface truncate" title="${receta.diagnostico_medico}">
+                    <p cclass="mt-0.5 text-xs text-on-surface-variant leading-relaxed whitespace-pre-wrap break-words" title="${receta.diagnostico_medico}">
                         ${receta.diagnostico_medico || 'Sin diagnostico'}
                     </p>
                 </div>
@@ -48,7 +48,7 @@ function crearTarjetaReceta(receta) {
                     <p class="text-[10px] font-bold uppercase tracking-wider text-on-surface-variant">
                         Indicación Nutricional
                     </p>
-                    <p class="mt-0.5 text-xs text-on-surface-variant line-clamp-2 leading-relaxed" title="${receta.indicacion_nutricional || ''}">
+                    <p class="mt-0.5 text-xs text-on-surface-variant leading-relaxed whitespace-pre-wrap break-words" title="${receta.indicacion_nutricional || ''}">
                         ${receta.indicacion_nutricional || 'Sin indicación registrada'}
                     </p>
                 </div>
