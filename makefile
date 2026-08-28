@@ -5,7 +5,7 @@ DB_NAME=$(shell grep DB_NAME .env | cut -d '=' -f2)
 DB_USER=$(shell grep DB_USER .env | cut -d '=' -f2)
 DB_PASS=$(shell grep DB_PASS .env | cut -d '=' -f2)
 DB_PORT=$(shell grep DB_PORT .env | cut -d '=' -f2)
-
+DB_NAME_PRODUCCION=$(shell grep DB_NAME_PRODUCCION .env | cut -d '=' -f2)
 up:
 	docker compose up -d
 
@@ -24,7 +24,7 @@ setup:
 	docker compose exec app composer require respect/validation
 
 mysql-local:
-	@mysql -h $(DB_HOST) -P $(DB_PORT) -u $(DB_USER) -p'$(DB_PASS)' $(DB_NAME)
+	@mysql -h $(DB_HOST) -P $(DB_PORT) -u $(DB_USER) -p'$(DB_PASS)' $(DB_NAME_PRODUCCION)
 
 mysql-docker:
 	@docker exec -it $(MYSQL_CONTAINER) mysql -h localhost -P 3306 -u $(DB_USER) -p'$(DB_PASS)' $(DB_NAME)
