@@ -1,51 +1,6 @@
 -- Autor: Francisco David Medina Lourenzo | Fecha: 2026-08-14 
 
-SELECT 
-    id,
-    nombre,
-    apellido,
-    fecha_nacimiento,
-    TIMESTAMPDIFF(YEAR, fecha_nacimiento, CURDATE()) as edad
+SELECT  id, nombre, apellido, fecha_nacimiento, TIMESTAMPDIFF(YEAR, fecha_nacimiento, CURDATE()) as edad
 FROM pacientes where cedula=5394596;
 
 
-
-INSERT INTO productos (nombre, cantidad, stock_minimo) VALUES
-('NOVARIX CON FIBRAS 1000 GR', 0, 6),
-('NOVARIX SIN FIBRAS 1000 GR', 0, 5),
-('NOVARIX DIABETICOS 1000 GR', 0, 5),
-('CN PLUS', 0, 5),
-('CN PREMO RENAL', 0, 5),
-('PENTASURE DLS 400 GR', 10, 5),
-('PENTASURE DM 400 GR', 0, 5),
-('PENTASURE INMUNO MAX 244 GR', 15, 5),
-('RENO DIET LP 400 GR', 90, 37),
-( 'ENTEREX KARBS 450 GR', 1, 5),
-( 'NUTRILON PEPTI JUNIOR 400 GR', 191, 5),
-( 'NUTRILON PREMIUM 1 1000 GR', 4, 5),
-( 'GLUTAPAK 15 GR', 702, 5),
-( 'FRESUBIN FIBRE 1000 ML', 0, 5),
-( 'EXPERTO 131 GR', 17, 5),
-( 'ENSURE POLVO 800 GR', 0, 5),
-( 'GLUCERNA 237 ML', 316, 5),
-( 'ENSURE PLUS 220 ML', 0, 5),
-( 'JEVITY 1000 ML', 0, 5),
-( 'ENTEREX DBT 237 ML', 366, 5),
-( 'ENTEREX PLUS 237 ML', 0, 5),
-( 'NOVARIX CON FIBRAS 500 GR', 0, 5),
-( 'NOVARIX SIN FIBRAS 500 GR', 10, 28),
-( 'NOVARIX DIABETICO 500 GR', 0, 48),
-( 'WHEY PROTEIN 50 GR', 0, 5),
-( 'CN MODULO CALORICO 500 GR', 1, 5),
-( 'NOVARIX RENAL EN DIALISIS 325 GR', 13, 5),
-( 'NOVARIX PRE RENAL 325 GR', 0, 5),
-( 'NAN OPTI PRO 900 GR', 0, 5),
-( 'NOVARIX MOD PROTEICO 50 GR', 349, 5),
-( 'ISOSOURCE 400 GR', 4, 5),
-( 'ENTEREX PLUS 220 ML', 36, 5),
-( 'ENTEREX DBT', 9, 5),
-( 'NOVASOURCE 1000 ML', 0, 5),
-( 'MALTODEX UP 250 GR', 360, 60)
-ON DUPLICATE KEY UPDATE 
-    cantidad = VALUES(cantidad),
-    stock_minimo = VALUES(stock_minimo);

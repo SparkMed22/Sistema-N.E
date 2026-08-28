@@ -44,6 +44,8 @@ $stockModel = new Stock();
 //$userModel->crearUsuarioModel('Samantha','Villordo','3188244','internacion',6); 
 //// ! Información nutricional de formula y reconstitución para 1 toma
 //$userModel->crearUsuarioModel('Rosala Irene','Velzquez','4840690','internacion',4);
+//$userModel->crearUsuarioModel('Celia Elizabeth','Snchez Martinez','3518681','internacion',3);
+
 
 
 // * ME QUEDE EN EL  12 DEL FOMRULARIO
