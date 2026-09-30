@@ -17,14 +17,16 @@ class PacientesValidator
     // Funciona ✅
     public function validarCrecionPaciente(array $data): bool
     {
-        $validator = v::key('nombre', v::stringType()->notEmpty()->length(1, 100))
+       $validator = v::key('nombre', v::stringType()->notEmpty()->length(1, 100))
             ->key('apellido', v::stringType()->notEmpty()->length(1, 100))
-            ->key('cedula', v::stringType()->notEmpty()->alnum()->length(7, 15))
+            ->key('cedula', v::stringType()->notEmpty()->alnum()->length(3,30))
             ->key('numero_telefono', v::stringType()->notEmpty()->alnum()->length(7, 15))
             ->key('fechaNacimiento', v::stringType()->notEmpty()->date('Y-m-d'))
             ->key('sexo', v::stringType()->notEmpty()->in(['M', 'F', 'INDEFINIDO']));
         return $validator->validate($data);
     }
+
+
 
 
     // Funciona ✅

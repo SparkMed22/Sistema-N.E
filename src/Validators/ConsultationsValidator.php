@@ -21,7 +21,7 @@ class ConsultationsValidator
     {
         $cedulaRule = v::stringType()
             ->notEmpty()
-            ->regex('/^[A-Za-z0-9_]{7,20}$/');
+            ->regex('/^[A-Za-z0-9_]{3,30}$/');
 
         $validator = v::key('cedula', $cedulaRule)
             ->key('servicio_id',v::intVal()->positive())
