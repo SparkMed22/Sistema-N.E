@@ -10,19 +10,9 @@ $dotenv->load();
 
 // ? Crear un usuario de prueba (solo para desarrollo)
 
-use App\Models\User;
-$userModel = new User();
+//use App\Models\User;
+//$userModel = new User();
 
-use App\Models\Stock;
-$stockModel = new Stock();
-
-//$stockModel->retirarInventario(7,100,'Soy la mera verga',1);
-
-
-////$userModel->crearUsuarioModel('Celia Elizabeth','Snchez Martinez','3518681','internacion');
-////$userModel->crearUsuarioModel('Adriana Gisselle','Maldonado Amatte','4273013','internacion');
-////$userModel->crearUsuarioModel('Gricelda Noemi ','Britez Arevalos','3502800','internacion');
-////$userModel->crearUsuarioModel('Carina Elizabeth ','Vargas Atencio','3197255','internacion',0);
 // ! Nuevos datos
 
 //// ? Administracion
@@ -48,14 +38,8 @@ $stockModel = new Stock();
 
 
 
-// * ME QUEDE EN EL  12 DEL FOMRULARIO
-
-
-
 // ! Rutas del S.N.E
-
 $router = new Router();
-
 
 // ! Ruta de prueba
 $router->get('/test','RouterController@test');
@@ -95,12 +79,11 @@ $router->post('/api/paciente/editar','PacientesController@editarPacienteControll
 $router->post('/api/stock/productos','StockController@crearProductoController')->protect();
 $router->post('/api/stock/productos/incrementar','StockController@agregarInventarioController')->protect();
 $router->post('/api/stock/productos/decrementar','StockController@retirarInventarioController')->protect();
-
 $router->post('/api/recetas','RecetasController@crearRecetaController')->protect();
 $router->post('/api/recetas/cancelar','RecetasController@cancelarRecetaController')->protect();
-
-
 $router->post('/api/orden/gestionar','OrdenesController@procesarOrdenController')->protect();
+
+$router->post('/api/informes/stock','InformesController@stockPorProductoController')->protect();
 
 //! Rutas para el Front (Autenticadas con ->protect())
 $router->get('/start/dashboard', 'RouterController@dashboard')->protect();

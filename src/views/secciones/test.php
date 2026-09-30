@@ -157,215 +157,209 @@
 </head>
 
 <body class="bg-background text-on-background font-body-md min-h-screen flex flex-col">
-    <!-- Top Header -->
-    <header class="w-full bg-surface-container-lowest border-b border-outline-variant py-4 px-6 md:px-8 shadow-sm">
-        <div class="max-w-7xl mx-auto flex items-center justify-between">
-            <div class="flex items-center gap-4">
-                <img class="w-10 h-10 rounded-full object-cover border border-outline-variant" data-alt="A clean, minimalist abstract logo design suitable for a modern hospital or healthcare institution, using a precise geometry of overlapping crosses or shields in deep indigo and bright white. High contrast, clean vector style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDwSweb3Bsay6UAzifQXFlJrhBy8MPUhIQ7xUdl5gmQgaZF7uYWM0b2LfD64stocZrOZcYyb9P59bFyT0T4puhOldnAhJblWNrbUda-8k_ooWTlkKGa344A07CeG4zY2q_gIeAHLctGBcY9NxFSHrIaKEFss1eFgWZrTe9Xdy7jgmtJemyp96kF63YqMTFDOEJ3ZYwbXiIGAoJOlkHkF2oiS3SxtVNSVOl6SyaOC4VT1g6G0GUW4huObg" />
-                <div>
-                    <h1 class="font-headline-sm text-headline-sm font-bold text-primary">Portal de Gestión Hospitalaria</h1>
-                    <p class="font-body-sm text-body-sm text-on-surface-variant hidden md:block">Sistema de Nutrición Enteral</p>
-                </div>
-            </div>
-            <div class="flex items-center gap-6">
-                <button class="relative text-on-surface-variant hover:text-primary transition-colors">
-                    <span class="material-symbols-outlined">notifications</span>
-                    <span class="absolute top-0 right-0 w-2 h-2 bg-error rounded-full"></span>
-                </button>
-                <div class="flex items-center gap-3 border-l border-outline-variant pl-6 cursor-pointer">
-                    <div class="hidden md:flex flex-col items-end">
-                        <span class="font-label-lg text-label-lg text-on-surface">Dr. Roberto Sánchez</span>
-                        <span class="font-label-md text-label-md text-on-surface-variant">Administrador</span>
-                    </div>
-                    <div class="w-10 h-10 rounded-full bg-primary text-on-primary flex items-center justify-center font-bold">
-                        RS
-                    </div>
-                </div>
-            </div>
+    <main class="p-6 max-w-7xl mx-auto space-y-6">
+
+    <!-- Encabezado y Filtros -->
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 bg-surface p-6 rounded-2xl shadow-sm border border-outline-variant">
+        <div>
+            <h1 class="text-2xl font-bold text-on-surface">Informe de Stock</h1>
+            <p class="text-sm text-on-surface-variant">Consulta de existencias y movimientos por rango de fechas</p>
         </div>
-    </header>
-    <!-- Main Content Canvas -->
-    <main class="flex-1 p-container-padding flex flex-col gap-stack-md w-full max-w-7xl mx-auto">
-        <!-- Header -->
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-stack-sm pt-stack-sm">
+
+        <!-- Formulario de Rango de Fechas -->
+        <form id="form-filtro-stock" class="flex flex-wrap items-end gap-3">
             <div>
-                <h2 class="font-headline-lg text-headline-lg text-on-surface">Gestión de Usuarios</h2>
-                <p class="font-body-md text-body-md text-on-surface-variant mt-1">Administre los accesos y roles del personal institucional.</p>
+                <label for="fecha_desde" class="block text-xs font-semibold text-on-surface-variant mb-1">Desde</label>
+                <input type="date" id="fecha_desde" required class="px-3 py-2 bg-surface-container-low text-on-surface border border-outline rounded-lg text-sm focus:ring-2 focus:ring-primary focus:outline-none">
             </div>
-            <button class="bg-primary text-on-primary font-label-lg text-label-lg px-6 py-3 rounded-lg flex items-center justify-center gap-2 hover:bg-primary-container transition-colors shadow-sm w-full md:w-auto">
-                <span class="material-symbols-outlined text-[20px]">add</span>
-                Nuevo Usuario
+            <div>
+                <label for="fecha_hasta" class="block text-xs font-semibold text-on-surface-variant mb-1">Hasta</label>
+                <input type="date" id="fecha_hasta" required class="px-3 py-2 bg-surface-container-low text-on-surface border border-outline rounded-lg text-sm focus:ring-2 focus:ring-primary focus:outline-none">
+            </div>
+            <button type="submit" id="btn-generar" class="px-4 py-2 bg-primary text-on-primary font-semibold text-sm rounded-lg hover:opacity-90 transition-opacity flex items-center gap-2">
+                <span class="material-symbols-outlined text-sm">search</span>
+                Generar Informe
             </button>
-        </div>
-        <!-- Filters & Search Bar -->
-        <div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-sm flex flex-col lg:flex-row gap-4 items-stretch lg:items-center">
-            <!-- Search -->
-            <div class="relative flex-1">
-                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
-                <input class="w-full bg-surface-container-low border border-outline-variant rounded-lg pl-10 pr-4 py-2 font-body-md text-on-surface focus:outline-none focus:border-secondary focus:ring-1 focus:ring-secondary transition-all" placeholder="Buscar por nombre, apellido o ID..." type="text" />
+        </form>
+    </div>
+
+    <!-- Tarjetas de Resumen (KPIs) -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-surface p-4 rounded-xl border border-outline-variant shadow-sm flex items-center gap-4">
+            <div class="p-3 bg-primary-container text-on-primary-container rounded-lg">
+                <span class="material-symbols-outlined">inventory_2</span>
+            </div>
+            <div>
+                <p class="text-xs font-medium text-on-surface-variant">Total Productos</p>
+                <p id="kpi-total-productos" class="text-2xl font-bold text-on-surface">0</p>
             </div>
         </div>
-        <!-- Users Data Table (Bento Style Card) -->
-        <div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden flex-1 flex flex-col shadow-sm">
-            <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse min-w-[800px]">
-                    <thead class="bg-surface-container-low border-b border-surface-variant">
-                        <tr>
-                            <th class="py-4 px-6 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Nombre</th>
-                            <th class="py-4 px-6 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Apellido</th>
-                            <th class="py-4 px-6 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Rol</th>
-                            <th class="py-4 px-6 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Estado</th>
-                            <th class="py-4 px-6 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider text-right">Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-surface-variant font-body-sm text-on-surface">
-                        <!-- Row 1 -->
-                        <tr class="hover:bg-surface-container-high transition-colors group">
-                            <td class="py-4 px-6">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-8 h-8 rounded-full bg-primary-fixed text-on-primary-fixed flex items-center justify-center font-bold text-xs">CM</div>
-                                    <span class="font-bold">Carlos</span>
-                                </div>
-                            </td>
-                            <td class="py-4 px-6">Martínez</td>
-                            <td class="py-4 px-6">
-                                <span class="bg-tertiary-fixed text-on-tertiary-fixed px-2 py-1 rounded-md text-xs font-bold">Médico</span>
-                            </td>
-                            <td class="py-4 px-6">
-                                <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1 w-max">
-                                    <span class="w-2 h-2 rounded-full bg-green-500"></span>
-                                    Activo
-                                </span>
-                            </td>
-                            <td class="py-4 px-6 text-right">
-                                <button class="text-on-surface-variant hover:text-primary transition-colors p-1 rounded hover:bg-surface-container-low">
-                                    <span class="material-symbols-outlined text-[20px]">edit</span>
-                                </button>
-                                <button class="text-on-surface-variant hover:text-error transition-colors p-1 rounded hover:bg-surface-container-low">
-                                    <span class="material-symbols-outlined text-[20px]">more_vert</span>
-                                </button>
-                            </td>
-                        </tr>
-                        <!-- Row 2 -->
-                        <tr class="hover:bg-surface-container-high transition-colors group">
-                            <td class="py-4 px-6">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-8 h-8 rounded-full bg-secondary-fixed text-on-secondary-fixed flex items-center justify-center font-bold text-xs">LA</div>
-                                    <span class="font-bold">Laura</span>
-                                </div>
-                            </td>
-                            <td class="py-4 px-6">Ayala</td>
-                            <td class="py-4 px-6">
-                                <span class="bg-surface-tint text-on-primary px-2 py-1 rounded-md text-xs font-bold">Enfermería</span>
-                            </td>
-                            <td class="py-4 px-6">
-                                <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1 w-max">
-                                    <span class="w-2 h-2 rounded-full bg-green-500"></span>
-                                    Activo
-                                </span>
-                            </td>
-                            <td class="py-4 px-6 text-right">
-                                <button class="text-on-surface-variant hover:text-primary transition-colors p-1 rounded hover:bg-surface-container-low">
-                                    <span class="material-symbols-outlined text-[20px]">edit</span>
-                                </button>
-                                <button class="text-on-surface-variant hover:text-error transition-colors p-1 rounded hover:bg-surface-container-low">
-                                    <span class="material-symbols-outlined text-[20px]">more_vert</span>
-                                </button>
-                            </td>
-                        </tr>
-                        <!-- Row 3 -->
-                        <tr class="hover:bg-surface-container-high transition-colors group">
-                            <td class="py-4 px-6">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-8 h-8 rounded-full bg-surface-variant text-on-surface-variant flex items-center justify-center font-bold text-xs">JG</div>
-                                    <span class="font-bold text-on-surface-variant">Juan</span>
-                                </div>
-                            </td>
-                            <td class="py-4 px-6 text-on-surface-variant">Gómez</td>
-                            <td class="py-4 px-6">
-                                <span class="bg-surface-variant text-on-surface-variant px-2 py-1 rounded-md text-xs font-bold">Administrativo</span>
-                            </td>
-                            <td class="py-4 px-6">
-                                <span class="bg-surface-variant text-on-surface-variant px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1 w-max">
-                                    <span class="w-2 h-2 rounded-full bg-gray-400"></span>
-                                    Inactivo
-                                </span>
-                            </td>
-                            <td class="py-4 px-6 text-right">
-                                <button class="text-on-surface-variant hover:text-primary transition-colors p-1 rounded hover:bg-surface-container-low">
-                                    <span class="material-symbols-outlined text-[20px]">edit</span>
-                                </button>
-                                <button class="text-on-surface-variant hover:text-error transition-colors p-1 rounded hover:bg-surface-container-low">
-                                    <span class="material-symbols-outlined text-[20px]">more_vert</span>
-                                </button>
-                            </td>
-                        </tr>
-                        <!-- Row 4 -->
-                        <tr class="hover:bg-surface-container-high transition-colors group">
-                            <td class="py-4 px-6">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-8 h-8 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-bold text-xs">MR</div>
-                                    <span class="font-bold">María</span>
-                                </div>
-                            </td>
-                            <td class="py-4 px-6">Rodríguez</td>
-                            <td class="py-4 px-6">
-                                <span class="bg-primary-container text-on-primary-container px-2 py-1 rounded-md text-xs font-bold">Admin</span>
-                            </td>
-                            <td class="py-4 px-6">
-                                <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1 w-max">
-                                    <span class="w-2 h-2 rounded-full bg-green-500"></span>
-                                    Activo
-                                </span>
-                            </td>
-                            <td class="py-4 px-6 text-right">
-                                <button class="text-on-surface-variant hover:text-primary transition-colors p-1 rounded hover:bg-surface-container-low">
-                                    <span class="material-symbols-outlined text-[20px]">edit</span>
-                                </button>
-                                <button class="text-on-surface-variant hover:text-error transition-colors p-1 rounded hover:bg-surface-container-low">
-                                    <span class="material-symbols-outlined text-[20px]">more_vert</span>
-                                </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+
+        <div class="bg-surface p-4 rounded-xl border border-outline-variant shadow-sm flex items-center gap-4">
+            <div class="p-3 bg-secondary-container text-on-secondary-container rounded-lg">
+                <span class="material-symbols-outlined">add_box</span>
             </div>
-            <!-- Pagination -->
-            <div class="mt-auto border-t border-surface-variant p-4 flex items-center justify-between bg-surface-container-lowest">
-                <span class="font-body-sm text-on-surface-variant">Mostrando 1 a 4 de 24 usuarios</span>
-                <div class="flex gap-2">
-                    <button class="px-3 py-1 border border-outline-variant rounded bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container-low disabled:opacity-50" disabled="">Anterior</button>
-                    <button class="px-3 py-1 border border-outline-variant rounded bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container-low">Siguiente</button>
-                </div>
+            <div>
+                <p class="text-xs font-medium text-on-surface-variant">Total Entradas</p>
+                <p id="kpi-total-entradas" class="text-2xl font-bold text-on-surface">0</p>
             </div>
         </div>
-    </main>
-    <footer class="border-t border-slate-200 bg-white mt-auto">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8 py-6 flex flex-col md:flex-row items-center justify-between gap-5">
-            <!-- Identidad -->
-            <div class="flex items-center gap-3">
-                <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-slate-50 border border-slate-200">
-                    <img alt="Hospital General de Itapúa" class="h-7 w-auto object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCwA6eqNmeZt2ZZmMhKWHJLwtO_cKjUYm0YzznnnpvcilDNzT20MG1on5Dsv29lzkirDCh25dCetl0ejHUS1hdEfYz5BZ8r_jREYFgbTqtgW600brV7GCI_MPwd7tk844mq6Wq6geSAEKKLuQIZu1w6Nx5VBdPsJS1oRWM48soAWZLmsX4RiQNplv6_ciXkwf6jUAvuW7mCSRawlumg3qPVDeG-KdJmeIuHmtKjPjqzkp395oYGE0n1YA" />
-                </div>
-                <div>
-                    <p class="text-sm font-semibold text-slate-700"> Hospital General de Itapúa </p>
-                    <p class="text-xs text-slate-400"> Sistema de Nutrición Enteral </p>
-                </div>
+
+        <div class="bg-surface p-4 rounded-xl border border-outline-variant shadow-sm flex items-center gap-4">
+            <div class="p-3 bg-error-container text-on-error-container rounded-lg">
+                <span class="material-symbols-outlined">indeterminate_check_box</span>
             </div>
-            <div class="flex flex-col sm:flex-row items-center gap-2 sm:gap-5 text-xs">
-                <span class="text-slate-400">
-                    © 2026 Hospital General de Itapúa
-                </span>
-                <span class="hidden sm:block h-1 w-1 rounded-full bg-slate-300"></span>
-                <span class="text-slate-400">
-                    Desarrollado por
-                    <span class="font-medium text-slate-600">
-                        Francisco David Medina Lourenzo
-                    </span>
-                </span>
+            <div>
+                <p class="text-xs font-medium text-on-surface-variant">Total Salidas</p>
+                <p id="kpi-total-salidas" class="text-2xl font-bold text-on-surface">0</p>
             </div>
         </div>
-    </footer>
+
+        <div class="bg-surface p-4 rounded-xl border border-outline-variant shadow-sm flex items-center gap-4">
+            <div class="p-3 bg-tertiary-container text-on-tertiary-container rounded-lg">
+                <span class="material-symbols-outlined">sync_alt</span>
+            </div>
+            <div>
+                <p class="text-xs font-medium text-on-surface-variant">Movimientos Totales</p>
+                <p id="kpi-total-movimientos" class="text-2xl font-bold text-on-surface">0</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Buscador en Tabla -->
+    <div class="bg-surface p-4 rounded-2xl border border-outline-variant shadow-sm space-y-4">
+        <div class="flex items-center justify-between gap-4">
+            <div class="relative w-full max-w-xs">
+                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">search</span>
+                <input type="text" id="input-buscar" placeholder="Buscar producto..." class="w-full pl-9 pr-3 py-2 bg-surface-container-low text-on-surface border border-outline rounded-lg text-sm focus:ring-2 focus:ring-primary focus:outline-none">
+            </div>
+        </div>
+
+        <!-- Tabla de Datos -->
+        <div class="overflow-x-auto rounded-xl border border-outline-variant">
+            <table class="w-full text-left border-collapse text-sm">
+                <thead>
+                    <tr class="bg-surface-container-high text-on-surface-variant text-xs uppercase font-bold border-b border-outline-variant">
+                        <th class="p-4">ID</th>
+                        <th class="p-4">Producto</th>
+                        <th class="p-4 text-center">Stock Actual</th>
+                        <th class="p-4 text-center">Entradas</th>
+                        <th class="p-4 text-center">Salidas</th>
+                        <th class="p-4 text-center">Mov. Neto</th>
+                        <th class="p-4 text-center">Cant. Movimientos</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla-stock-body" class="divide-y divide-outline-variant bg-surface text-on-surface">
+                    <tr>
+                        <td colspan="7" class="p-6 text-center text-on-surface-variant">Selecciona un rango de fechas y presiona "Generar Informe"</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</main>
 </body>
 
+<script>
+let productosCache = [];
+
+document.getElementById('form-filtro-stock').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const desde = document.getElementById('fecha_desde').value;
+    const hasta = document.getElementById('fecha_hasta').value;
+
+    if (!desde || !hasta) {
+        return;
+    }
+
+    try {
+        const response = await fetch('/api/informes/stock', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                fecha_desde: desde,
+                fecha_hasta: hasta
+            })
+        });
+
+        const result = await response.json();
+        
+
+        if (result.success && Array.isArray(result.data)) {
+            productosCache = result.data;
+            console.log(result);
+            renderizarTabla(productosCache);
+            actualizarKPIs(productosCache);
+        } else {
+            alert('Error', result.message || 'No se pudo obtener la información.', 'error');
+        }
+
+    } catch (error) {
+        console.error('Error al consultar la API:', error);
+        alert('Error', 'Ocurrió un error al conectar con el servidor.', 'error');
+    }
+});
+
+// Función para Renderizar la Tabla
+function renderizarTabla(lista) {
+    const tbody = document.getElementById('tabla-stock-body');
+
+    if (lista.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="7" class="p-6 text-center text-on-surface-variant">No se encontraron resultados</td>
+            </tr>`;
+        return;
+    }
+
+    tbody.innerHTML = lista.map(item => {
+        const stockClase = item.stock_actual > 0 
+            ? 'bg-emerald-100 text-emerald-800 border-emerald-300 dark:bg-emerald-950 dark:text-emerald-300' 
+            : 'bg-rose-100 text-rose-800 border-rose-300 dark:bg-rose-950 dark:text-rose-300';
+
+        return `
+            <tr class="hover:bg-surface-container-low transition-colors">
+                <td class="p-4 font-semibold text-on-surface-variant">#${item.producto_id}</td>
+                <td class="p-4 font-semibold text-on-surface">${item.producto}</td>
+                <td class="p-4 text-center">
+                    <span class="px-2.5 py-1 text-xs font-bold rounded-full border ${stockClase}">
+                        ${item.stock_actual}
+                    </span>
+                </td>
+                <td class="p-4 text-center font-medium text-emerald-600 dark:text-emerald-400">+${item.total_entradas}</td>
+                <td class="p-4 text-center font-medium text-rose-600 dark:text-rose-400">-${item.total_salidas}</td>
+                <td class="p-4 text-center font-medium text-on-surface">${item.movimiento_neto}</td>
+                <td class="p-4 text-center text-on-surface-variant">${item.cantidad_movimientos}</td>
+            </tr>
+        `;
+    }).join('');
+}
+
+// Función para actualizar métricas (KPIs)
+function actualizarKPIs(lista) {
+    document.getElementById('kpi-total-productos').textContent = lista.length;
+
+    const totalEntradas = lista.reduce((sum, item) => sum + Number(item.total_entradas || 0), 0);
+    const totalSalidas = lista.reduce((sum, item) => sum + Number(item.total_salidas || 0), 0);
+    const totalMovimientos = lista.reduce((sum, item) => sum + Number(item.cantidad_movimientos || 0), 0);
+
+    document.getElementById('kpi-total-entradas').textContent = totalEntradas;
+    document.getElementById('kpi-total-salidas').textContent = totalSalidas;
+    document.getElementById('kpi-total-movimientos').textContent = totalMovimientos;
+}
+
+// Buscador en tiempo real
+document.getElementById('input-buscar').addEventListener('input', function(e) {
+    const query = e.target.value.toLowerCase().trim();
+    const filtrados = productosCache.filter(p => 
+        p.producto.toLowerCase().includes(query) || 
+        p.producto_id.toString().includes(query)
+    );
+    renderizarTabla(filtrados);
+});
+</script>
 </html>

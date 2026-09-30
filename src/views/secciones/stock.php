@@ -11,19 +11,33 @@ require_once __DIR__ . '/../../utils/head.php';
         <section class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-8">
             <div>
                 <div class="flex items-center gap-2 mb-2">
-                    <span class="text-xs font-bold uppercase tracking-wider text-secondary"> Gestión hospitalaria</span>
+                    <span class="text-xs font-bold uppercase tracking-wider text-secondary">Gestión hospitalaria</span>
                 </div>
-                <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-primary">Inventario </h1>
-                <p class="mt-2 text-sm sm:text-base text-on-surface-variant">Controle el stock y disponibilidad de suministros médicos. </p>
+                <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-primary">Inventario</h1>
+                <p class="mt-2 text-sm sm:text-base text-on-surface-variant">Controle el stock y disponibilidad de suministros médicos.</p>
             </div>
-            <button class="w-full sm:w-auto
-                       flex items-center justify-center gap-2 bg-primary hover:bg-primary-container text-white
-                       px-5 py-3 rounded-xl font-semibold transition"
-                onclick="openModal('modal-new-item')">
-                <span class="material-symbols-outlined">add</span> Nueva formula
-            </button>
-        </section>
 
+            <!-- Contenedor para los botones de acción -->
+            <div class="flex flex-col sm:flex-row items-center gap-3 w-full lg:w-auto relative">
+
+                <!-- Botón para Informe (Popover) -->
+                <button class="w-full sm:w-auto flex items-center justify-center gap-2 
+                       bg-surface-variant text-on-surface hover:bg-outline-variant/30 
+                       border border-outline/30 px-5 py-3 rounded-xl font-semibold transition"
+                    onclick="openModal('popover-informe')">
+                    <span class="material-symbols-outlined">summarize</span> Generar informe
+                </button>
+
+                <!-- Botón Nueva Fórmula existente -->
+                <button class="w-full sm:w-auto flex items-center justify-center gap-2 
+                       bg-primary hover:bg-primary-container text-white 
+                       px-5 py-3 rounded-xl font-semibold transition"
+                    onclick="openModal('modal-new-item')">
+                    <span class="material-symbols-outlined">add</span> Nueva formula
+                </button>
+
+            </div>
+        </section>
         <section class="bg-surface-container-lowest border border-outline-variant rounded-2xl p-4 mb-6">
             <div class="flex flex-col lg:flex-row gap-3">
                 <div class="relative flex-1">
@@ -87,9 +101,96 @@ require_once __DIR__ . '/../../utils/head.php';
     <!-- SCRIPTS -->
     <script src="/assets/js/script.js" defer></script>
     <script src="/assets/js/stock.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/exceljs/dist/exceljs.min.js"></script>
 
 
-    <!-- MODAL -->
+    <div id="popover-informe" popover="manual" class="m-auto w-full max-w-lg p-0 bg-transparent backdrop:bg-black/40 backdrop:backdrop-blur-[2px]">
+        <div class="relative overflow-hidden rounded-2xl border border-outline-variant bg-surface-container-lowest">
+            <header class="flex items-start justify-between gap-4 border-b border-outline-variant px-6 py-5">
+                <div class="flex items-center gap-3">
+                    <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary-fixed text-primary">
+                        <span class="material-symbols-outlined">inventory_2</span>
+                    </div>
+                    <div>
+                        <h2 class="text-lg font-bold text-primary">Informe de Movimientos</h2>
+                        <p class="mt-1 text-sm text-on-surface-variant">Seleccione el período para generar el informe.</p>
+                    </div>
+                </div>
+
+                <button
+                    id="btn-close-modal"
+                    type="button"
+                    popovertarget="popover-informe"
+                    popovertargetaction="hide"
+                    aria-label="Cerrar"
+                    class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg
+                       text-on-surface-variant transition-colors
+                       hover:bg-surface-container-low hover:text-primary">
+                    <span class="material-symbols-outlined">
+                        close
+                    </span>
+                </button>
+
+            </header>
+
+            <div class="px-6 py-5">
+                <form id="form-informe" class="space-y-4">
+                    <div>
+                        <label
+                            for="fecha-desde"
+                            class="mb-1.5 block text-xs font-medium text-on-surface-variant">
+                            Fecha desde
+                        </label>
+                        <input id="fecha-desde" type="date" name="fechaDesde" required
+                            class="w-full rounded-lg border border-outline/30
+                               bg-surface-container-lowest px-3 py-2.5 text-sm
+                               text-on-surface outline-none transition-colors
+                               focus:border-primary focus:ring-1 focus:ring-primary/20">
+                    </div>
+
+                    <div>
+                        <label
+                            for="fecha-hasta"
+                            class="mb-1.5 block text-xs font-medium text-on-surface-variant">
+                            Fecha hasta
+                        </label>
+
+                        <input
+                            id="fecha-hasta"
+                            type="date"
+                            name="fechaHasta"
+                            required
+                            class="w-full rounded-lg border border-outline/30
+                               bg-surface-container-lowest px-3 py-2.5 text-sm
+                               text-on-surface outline-none transition-colors
+                               focus:border-primary focus:ring-1 focus:ring-primary/20">
+                    </div>
+
+                    <div class="flex justify-end gap-2 pt-2">
+                        <button
+                            type="button"
+                            popovertarget="popover-informe"
+                            popovertargetaction="hide"
+                            class="rounded-lg px-4 py-2.5 text-sm font-medium
+                               text-on-surface-variant transition-colors
+                               hover:bg-surface-container-low">
+                            Cancelar
+                        </button>
+
+                        <button type="submit"
+                            class="rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold
+                               text-white transition-colors
+                               hover:bg-primary-container">
+                            <span class="material-symbols-outlined align-middle text-[18px]">download</span>
+                            Generar informe
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    
     <div id="modal-new-item" popover="manual" class="m-auto p-0 bg-transparent backdrop:bg-black/40 backdrop:backdrop-blur-[2px]">
 
         <div class="relative w-full max-w-lg bg-surface-container-lowest border border-outline-variant rounded-2xl overflow-hidden">
