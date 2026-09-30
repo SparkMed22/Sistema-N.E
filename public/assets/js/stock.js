@@ -291,10 +291,6 @@ formInforme.addEventListener('submit', async (event) => {
     const desde = formData.get('fechaDesde');
     const hasta = formData.get('fechaHasta');
 
-    // ==========================================================
-    // VALIDACIONES
-    // ==========================================================
-
     if (!desde || !hasta) {
         alert('Debe seleccionar ambas fechas.');
         return;
@@ -307,9 +303,6 @@ formInforme.addEventListener('submit', async (event) => {
 
     try {
 
-        // ======================================================
-        // USUARIO
-        // ======================================================
 
         const usuarioStorage = localStorage.getItem('usuario');
 
@@ -322,10 +315,6 @@ formInforme.addEventListener('submit', async (event) => {
 
         const nombreUsuario =
             `${usuario.nombre ?? ''} ${usuario.apellido ?? ''}`.trim();
-
-        // ======================================================
-        // CONSULTAR API
-        // ======================================================
 
         const response = await fetch('/api/informes/stock', {
             method: 'POST',
@@ -357,10 +346,6 @@ formInforme.addEventListener('submit', async (event) => {
             return;
         }
 
-        // ======================================================
-        // NORMALIZAR DATOS
-        // ======================================================
-
         const productos = datos.map(item => ({
             producto: item.producto ?? '',
             stockInicial: Number(item.stock_inicial) || 0,
@@ -368,10 +353,6 @@ formInforme.addEventListener('submit', async (event) => {
             salidas: Number(item.cantidad_salidas) || 0,
             stockActual: Number(item.cantidad_actual) || 0
         }));
-
-        // ======================================================
-        // TOTALES
-        // ======================================================
 
         const totalStockInicial = productos.reduce(
             (total, item) => total + item.stockInicial,
@@ -397,10 +378,6 @@ formInforme.addEventListener('submit', async (event) => {
             item => item.stockActual > 0
         ).length;
 
-        // ======================================================
-        // FECHA DE GENERACIÓN
-        // ======================================================
-
         const ahora = new Date();
 
         const fechaGeneracion = ahora.toLocaleDateString('es-PY');
@@ -409,10 +386,6 @@ formInforme.addEventListener('submit', async (event) => {
             hour: '2-digit',
             minute: '2-digit'
         });
-
-        // ======================================================
-        // CREAR LIBRO
-        // ======================================================
 
         const workbook = new ExcelJS.Workbook();
 
@@ -425,10 +398,6 @@ formInforme.addEventListener('submit', async (event) => {
         workbook.properties.subject =
             'Informe de movimientos y stock';
         workbook.properties.company = 'S.N.E';
-
-        // ======================================================
-        // HOJA PRINCIPAL
-        // ======================================================
 
         const worksheet = workbook.addWorksheet(
             'Reporte de Stock',
@@ -443,9 +412,6 @@ formInforme.addEventListener('submit', async (event) => {
             }
         );
 
-        // ======================================================
-        // CONFIGURACIÓN DE COLUMNAS
-        // ======================================================
 
         worksheet.columns = [
             {
@@ -518,16 +484,12 @@ formInforme.addEventListener('submit', async (event) => {
 
         worksheet.getRow(1).height = 35;
 
-        // ======================================================
-        // SUBTÍTULO
-        // ======================================================
 
         worksheet.mergeCells('A2:E2');
 
         const subtitulo = worksheet.getCell('A2');
 
-        subtitulo.value =
-            'Sistema Nacional de Emergencias';
+        subtitulo.value ='Sistema Nutrición Enteral';
 
         subtitulo.font = {
             name: 'Arial',
@@ -570,10 +532,6 @@ formInforme.addEventListener('submit', async (event) => {
             vertical: 'middle'
         };
 
-        // ======================================================
-        // SECCIÓN INFORMACIÓN
-        // ======================================================
-
         worksheet.mergeCells('A5:E5');
 
         const infoTitulo = worksheet.getCell('A5');
@@ -581,10 +539,6 @@ formInforme.addEventListener('submit', async (event) => {
         infoTitulo.value = 'INFORMACIÓN DEL REPORTE';
 
         aplicarTituloSeccion(infoTitulo, AZUL);
-
-        // ======================================================
-        // INFORMACIÓN
-        // ======================================================
 
         const informacion = [
             ['Emitido por', 'S.N.E', 'Generado por', nombreUsuario],
@@ -620,10 +574,6 @@ formInforme.addEventListener('submit', async (event) => {
             };
         });
 
-        // ======================================================
-        // RESUMEN
-        // ======================================================
-
         worksheet.mergeCells('A10:E10');
 
         const resumenTitulo = worksheet.getCell('A10');
@@ -632,9 +582,6 @@ formInforme.addEventListener('submit', async (event) => {
 
         aplicarTituloSeccion(resumenTitulo, AZUL);
 
-        // ======================================================
-        // TARJETAS DEL RESUMEN
-        // ======================================================
 
         const resumen = [
             {
@@ -720,9 +667,7 @@ formInforme.addEventListener('submit', async (event) => {
             valorCelda.border = borde();
         });
 
-        // ======================================================
-        // PRODUCTOS CON STOCK
-        // ======================================================
+
 
         worksheet.getCell('E11').value =
             'PRODUCTOS CON STOCK';
@@ -1193,10 +1138,7 @@ formInforme.addEventListener('submit', async (event) => {
             cell.border = borde();
         }
 
-        // ======================================================
-        // DESCARGAR
-        // ======================================================
-
+    
         const buffer = await workbook.xlsx.writeBuffer();
 
         const blob = new Blob(
