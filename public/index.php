@@ -84,6 +84,9 @@ $router->post('/api/recetas/cancelar','RecetasController@cancelarRecetaControlle
 $router->post('/api/orden/gestionar','OrdenesController@procesarOrdenController')->protect();
 
 $router->post('/api/informes/stock','InformesController@stockPorProductoController')->protect();
+$router->post('/api/informes/recetas','InformesController@pedidosCerradosController')->protect();
+
+
 
 //! Rutas para el Front (Autenticadas con ->protect())
 $router->get('/start/dashboard', 'RouterController@dashboard')->protect();
