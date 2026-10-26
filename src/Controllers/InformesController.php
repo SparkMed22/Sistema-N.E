@@ -60,10 +60,8 @@ class InformesController extends BaseController
 
             error_log('Generando informe de pedidos cerrados: ' . json_encode($data, JSON_UNESCAPED_UNICODE));
 
-            // Consulta al modelo
             $informe = $this->userInformes->pedidosCerradosModel($fechaDesde, $fechaHasta);
 
-            // Respuesta estructurada
             $this->success([
                 'total_registros' => count($informe),
                 'rango_fechas'    => [

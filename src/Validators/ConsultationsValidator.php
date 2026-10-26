@@ -41,7 +41,7 @@ class ConsultationsValidator
     public function validarPedidioConsultas(array $data): bool
     {
         $validator = v::key('id_servicio', v::intVal()->positive())
-            ->key('rol', v::stringType()->notEmpty()->in(['admin', 'internacion', 'nutricionista']));
+            ->key('rol', v::stringType()->notEmpty()->in(['admin', 'internacion', 'nutricionista','franquero']));
 
         return $validator->validate($data);
     }

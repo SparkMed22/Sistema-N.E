@@ -8,7 +8,8 @@ const inicialHeader = document.getElementById('inicial_usuario');
 const ROLES = {
     admin: 'Administrador',
     internacion: 'Internación',
-    nutricionista: 'Nutricionista'
+    nutricionista: 'Nutricionista',
+    franquero:'Franquero'
 };
 
 document.addEventListener('DOMContentLoaded', () => {

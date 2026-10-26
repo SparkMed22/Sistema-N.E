@@ -28,6 +28,10 @@ $roles = [
         'gestionar_pacientes',
         'gestionar_stock',
         'gestionar_ordenes'
+    ],
+    'franquero' => [
+        'gestionar_pacientes',
+        'gestionar_ordenes'
     ]
 ];
 

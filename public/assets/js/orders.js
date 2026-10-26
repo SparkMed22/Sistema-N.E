@@ -1,6 +1,228 @@
 let recetas = [];
 let stockD = [];
 
+// ? INFORMES
+
+async function obtenerYExportar(fecha_desde, fecha_hasta) {
+    try {
+
+        const response = await fetch('/api/informes/recetas', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                fecha_desde: fecha_desde,
+                fecha_hasta: fecha_hasta
+            })
+        });
+        const responseData = await response.json();
+        const jsonDatos = responseData.data;
+
+
+        exportarJsonAExcel(jsonDatos);
+
+    } catch (error) {
+        console.error("Error al procesar la exportación:", error);
+        alert("Ocurrió un error al generar el archivo Excel.");
+    }
+}
+
+
+async function exportarJsonAExcel(apiResponse) {
+    if (!apiResponse || !apiResponse.pedidos || apiResponse.pedidos.length === 0) {
+        alert('No se encontraron registros de pedidos para exportar.');
+        return;
+    }
+
+    // 1. Crear nuevo libro de trabajo y hoja
+    const workbook = new ExcelJS.Workbook();
+    const sheet = workbook.addWorksheet('Informe de Pedidos');
+
+    // Habilitar líneas de cuadrícula
+    sheet.views = [{ showGridLines: true }];
+
+    // 2. Encabezado principal del reporte (Banner)
+    sheet.mergeCells('A1:U2');
+    const titleCell = sheet.getCell('A1');
+    titleCell.value = 'INFORME DE MOVIMIENTOS Y GESTIÓN NUTRICIONAL';
+    titleCell.font = { name: 'Arial', size: 16, bold: true, color: { argb: 'FFFFFF' } };
+    titleCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '1A365D' } }; // Azul Institucional
+    titleCell.alignment = { horizontal: 'center', vertical: 'middle' };
+
+    // Subtítulo con rango de fechas
+    const desde = apiResponse.rango_fechas?.desde || 'Inicio';
+    const hasta = apiResponse.rango_fechas?.hasta || 'Fin';
+    sheet.mergeCells('A3:U3');
+    const subCell = sheet.getCell('A3');
+    subCell.value = `Rango del reporte: ${desde} al ${hasta} | Total Registros: ${apiResponse.total_registros}`;
+    subCell.font = { name: 'Arial', size: 10, italic: true, color: { argb: 'FFFFFF' } };
+    subCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '2B6CB0' } };
+    subCell.alignment = { horizontal: 'center', vertical: 'middle' };
+
+    // 3. Encabezados de la Tabla (Fila 5)
+    const headers = [
+        "ID Pedido", "Estado Pedido", "ID Paciente", "Paciente", "Cédula", 
+        "Bloque", "Sala", "Cama", "Servicio", "ID Receta", 
+        "Indicación Nutricional", "Medida Porción", "Aporte Líquido (ml)", "Volumen Total (ml)", 
+        "Estado Aprobación", "Cant. Comp.", "Componentes / Productos Nutricionales", 
+        "Gestionado Por", "Fecha Pedido", "Fecha Revisión", "Fecha Cierre"
+    ];
+
+    const headerRow = sheet.getRow(5);
+    headerRow.values = headers;
+    headerRow.height = 28;
+
+    headerRow.eachCell((cell) => {
+        cell.font = { name: 'Arial', size: 10, bold: true, color: { argb: 'FFFFFF' } };
+        cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: '2B6CB0' } };
+        cell.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
+        cell.border = {
+            top: { style: 'thin', color: { argb: 'CBD5E0' } },
+            bottom: { style: 'medium', color: { argb: '1A365D' } }
+        };
+    });
+
+    // 4. Mapeo e Inserción de Datos
+    apiResponse.pedidos.forEach((p, index) => {
+        // Formatear componentes en lista limpia con viñetas
+        let componentesFormateados = '-';
+        if (p.componentes) {
+            componentesFormateados = p.componentes
+                .split('|')
+                .map(c => `• ${c.trim()}`)
+                .join('\n');
+        }
+
+        const row = sheet.addRow([
+            p.pedido_id,
+            p.estado_pedido,
+            p.paciente_id,
+            p.paciente,
+            p.cedula,
+            p.bloque,
+            p.sala,
+            p.cama,
+            p.servicio,
+            p.receta_id,
+            p.indicacion_nutricional || '-',
+            Number(p.medida_porcion) || 0,
+            Number(p.aporte_liquido) || 0,
+            Number(p.volumen_total) || 0,
+            p.estado_aprobacion,
+            Number(p.total_componentes) || 0,
+            componentesFormateados,
+            p.gestionado_por,
+            p.fecha_pedido,
+            p.fecha_revision,
+            p.fecha_cierre
+        ]);
+
+        // Alternancia de colores en filas (Zebra Striping)
+        const isZebra = index % 2 === 1;
+        const rowBg = isZebra ? 'F7FAFC' : 'FFFFFF';
+
+        row.height = Math.max(30, (componentesFormateados.split('\n').length * 16));
+
+        row.eachCell((cell, colNumber) => {
+            cell.font = { name: 'Arial', size: 9 };
+            cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: rowBg } };
+            cell.border = {
+                top: { style: 'thin', color: { argb: 'E2E8F0' } },
+                bottom: { style: 'thin', color: { argb: 'E2E8F0' } }
+            };
+
+            // Alineación e indicador según la columna
+            if ([1, 2, 3, 5, 6, 7, 8, 10, 15, 16, 19, 20, 21].includes(colNumber)) {
+                cell.alignment = { horizontal: 'center', vertical: 'middle' };
+            } else if ([12, 13, 14].includes(colNumber)) {
+                cell.alignment = { horizontal: 'right', vertical: 'middle' };
+                cell.numFmt = '#,##0';
+            } else if (colNumber === 17) {
+                cell.alignment = { horizontal: 'left', vertical: 'middle', wrapText: true };
+            } else {
+                cell.alignment = { horizontal: 'left', vertical: 'middle' };
+            }
+
+            // Resaltar estado de aprobación (Verde suave)
+            if (colNumber === 15 && cell.value === 'APROBADA') {
+                cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'C6F6D5' } };
+                cell.font = { name: 'Arial', size: 9, bold: true, color: { argb: '22543D' } };
+            }
+        });
+    });
+
+    // 5. Fila de Totales
+    const totalRowIndex = sheet.rowCount + 1;
+    const totalRow = sheet.getRow(totalRowIndex);
+    totalRow.height = 24;
+
+    sheet.mergeCells(`A${totalRowIndex}:K${totalRowIndex}`);
+    sheet.getCell(`A${totalRowIndex}`).value = 'TOTALES / RESUMEN';
+
+    sheet.getCell(`M${totalRowIndex}`).value = { formula: `SUM(M6:M${totalRowIndex - 1})` };
+    sheet.getCell(`N${totalRowIndex}`).value = { formula: `SUM(N6:N${totalRowIndex - 1})` };
+    sheet.getCell(`P${totalRowIndex}`).value = { formula: `SUM(P6:P${totalRowIndex - 1})` };
+
+    totalRow.eachCell((cell, colNumber) => {
+        cell.font = { name: 'Arial', size: 10, bold: true };
+        cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'E2E8F0' } };
+        cell.border = { top: { style: 'thin' }, bottom: { style: 'double' } };
+        if ([13, 14, 16].includes(colNumber)) {
+            cell.alignment = { horizontal: 'right', vertical: 'middle' };
+            cell.numFmt = '#,##0';
+        }
+    });
+
+    // 6. Anchos de columna automáticos
+    sheet.columns.forEach((column) => {
+        let maxLen = 12;
+        column.eachCell({ includeEmpty: false }, (cell) => {
+            if (cell.row >= 5) {
+                const valStr = cell.value ? cell.value.toString() : '';
+                const lines = valStr.split('\n');
+                lines.forEach(line => {
+                    if (line.length > maxLen) maxLen = line.length;
+                });
+            }
+        });
+        column.width = Math.min(Math.max(maxLen + 4, 12), 48);
+    });
+
+    // 7. Descargar el archivo generado
+    const buffer = await workbook.xlsx.writeBuffer();
+    const fileName = `Informe_Nutricional_${desde}_al_${hasta}.xlsx`;
+    saveAs(new Blob([buffer]), fileName);
+}
+
+async function generarInforme(event) {
+    event.preventDefault();
+
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+
+    const fechaDesde = formData.get('fechaDesde');
+    const fechaHasta = formData.get('fechaHasta');
+
+    if (fechaDesde > fechaHasta) {
+        alert('La fecha desde no puede ser posterior a la fecha hasta.');
+        return;
+    }
+
+    try {
+        console.log('Generando informe:', { fechaDesde, fechaHasta });
+
+        obtenerYExportar(fechaDesde, fechaHasta);
+
+        alert(`Informe solicitado desde ${fechaDesde} hasta ${fechaHasta}`);
+        form.reset();
+    } catch (error) {
+        console.error('Error al generar el informe:', error);
+        alert('Ocurrió un error al generar el informe.');
+    }
+}
+
+// =========================================================================0000
+
+
 function crearTarjetaReceta(receta) {
     const fecha = receta.fecha_creacion
         ? new Date(receta.fecha_creacion.replace(' ', 'T'))
@@ -356,4 +578,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const formCancelarRecetaModal = document.getElementById('form-cancelar-receta');
     formCancelarRecetaModal.addEventListener('submit', cancelarReceta);
+
+    const formInformeModal = document.getElementById('form-informe-pacientes');
+    formInformeModal.addEventListener('submit', generarInforme);
 });

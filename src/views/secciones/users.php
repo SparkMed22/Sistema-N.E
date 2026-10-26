@@ -149,6 +149,7 @@ $usuarios = $_SESSION['user_nombre'] ?? 'Personal de Guardia';
                         <option value="admin">Administrador</option>
                         <option value="internacion">Internación</option>
                         <option value="nutricionista">Nutricionista</option>
+                        <option value="franquero">Franquero</option>
                     </select>
                     <span class="material-symbols-outlined pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[20px] text-on-surface-variant">expand_more</span>
                 </div>
@@ -253,6 +254,7 @@ $usuarios = $_SESSION['user_nombre'] ?? 'Personal de Guardia';
                         <option value="admin">Administrador</option>
                         <option value="internacion">Internación</option>
                         <option value="nutricionista">Nutricionista</option>
+                        <option value="franquero">Franquero</option>
                     </select>
                     <span class="material-symbols-outlined pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[20px] text-on-surface-variant">expand_more</span>
                 </div>

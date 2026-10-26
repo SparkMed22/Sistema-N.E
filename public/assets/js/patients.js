@@ -177,6 +177,7 @@ function renderizarTarjetas(consultas) {
 async function loadConsultas() {
     try {
         const usuario = getLocalStorangeData('usuario');
+        console.log(usuario);
         const url = `/api/${usuario.rol}/consultation/${usuario.id_servicio}/activas`;
         const response = await getFetch(url, 'No se pudieron obtener las consultas.');
         consultas = response;

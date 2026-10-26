@@ -27,9 +27,6 @@
     </div>
 
     <script>
-        /**
-         * Función principal: obtiene los datos (API o Demo) y dispara la conversión a Excel
-         */
         async function obtenerYExportar() {
             const btn = document.getElementById('btnExportar');
             btn.disabled = true;
@@ -46,7 +43,7 @@
                     })
                 });
                 const responseData = await response.json();
-                const jsonDatos = responseData.data; // O responseData directo según la estructura de tu respuesta
+                const jsonDatos = responseData.data; 
                 
 
                 
@@ -64,7 +61,7 @@
 
         /**
          * Convierte la estructura de datos recibida en un libro de Excel y fuerza la descarga
-         */
+         
         function exportarJsonAExcel(apiResponse) {
             if (!apiResponse || !apiResponse.pedidos || apiResponse.pedidos.length === 0) {
                 alert('No se encontraron registros de pedidos para exportar.');
@@ -121,7 +118,7 @@
 
             // 6. Descarga directa del archivo .xlsx
             XLSX.writeFile(workbook, nombreArchivo);
-        }
+        }*/
     </script>
 </body>
 </html>

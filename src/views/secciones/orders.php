@@ -25,8 +25,20 @@ require __DIR__ . '/../../utils/head.php';
                 <p class="text-sm text-on-surface-variant mt-4 max-w-xl">Administra, supervisa y procesa los pedidos nutricionales activos de los pacientes.</p>
             </div>
             <div class="flex flex-wrap items-center gap-3">
-                <button type="button" onclick="window.location.reload()" class="h-11 px-4 rounded-xl bg-primary text-on-primary text-sm font-bold hover:bg-primary-container transition flex items-center gap-2">
-                    <span class="material-symbols-outlined text-[19px]">refresh</span>Actualizar
+                <button
+                    type="button"
+                    onclick="openModal('popover-informe-pacientes')"
+                    class="h-11 px-4 rounded-xl border border-outline/30 bg-surface-container-lowest text-on-surface text-sm font-bold hover:bg-surface-container-low transition flex items-center gap-2">
+                    <span class="material-symbols-outlined text-[19px]">description</span>
+                    Informe Pacientes
+                </button>
+
+                <button
+                    type="button"
+                    onclick="window.location.reload()"
+                    class="h-11 px-4 rounded-xl bg-primary text-on-primary text-sm font-bold hover:bg-primary-container transition flex items-center gap-2">
+                    <span class="material-symbols-outlined text-[19px]">refresh</span>
+                    Actualizar
                 </button>
             </div>
         </header>
@@ -215,6 +227,93 @@ require __DIR__ . '/../../utils/head.php';
             </section>
             <div class="flex flex-col-reverse gap-3 border-t border-outline-variant/40 pt-5 sm:flex-row sm:justify-end"><button type="button" popovertarget="popover-procesar-receta" popovertargetaction="hide" class="h-11 rounded-xl border border-outline-variant/60 px-5 text-sm font-semibold text-on-surface-variant transition hover:bg-surface-container-high">Cancelar</button><button type="submit" class="flex h-11 items-center justify-center gap-2 rounded-xl bg-primary px-6 text-sm font-semibold text-on-primary shadow-sm transition hover:opacity-90 active:scale-[0.98]"><span class="material-symbols-outlined text-[19px]">check_circle</span>Procesar Pedido</button></div>
         </form>
+    </div>
+
+    <!-- POPOVER : Informes -->
+    <div id="popover-informe-pacientes" popover="manual" class="m-auto w-full max-w-lg p-0 bg-transparent backdrop:bg-black/40 backdrop:backdrop-blur-[2px]">
+        <div class="relative overflow-hidden rounded-2xl border border-outline-variant bg-surface-container-lowest">
+            <header class="flex items-start justify-between gap-4 border-b border-outline-variant px-6 py-5">
+                <div class="flex items-center gap-3">
+                    <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary-fixed text-primary">
+                        <span class="material-symbols-outlined">inventory_2</span>
+                    </div>
+                    <div>
+                        <h2 class="text-lg font-bold text-primary">Informe de Movimientos</h2>
+                        <p class="mt-1 text-sm text-on-surface-variant">Seleccione el período para generar el informe.</p>
+                    </div>
+                </div>
+
+                <button
+                    id="btn-close-modal"
+                    type="button"
+                    popovertarget="popover-informe-pacientes"
+                    popovertargetaction="hide"
+                    aria-label="Cerrar"
+                    class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg
+                       text-on-surface-variant transition-colors
+                       hover:bg-surface-container-low hover:text-primary">
+                    <span class="material-symbols-outlined">
+                        close
+                    </span>
+                </button>
+
+            </header>
+
+            <div class="px-6 py-5">
+                <form id="form-informe-pacientes" class="space-y-4">
+                    <div>
+                        <label
+                            for="fecha-desde"
+                            class="mb-1.5 block text-xs font-medium text-on-surface-variant">
+                            Fecha desde
+                        </label>
+                        <input id="fecha-desde" type="date" name="fechaDesde" required
+                            class="w-full rounded-lg border border-outline/30
+                               bg-surface-container-lowest px-3 py-2.5 text-sm
+                               text-on-surface outline-none transition-colors
+                               focus:border-primary focus:ring-1 focus:ring-primary/20">
+                    </div>
+
+                    <div>
+                        <label
+                            for="fecha-hasta"
+                            class="mb-1.5 block text-xs font-medium text-on-surface-variant">
+                            Fecha hasta
+                        </label>
+
+                        <input
+                            id="fecha-hasta"
+                            type="date"
+                            name="fechaHasta"
+                            required
+                            class="w-full rounded-lg border border-outline/30
+                               bg-surface-container-lowest px-3 py-2.5 text-sm
+                               text-on-surface outline-none transition-colors
+                               focus:border-primary focus:ring-1 focus:ring-primary/20">
+                    </div>
+
+                    <div class="flex justify-end gap-2 pt-2">
+                        <button
+                            type="button"
+                            popovertarget="popover-informe-pacientes"
+                            popovertargetaction="hide"
+                            class="rounded-lg px-4 py-2.5 text-sm font-medium
+                               text-on-surface-variant transition-colors
+                               hover:bg-surface-container-low">
+                            Cancelar
+                        </button>
+
+                        <button type="submit"
+                            class="rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold
+                               text-white transition-colors
+                               hover:bg-primary-container">
+                            <span class="material-symbols-outlined align-middle text-[18px]">download</span>
+                            Generar informe
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </body>
 
