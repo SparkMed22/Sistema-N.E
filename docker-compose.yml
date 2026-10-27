@@ -5,7 +5,7 @@ services:
       dockerfile: Dockerfile
     container_name: sistema_ne_app
     ports:
-      - "8081:80"
+      - "${APP_PORT:-8080}:80"
     volumes:
       - .:/var/www/html
     env_file:
